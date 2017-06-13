@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/bg_register"
@@ -21,12 +22,13 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:background="@color/white"
-            android:hint="@string/hint_name"
+            android:hint="Full Name"
             android:padding="10dp"
             android:singleLine="true"
             android:inputType="textCapWords"
             android:textColor="@color/input_register"
             android:textColorHint="@color/input_register_hint" />
+
 
         <EditText
             android:id="@+id/email"
@@ -54,6 +56,21 @@
             android:textColor="@color/input_register"
             android:textColorHint="@color/input_register_hint" />
 
+        <ImageView
+            android:id="@+id/img_reg_userphoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:srcCompat="@drawable/default_avatar" />
+
+        <Button
+            android:id="@+id/btnSelectImage"
+            android:layout_width="fill_parent"
+            android:layout_height="50dip"
+            android:layout_marginTop="20dip"
+            android:background="#ffffff"
+            android:text="Select Photo"
+            android:textColor="@color/btn_text_login" />
         <!-- Login Button -->
 
         <Button

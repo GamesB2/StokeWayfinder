@@ -1,21 +1,54 @@
 package com.example.w028006g.regnlogin.activity;
 
 //Add the imports needed
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.provider.SyncStateContract;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 import com.android.volley.Request.Method;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import com.example.w028006g.regnlogin.MainActivity;
@@ -25,16 +58,55 @@ import com.example.w028006g.regnlogin.app.AppController;
 import com.example.w028006g.regnlogin.helper.SQLiteHandler;
 import com.example.w028006g.regnlogin.helper.SessionManager;
 
-public class RegisterActivity extends Activity {
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+
+
+import java.util.UUID;
+
+import javax.net.ssl.HttpsURLConnection;
+
+import static android.R.attr.path;
+
+
+public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = RegisterActivity.class.getSimpleName();
     private Button btnRegister;
     private Button btnLinkToLogin;
+    private Button btnSelPhoto;
     private EditText inputFullName;
     private EditText inputEmail;
     private EditText inputPassword;
     private ProgressDialog pDialog;
     private SessionManager session;
     private SQLiteHandler db;
+    private ImageView img_user_photo;
+    private boolean imgSelected = true;
+    Bitmap bitmap;
+    boolean check = true;
+    String GetImageNameEditText = "file1";
+    String ImageName = "image_name" ;
+    String ImagePath = "image_path" ;
+    String ServerUploadPath ="https://concussive-shirt.000webhostapp.com/upload.php";
+    ProgressDialog progressDialog ;
+    ByteArrayOutputStream byteArrayOutputStream ;
+    byte[] byteArray ;
+    String ConvertImage ;
+    String GetImageNameFromEditText;
+    HttpURLConnection httpURLConnection ;
+    URL url;
+    OutputStream outputStream;
+    BufferedWriter bufferedWriter ;
+    int RC ;
+    BufferedReader bufferedReader ;
+    StringBuilder stringBuilder;
+    String unique_id="1";
+
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,6 +118,13 @@ public class RegisterActivity extends Activity {
         inputPassword = (EditText) findViewById(R.id.password);
         btnRegister = (Button) findViewById(R.id.btnRegister);
         btnLinkToLogin = (Button) findViewById(R.id.btnLinkToLoginScreen);
+        btnSelPhoto = (Button) findViewById(R.id.btnSelectImage);
+        img_user_photo = (ImageView) findViewById(R.id.img_reg_userphoto);
+
+        byteArrayOutputStream = new ByteArrayOutputStream();
+
+        bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.default_avatar);
+        //String imageUri = "drawable://" + R.drawable.default_avatar;
 
         // Progress dialog
         pDialog = new ProgressDialog(this);
@@ -94,6 +173,15 @@ public class RegisterActivity extends Activity {
             }
         });
 
+        btnSelPhoto.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Image From Gallery"), 1);
+            }
+        });
+
     }
 
     /**
@@ -132,6 +220,10 @@ public class RegisterActivity extends Activity {
 
                         // Inserting row in users table
                         db.addUser(name, email, uid, created_at);
+
+                        //Upload Image to web Server
+                        unique_id = uid;
+                        ImageUploadToServerFunction();
 
                         Toast.makeText(getApplicationContext(), "You Have Successfully Registered. Please Try login now!", Toast.LENGTH_LONG).show();
 
@@ -190,5 +282,143 @@ public class RegisterActivity extends Activity {
     private void hideDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();
+    }
+
+    //User profile image stuff
+
+    @Override
+    protected void onActivityResult(int RC, int RQC, Intent I) {
+        super.onActivityResult(RC, RQC, I);
+
+        if (RC == 1 && RQC == RESULT_OK && I != null && I.getData() != null) {
+            Uri uri = I.getData();
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                img_user_photo.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void ImageUploadToServerFunction(){
+
+        ByteArrayOutputStream byteArrayOutputStreamObject ;
+        byteArrayOutputStreamObject = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStreamObject);
+        byte[] byteArrayVar = byteArrayOutputStreamObject.toByteArray();
+        final String ConvertImage = Base64.encodeToString(byteArrayVar, Base64.DEFAULT);
+        class AsyncTaskUploadClass extends AsyncTask<Void,Void,String> {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                progressDialog = ProgressDialog.show(RegisterActivity.this,"Image is Uploading","Please Wait",false,false);
+            }
+
+            @Override
+            protected void onPostExecute(String string1) {
+
+                super.onPostExecute(string1);
+                // Dismiss the progress dialog after done uploading.
+                progressDialog.dismiss();
+                // Printing uploading success message coming from server on android app.
+                Toast.makeText(RegisterActivity.this,string1,Toast.LENGTH_LONG).show();
+                // Setting image as transparent after done uploading.
+                img_user_photo.setImageResource(android.R.color.transparent);
+            }
+
+            @Override
+            protected String doInBackground(Void... params) {
+
+                ImageProcessClass imageProcessClass = new ImageProcessClass();
+                HashMap<String,String> HashMapParams = new HashMap<String,String>();
+                HashMapParams.put(ImageName, unique_id);
+                HashMapParams.put(ImagePath, ConvertImage);
+                String FinalData = imageProcessClass.ImageHttpRequest(ServerUploadPath, HashMapParams);
+                return FinalData;
+            }
+        }
+        AsyncTaskUploadClass AsyncTaskUploadClassOBJ = new AsyncTaskUploadClass();
+        AsyncTaskUploadClassOBJ.execute();
+    }
+
+    public class ImageProcessClass{
+        public String ImageHttpRequest(String requestURL,HashMap<String, String> PData) {
+            StringBuilder stringBuilder = new StringBuilder();
+            try {
+                URL url;
+                HttpURLConnection httpURLConnectionObject ;
+                OutputStream OutPutStream;
+                BufferedWriter bufferedWriterObject ;
+                BufferedReader bufferedReaderObject ;
+                int RC ;
+                url = new URL(requestURL);
+
+                httpURLConnectionObject = (HttpURLConnection) url.openConnection();
+                httpURLConnectionObject.setReadTimeout(19000);
+                httpURLConnectionObject.setConnectTimeout(19000);
+                httpURLConnectionObject.setRequestMethod("POST");
+                httpURLConnectionObject.setDoInput(true);
+                httpURLConnectionObject.setDoOutput(true);
+                OutPutStream = httpURLConnectionObject.getOutputStream();
+                bufferedWriterObject = new BufferedWriter(
+                        new OutputStreamWriter(OutPutStream, "UTF-8"));
+                bufferedWriterObject.write(bufferedWriterDataFN(PData));
+                bufferedWriterObject.flush();
+                bufferedWriterObject.close();
+                OutPutStream.close();
+                RC = httpURLConnectionObject.getResponseCode();
+
+                if (RC == HttpsURLConnection.HTTP_OK) {
+                    bufferedReaderObject = new BufferedReader(new InputStreamReader(httpURLConnectionObject.getInputStream()));
+                    stringBuilder = new StringBuilder();
+                    String RC2;
+                    while ((RC2 = bufferedReaderObject.readLine()) != null){
+                        stringBuilder.append(RC2);
+                    }
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return stringBuilder.toString();
+        }
+
+        private String bufferedWriterDataFN(HashMap<String, String> HashMapParams) throws UnsupportedEncodingException {
+
+            StringBuilder stringBuilderObject;
+            stringBuilderObject = new StringBuilder();
+            for (Map.Entry<String, String> KEY : HashMapParams.entrySet()) {
+                if (check)
+                    check = false;
+                else
+                    stringBuilderObject.append("&");
+
+                stringBuilderObject.append(URLEncoder.encode(KEY.getKey(), "UTF-8"));
+                stringBuilderObject.append("=");
+                stringBuilderObject.append(URLEncoder.encode(KEY.getValue(), "UTF-8"));
+            }
+            return stringBuilderObject.toString();
+        }
+    }
+
+    public static Bitmap drawableToBitmap (Drawable drawable) {
+        Bitmap bitmap = null;
+        if (drawable instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            if(bitmapDrawable.getBitmap() != null) {
+                return bitmapDrawable.getBitmap();
+            }
+        }
+        if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
+        } else {
+            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        }
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
     }
 }
