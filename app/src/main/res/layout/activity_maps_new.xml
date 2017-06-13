@@ -11,22 +11,35 @@
         android:orientation="horizontal"
         android:weightSum="1">
 
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="58dp"
+            android:layout_height="106dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/searchbutton"
+            />
+
+
         <EditText
             android:id="@+id/gSearch"
-            android:layout_width="246dp"
+            android:layout_width="212dp"
             android:layout_height="match_parent"
             android:background="@drawable/sbar"
             android:ems="10"
             android:inputType="textPersonName"
             android:text="Name"
-            android:layout_weight="1.03"/>
+            />
 
-        <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="51dp"
-            android:layout_height="wrap_content"
-            android:onClick="onMapSearch"
-            map:srcCompat="@drawable/searchbutton"/>
+        <Button
+            android:id="@+id/search_button"
+            android:layout_width="wrap_content"
+            android:layout_height="96dp"
+            android:layout_alignBottom="@+id/button3"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/searchbutton"
+            android:onClick="onMapSearch"/>
 
     </LinearLayout>
 

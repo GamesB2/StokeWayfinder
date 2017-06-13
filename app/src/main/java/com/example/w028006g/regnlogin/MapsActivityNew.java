@@ -10,15 +10,24 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.LocationManager;
 import android.provider.Settings;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.w028006g.regnlogin.activity.MenuActivity;
+import com.example.w028006g.regnlogin.helper.SettingsActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -31,12 +40,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 import java.util.List;
 
-public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallback
+{
 
     //Assigns the String "TAG" the name of the class for error reports
     private static final String TAG = MapsActivityNew.class.getSimpleName();
 
     private GoogleMap mMap;
+    private Button btnMenu;
 
     LocationManager locationManager;
 
@@ -48,12 +59,61 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps_new);
+        setContentView(R.layout.activity_menu);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener()
+        {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item)
+            {
+                // Handle navigation view item clicks here.
+                int id = item.getItemId();
+
+                if (id == R.id.nav_profile) {
+                    // Handle the camera action
+                } else if (id == R.id.nav_events) {
+
+                } else if (id == R.id.nav_logout) {
+
+                } else if (id == R.id.nav_settings) {
+                    Intent intent = new Intent(getApplicationContext(),SettingsActivity.class);
+                    startActivity(intent);
+                } else if (id == R.id.nav_exit) {
+                    Intent intent = new Intent(Intent.ACTION_MAIN);
+                    intent.addCategory(Intent.CATEGORY_HOME);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
+            }
+
+        });
+
+        btnMenu = (Button) findViewById(R.id.button3);
+        btnMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.openDrawer(GravityCompat.START);
+
+            }
+        });
+
     }
 
     //Called to check if location is enabled on the device.
@@ -63,6 +123,12 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         if(!isLocationEnabled())
             showOffAlert();
         return isLocationEnabled();
+    }
+
+    private boolean isLocationEnabled()
+    {
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 
     //Checks to see if the user has granted location permissions to the app.
@@ -89,7 +155,7 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults)
     {
-        LatLng center = new LatLng(100,100);
+        LatLng stoke = new LatLng(53.0027,-2.1794);
 
         switch (requestCode)
         {
@@ -105,13 +171,13 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
                     }catch (SecurityException SE)
                     {
                         Log.e(TAG, "Permissions error: Requires Location Permissions to be enabled manually");
-                        mMap.moveCamera(CameraUpdateFactory.newLatLng(center));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(stoke));
                     }
 
                 } else
                 {
                     Log.e(TAG, "Location permissions denied");
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(center));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(stoke));
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
@@ -119,6 +185,7 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         }
     }
 
+    //Creates an alert window to prompt the user to turn their location settings on
     private void showOffAlert()
     {
         final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
@@ -143,13 +210,7 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         dialog.show();
     }
 
-    private boolean isLocationEnabled()
-    {
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
-                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-    }
-
-    //Search implementation
+    //Search implementation, pins a marker on the location of the user
     public void onMapSearch(View view)
     {
         EditText locationSearch = (EditText) findViewById(R.id.gSearch);
