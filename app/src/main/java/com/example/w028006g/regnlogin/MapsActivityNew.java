@@ -1,0 +1,219 @@
+package com.example.w028006g.regnlogin;
+
+import android.Manifest;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.LocationManager;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
+import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.IOException;
+import java.util.List;
+
+public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallback {
+
+    //Assigns the String "TAG" the name of the class for error reports
+    private static final String TAG = MapsActivityNew.class.getSimpleName();
+
+    private GoogleMap mMap;
+
+    LocationManager locationManager;
+
+    //Constant used as a request code for the location permissions
+    final int MY_PERMISSIONS_REQUEST_LOCATION = 14;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_maps_new);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
+    //Called to check if location is enabled on the device.
+    //DOES NOT check to see if permission has been granted
+    private boolean checkLocation()
+    {
+        if(!isLocationEnabled())
+            showOffAlert();
+        return isLocationEnabled();
+    }
+
+    //Checks to see if the user has granted location permissions to the app.
+    private boolean checkLocationPermission()
+    {
+        if (ContextCompat.checkSelfPermission(this,
+                                          android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED)
+        {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission. ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+            return false;
+        } else
+        {
+            mMap.setMyLocationEnabled(true);
+            return true;
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults)
+    {
+        LatLng center = new LatLng(100,100);
+
+        switch (requestCode)
+        {
+            case MY_PERMISSIONS_REQUEST_LOCATION:
+                {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    try
+                    {
+                        mMap.setMyLocationEnabled(true);
+                    }catch (SecurityException SE)
+                    {
+                        Log.e(TAG, "Permissions error: Requires Location Permissions to be enabled manually");
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(center));
+                    }
+
+                } else
+                {
+                    Log.e(TAG, "Location permissions denied");
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(center));
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+            }
+        }
+    }
+
+    private void showOffAlert()
+    {
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Enable Location")
+                .setMessage("Your Locations Settings are turned off.\nPlease Enable Location to " +
+                        "use this app")
+                .setPositiveButton("Location Settings", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface paramDialogInterface, int paramInt)
+                    {
+                        Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivity(myIntent);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface paramDialogInterface, int paramInt)
+                    {
+                    }
+                });
+        dialog.show();
+    }
+
+    private boolean isLocationEnabled()
+    {
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+    }
+
+    //Search implementation
+    public void onMapSearch(View view)
+    {
+        EditText locationSearch = (EditText) findViewById(R.id.gSearch);
+        String location = locationSearch.getText().toString();
+        List<Address> addressList = null;
+
+        if (!location.equals(""))
+        {
+            Geocoder geocoder = new Geocoder(this);
+            try
+            {
+                addressList = geocoder.getFromLocationName(location, 1);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Address address = addressList.get(0);
+            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+            mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        }
+    }
+
+
+    @Override
+    public void onMapReady(GoogleMap googleMap)
+    {
+        mMap = googleMap;
+
+        try
+        {
+            boolean success = mMap.setMapStyle
+                    (MapStyleOptions.loadRawResourceStyle
+                            (this, R.raw.style_json));
+            if (!success)
+            {
+                Log.e(TAG, "Style parsing failed.");
+            }
+        }catch (Resources.NotFoundException e)
+        {
+            Log.e(TAG, "Can't find style. Error: ", e);
+        }
+
+        LatLng sydney = new LatLng(-34, 151);
+        LatLng stoke = new LatLng(53.0027,-2.1794);
+        LatLng center = new LatLng(0,0);
+
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney").snippet("Test Snippet inserting text").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(stoke));
+
+        if (checkLocation())
+        {
+            checkLocationPermission();
+        }
+    }
+
+    /**
+     * Manipulates the map once available.
+     * This callback is triggered when the map is ready to be used.
+     * This is where we can add markers or lines, add listeners or move the camera. In this case,
+     * we just add a marker near Sydney, Australia.
+     * If Google Play services is not installed on the device, the user will be prompted to install
+     * it inside the SupportMapFragment. This method will only be triggered once the user has
+     * installed Google Play services and returned to the app.
+     */
+
+}
