@@ -34,6 +34,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
@@ -215,6 +216,9 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         String location = locationSearch.getText().toString();
         List<Address> addressList = null;
 
+        Marker mSearch = null;
+        mSearch.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.searchbutton));
+
         if (!location.equals(""))
         {
             Geocoder geocoder = new Geocoder(this);
@@ -227,8 +231,9 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
             }
             Address address = addressList.get(0);
             LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
+            mMap.addMarker(new MarkerOptions().position(latLng).title("Search query").icon(BitmapDescriptorFactory.fromResource(R.drawable.searchbutton)));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+
         }
     }
 
@@ -256,7 +261,7 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         LatLng stoke = new LatLng(53.0027,-2.1794);
         LatLng center = new LatLng(0,0);
 
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney").snippet("Test Snippet inserting text").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        mMap.addMarker(new MarkerOptions().position(sydney).title("'Ere be prisoners").snippet("Why are you even reading this?").icon(BitmapDescriptorFactory.fromResource(R.drawable.lock)));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(stoke));
 
         if (checkLocation())
@@ -264,6 +269,7 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
             checkLocationPermission();
         }
     }
+
 
     /**
      * Manipulates the map once available.
