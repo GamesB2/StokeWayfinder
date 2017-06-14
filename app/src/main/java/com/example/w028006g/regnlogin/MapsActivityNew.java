@@ -9,6 +9,8 @@ import android.content.res.Resources;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.LocationManager;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -25,6 +27,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
 
 import com.example.w028006g.regnlogin.helper.SettingsActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -37,6 +41,7 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallback
@@ -52,7 +57,8 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
 
     //Constant used as a request code for the location permissions
     final int MY_PERMISSIONS_REQUEST_LOCATION = 14;
-
+    public String lat;
+    public String lon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -64,6 +70,17 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        Bundle extras = getIntent().getExtras();
+
+        if(extras != null) {
+            final String lat = extras.getString("Latitude");
+            final String lon = extras.getString("Longitude");
+            Toast.makeText(MapsActivityNew.this, "" + lat + " " + lon + "", Toast.LENGTH_SHORT).show();
+            //centerOn(lat, lon);
+        }
+
+
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -114,7 +131,15 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         });
 
     }
+    public void centerOn(String sLat, String sLong)
+    {
 
+        LatLng focusPoint = new LatLng(Double.parseDouble(sLat),Double.parseDouble(sLong));
+
+        mMap.addMarker(new MarkerOptions().position(focusPoint).title("Discount Day").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_menu_send)));
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(25));
+        mMap.animateCamera(CameraUpdateFactory.newLatLng(focusPoint));
+    }
     //Called to check if location is enabled on the device.
     //DOES NOT check to see if permission has been granted
     private boolean checkLocation()
@@ -257,13 +282,14 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         LatLng stoke = new LatLng(53.0027,-2.1794);
         LatLng center = new LatLng(0,0);
 
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney").snippet("Test Snippet inserting text").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        mMap.addMarker(new MarkerOptions().position(stoke).title("Marker in Sydney").snippet("Test Snippet inserting text").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(stoke));
 
         if (checkLocation())
         {
             checkLocationPermission();
         }
+
     }
 
     /**
