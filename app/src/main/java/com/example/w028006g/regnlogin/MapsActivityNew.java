@@ -276,25 +276,23 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         EditText locationSearch = (EditText) findViewById(R.id.gSearch);
         String location = locationSearch.getText().toString();
         List<Address> addressList = null;
-
-        Marker mSearch = null;
-        mSearch.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.searchbutton));
+        Geocoder geocoder = new Geocoder(this);
 
         if (!location.equals(""))
         {
-            Geocoder geocoder = new Geocoder(this);
-            try
-            {
+            try {
                 addressList = geocoder.getFromLocationName(location, 1);
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
             Address address = addressList.get(0);
+
             LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
             mMap.addMarker(new MarkerOptions().position(latLng).title("Search query").icon(BitmapDescriptorFactory.fromResource(R.drawable.searchbutton)));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         }
+
     }
 
 
@@ -331,6 +329,8 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         {
             checkLocationPermission();
         }
+
+        //centerOn("53.0412","-2.2098");
     }
 
     /**
