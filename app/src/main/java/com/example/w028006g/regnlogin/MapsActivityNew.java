@@ -22,6 +22,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,7 +45,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.List;
-
 
 public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallback
 {
@@ -207,7 +207,6 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
     {
         LatLng stoke = new LatLng(53.0027,-2.1794);
 
-
         switch (requestCode)
         {
             case MY_PERMISSIONS_REQUEST_LOCATION:
@@ -295,7 +294,6 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
             LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
             mMap.addMarker(new MarkerOptions().position(latLng).title("Search query").icon(BitmapDescriptorFactory.fromResource(R.drawable.searchbutton)));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-
         }
     }
 
@@ -327,14 +325,13 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
 
         mMap.addMarker(new MarkerOptions().position(sydney).title("'Ere be prisoners").snippet("Why are you even reading this?").icon(BitmapDescriptorFactory.fromResource(R.drawable.lock)));
         mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(Demo,0));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Demo.getCenter(),25));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Demo.getCenter(),10));
 
         if (checkLocation())
         {
             checkLocationPermission();
         }
     }
-
 
     /**
      * Manipulates the map once available.
