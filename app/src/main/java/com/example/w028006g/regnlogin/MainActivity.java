@@ -1,32 +1,39 @@
 package com.example.w028006g.regnlogin;
 
 import com.example.w028006g.regnlogin.activity.LoginActivity;
-//import com.example.w028006g.regnlogin.activity.MapsActivity;
+import com.example.w028006g.regnlogin.helper.DownloadImageTask;
 import com.example.w028006g.regnlogin.helper.SQLiteHandler;
 import com.example.w028006g.regnlogin.helper.SessionManager;
+
+import java.net.URL;
 import java.util.HashMap;
+import java.util.concurrent.Exchanger;
+
 import android.app.Activity;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-public class MainActivity extends Activity {
+import static com.example.w028006g.regnlogin.R.id.imageView;
+import static com.example.w028006g.regnlogin.R.id.img_userprofile;
+
+public class MainActivity extends AppCompatActivity {
 
     private TextView txtName;
     private TextView txtEmail;
     private Button btnLogout;
     private Button btnMaps;
-    private Button btnNotify;
+    private ImageView imgUser;
 
     private SQLiteHandler db;
     private SessionManager session;
-
-    int numMessages = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +44,7 @@ public class MainActivity extends Activity {
         txtEmail = (TextView) findViewById(R.id.email);
         btnLogout = (Button) findViewById(R.id.btnLogout);
         btnMaps = (Button) findViewById(R.id.btnMaps);
-        btnNotify = (Button) findViewById(R.id.button);
-
+        imgUser = (ImageView) findViewById(R.id.img_userprofile);
         // SqLite database handler
         db = new SQLiteHandler(getApplicationContext());
 
@@ -54,6 +60,7 @@ public class MainActivity extends Activity {
 
         String name = user.get("name");
         String email = user.get("email");
+        String u_id = user.get("uid");
 
         // Displaying the user details on the screen
         txtName.setText(name);
@@ -76,12 +83,10 @@ public class MainActivity extends Activity {
                 startActivity(intent);
             }
         });
-        btnNotify.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addNotification();
-            }
-        });
+
+
+        new DownloadImageTask((ImageView) findViewById(R.id.img_userprofile))
+                .execute("https://concussive-shirt.000webhostapp.com/uploads/" + u_id + ".png" );
     }
 
     /**
@@ -97,17 +102,5 @@ public class MainActivity extends Activity {
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
-    }
-
-    public void addNotification() {
-
-        ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE))
-                .notify(123, new NotificationCompat.Builder(this)
-                        .setContentTitle("WayFarer")
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setStyle(new NotificationCompat.MessagingStyle(null)
-                                .setConversationTitle("Discounts!")
-                                .addMessage("New", 123, null) // Pass in null for user.
-                                .addMessage("MiddlePort", 234, null)).build());
     }
 }

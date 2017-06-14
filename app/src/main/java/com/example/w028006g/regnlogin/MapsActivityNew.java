@@ -9,21 +9,26 @@ import android.content.res.Resources;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.LocationManager;
+import android.provider.ContactsContract;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.support.design.widget.BottomNavigationView;
 
 import com.example.w028006g.regnlogin.helper.SettingsActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -48,6 +53,12 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
     private static final String TAG = MapsActivityNew.class.getSimpleName();
 
     private GoogleMap mMap;
+    //private Button btnMenu;
+
+    private SectionsPageAdapter mSectionsPageAdapter;
+
+    private ViewPager mViewPager;
+
     private LatLngBounds Demo = new LatLngBounds(new LatLng(52.5027,-2.6794), new LatLng(53.5025,-1.6794));
     private Button btnMenu;
 
@@ -61,7 +72,9 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu);
+        setContentView(R.layout.activity_maps_new);
+
+
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -69,51 +82,87 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         mapFragment.getMapAsync(this);
 
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        mSectionsPageAdapter = new SectionsPageAdapter(getSupportFragmentManager());
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener()
-        {
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView_Bar);
+        BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
+        Menu menu = bottomNavigationView.getMenu();
+        MenuItem menuItem = menu.getItem(0);
+        menuItem.setChecked(true);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(MenuItem item)
-            {
-                // Handle navigation view item clicks here.
-                int id = item.getItemId();
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.ic_map:
 
-                if (id == R.id.nav_profile) {
-                    // Handle the camera action
-                } else if (id == R.id.nav_events) {
+                        break;
 
-                } else if (id == R.id.nav_logout) {
+                    case R.id.ic_Profile:
+                        Intent intent1 = new Intent(MapsActivityNew.this, Profile.class);
+                        startActivity(intent1);
+                        break;
 
-                } else if (id == R.id.nav_settings) {
-                    Intent intent = new Intent(getApplicationContext(),SettingsActivity.class);
-                    startActivity(intent);
-                } else if (id == R.id.nav_exit) {
-                    Intent intent = new Intent(Intent.ACTION_MAIN);
-                    intent.addCategory(Intent.CATEGORY_HOME);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
+                    case R.id.ic_Adventures:
+                        Intent intent2 = new Intent(MapsActivityNew.this, Adventures.class);
+                        startActivity(intent2);
+                        break;
+
+                    case R.id.ic_Tickets:
+                        Intent intent3 = new Intent(MapsActivityNew.this, Tickets.class);
+                        startActivity(intent3);
+                        break;
                 }
-
-                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                drawer.closeDrawer(GravityCompat.START);
-                return true;
-            }
-
-        });
-
-        btnMenu = (Button) findViewById(R.id.button3);
-        btnMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                drawer.openDrawer(GravityCompat.START);
-
+                return false;
             }
         });
+
+
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+//
+//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener()
+//        {
+//            @Override
+//            public boolean onNavigationItemSelected(MenuItem item)
+//            {
+//                // Handle navigation view item clicks here.
+//                int id = item.getItemId();
+//
+//                if (id == R.id.nav_profile) {
+//                    // Handle the camera action
+//                } else if (id == R.id.nav_events) {
+//
+//                } else if (id == R.id.nav_logout) {
+//
+//                } else if (id == R.id.nav_settings) {
+//                    Intent intent = new Intent(getApplicationContext(),SettingsActivity.class);
+//                    startActivity(intent);
+//                } else if (id == R.id.nav_exit) {
+//                    Intent intent = new Intent(Intent.ACTION_MAIN);
+//                    intent.addCategory(Intent.CATEGORY_HOME);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    startActivity(intent);
+//                }
+//
+//                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//                drawer.closeDrawer(GravityCompat.START);
+//                return true;
+//            }
+//
+//        });
+//
+//        btnMenu = (Button) findViewById(R.id.button3);
+//        btnMenu.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//                drawer.openDrawer(GravityCompat.START);
+//
+//            }
+//        });
 
     }
 
