@@ -19,7 +19,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,12 +32,14 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.List;
+
 
 public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallback
 {
@@ -47,6 +48,7 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
     private static final String TAG = MapsActivityNew.class.getSimpleName();
 
     private GoogleMap mMap;
+    private LatLngBounds Demo = new LatLngBounds(new LatLng(52.5027,-2.6794), new LatLng(53.5025,-1.6794));
     private Button btnMenu;
 
     LocationManager locationManager;
@@ -156,6 +158,7 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
     {
         LatLng stoke = new LatLng(53.0027,-2.1794);
 
+
         switch (requestCode)
         {
             case MY_PERMISSIONS_REQUEST_LOCATION:
@@ -209,6 +212,16 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         dialog.show();
     }
 
+    public void centerOn(String sLat, String sLong)
+    {
+        LatLng focusPoint = new LatLng(Double.parseDouble(sLat),Double.parseDouble(sLong));
+
+        mMap.addMarker(new MarkerOptions().position(focusPoint).title("Discount Day").icon(BitmapDescriptorFactory.fromResource(R.drawable.discountlogo)));
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(25));
+        mMap.animateCamera(CameraUpdateFactory.newLatLng(focusPoint));
+    }
+
+
     //Search implementation, pins a marker on the location of the user
     public void onMapSearch(View view)
     {
@@ -242,6 +255,8 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
     public void onMapReady(GoogleMap googleMap)
     {
         mMap = googleMap;
+        mMap.setLatLngBoundsForCameraTarget(Demo);
+        mMap.setMinZoomPreference(5);
 
         try
         {
@@ -262,7 +277,8 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         LatLng center = new LatLng(0,0);
 
         mMap.addMarker(new MarkerOptions().position(sydney).title("'Ere be prisoners").snippet("Why are you even reading this?").icon(BitmapDescriptorFactory.fromResource(R.drawable.lock)));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(stoke));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(Demo,0));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Demo.getCenter(),25));
 
         if (checkLocation())
         {
