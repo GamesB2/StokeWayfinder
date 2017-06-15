@@ -11,23 +11,28 @@ import android.location.Geocoder;
 import android.location.LocationManager;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.ContactsContract;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.support.design.widget.BottomNavigationView;
 
 
 import com.example.w028006g.regnlogin.helper.SettingsActivity;
@@ -37,7 +42,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
@@ -51,6 +58,13 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
     private static final String TAG = MapsActivityNew.class.getSimpleName();
 
     private GoogleMap mMap;
+    //private Button btnMenu;
+
+    private SectionsPageAdapter mSectionsPageAdapter;
+
+    private ViewPager mViewPager;
+
+    private LatLngBounds Demo = new LatLngBounds(new LatLng(52.5027,-2.6794), new LatLng(53.5025,-1.6794));
     private Button btnMenu;
 
     LocationManager locationManager;
@@ -65,7 +79,9 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu);
+        setContentView(R.layout.activity_maps_new);
+
+
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -84,39 +100,38 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
 
 
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mSectionsPageAdapter = new SectionsPageAdapter(getSupportFragmentManager());
 
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView_Bar);
+        BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
+        Menu menu = bottomNavigationView.getMenu();
+        MenuItem menuItem = menu.getItem(0);
+        menuItem.setChecked(true);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener()
-        {
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(MenuItem item)
-            {
-                // Handle navigation view item clicks here.
-                int id = item.getItemId();
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.ic_map:
 
-                if (id == R.id.nav_profile) {
-                    // Handle the camera action
-                } else if (id == R.id.nav_events) {
+                        break;
 
-                } else if (id == R.id.nav_logout) {
+                    case R.id.ic_Profile:
+                        Intent intent1 = new Intent(MapsActivityNew.this, Profile.class);
+                        startActivity(intent1);
+                        break;
 
-                } else if (id == R.id.nav_settings) {
-                    Intent intent = new Intent(getApplicationContext(),SettingsActivity.class);
-                    startActivity(intent);
-                } else if (id == R.id.nav_exit) {
-                    Intent intent = new Intent(Intent.ACTION_MAIN);
-                    intent.addCategory(Intent.CATEGORY_HOME);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
+                    case R.id.ic_Adventures:
+                        Intent intent2 = new Intent(MapsActivityNew.this, Adventures.class);
+                        startActivity(intent2);
+                        break;
+
+                    case R.id.ic_Tickets:
+                        Intent intent3 = new Intent(MapsActivityNew.this, Tickets.class);
+                        startActivity(intent3);
+                        break;
                 }
-
-                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                drawer.closeDrawer(GravityCompat.START);
-                return true;
+                return false;
             }
 
         });
@@ -235,12 +250,25 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         dialog.show();
     }
 
+    public void centerOn(String sLat, String sLong)
+    {
+        LatLng focusPoint = new LatLng(Double.parseDouble(sLat),Double.parseDouble(sLong));
+
+        mMap.addMarker(new MarkerOptions().position(focusPoint).title("Discount Day").icon(BitmapDescriptorFactory.fromResource(R.drawable.discountlogo)));
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(25));
+        mMap.animateCamera(CameraUpdateFactory.newLatLng(focusPoint));
+    }
+
+
     //Search implementation, pins a marker on the location of the user
     public void onMapSearch(View view)
     {
         EditText locationSearch = (EditText) findViewById(R.id.gSearch);
         String location = locationSearch.getText().toString();
         List<Address> addressList = null;
+
+        Marker mSearch = null;
+        mSearch.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.searchbutton));
 
         if (!location.equals(""))
         {
@@ -254,7 +282,7 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
             }
             Address address = addressList.get(0);
             LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
+            mMap.addMarker(new MarkerOptions().position(latLng).title("Search query").icon(BitmapDescriptorFactory.fromResource(R.drawable.searchbutton)));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         }
     }
@@ -264,6 +292,8 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
     public void onMapReady(GoogleMap googleMap)
     {
         mMap = googleMap;
+        mMap.setLatLngBoundsForCameraTarget(Demo);
+        mMap.setMinZoomPreference(5);
 
         try
         {
@@ -285,6 +315,9 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
 
         mMap.addMarker(new MarkerOptions().position(stoke).title("Marker in Sydney").snippet("Test Snippet inserting text").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(stoke));
+        mMap.addMarker(new MarkerOptions().position(sydney).title("'Ere be prisoners").snippet("Why are you even reading this?").icon(BitmapDescriptorFactory.fromResource(R.drawable.lock)));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(Demo,0));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Demo.getCenter(),10));
 
         if (checkLocation())
         {

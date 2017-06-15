@@ -3,9 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -13,35 +14,36 @@
 
         <Button
             android:id="@+id/button3"
-            android:layout_width="58dp"
-            android:layout_height="106dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:background="@drawable/searchbutton"
-            />
+            android:background="@drawable/searchbutton"/>
 
 
         <EditText
             android:id="@+id/gSearch"
-            android:layout_width="212dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_alignBottom="@+id/button3"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/button3"
             android:background="@drawable/sbar"
             android:ems="10"
+            android:hint="Search..."
             android:inputType="textPersonName"
-            android:text="Name"
-            />
+            android:textAppearance="@style/TextAppearance.AppCompat"/>
 
         <Button
             android:id="@+id/search_button"
             android:layout_width="wrap_content"
-            android:layout_height="96dp"
-            android:layout_alignBottom="@+id/button3"
+            android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
             android:background="@drawable/searchbutton"
             android:onClick="onMapSearch"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <fragment
         android:id="@+id/map"
@@ -50,5 +52,22 @@
         android:layout_height="match_parent"
         tools:context="com.example.w028006g.regnlogin.MapsActivityNew"
         android:layout_weight="1"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/bottomBar"
+        android:layout_alignParentBottom="true">
+
+        <android.support.design.widget.BottomNavigationView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/bottomNavView_Bar"
+            android:background="@drawable/white_grey_border_top"
+            app:menu="@menu/bottom_navigation_menu">
+
+
+        </android.support.design.widget.BottomNavigationView>
+    </RelativeLayout>
 
 </LinearLayout>
