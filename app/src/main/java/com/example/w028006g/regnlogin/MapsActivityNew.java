@@ -44,6 +44,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallback
@@ -269,6 +270,10 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         mMap.animateCamera(CameraUpdateFactory.newLatLng(focusPoint));
     }
 
+    public void popMap(ArrayList alLocations)
+    {
+
+    }
 
     //Search implementation, pins a marker on the location of the user
     public void onMapSearch(View view)
@@ -280,9 +285,9 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
 
         if (!location.equals(""))
         {
-            try {
+            try
+            {
                 addressList = geocoder.getFromLocationName(location, 1);
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -329,7 +334,7 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         {
             checkLocationPermission();
         }
-
+        //popMap();
         //centerOn("53.0412","-2.2098");
     }
 
