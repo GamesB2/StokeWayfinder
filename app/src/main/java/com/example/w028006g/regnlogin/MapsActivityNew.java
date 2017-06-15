@@ -60,6 +60,7 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
     public String lat;
     public String lon;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -74,11 +75,11 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         Bundle extras = getIntent().getExtras();
 
         if(extras != null) {
-            final String lat = extras.getString("Latitude");
-            final String lon = extras.getString("Longitude");
-            Toast.makeText(MapsActivityNew.this, "" + lat + " " + lon + "", Toast.LENGTH_SHORT).show();
-            //centerOn(lat, lon);
+            lat = extras.getString("Latitude");
+            lon = extras.getString("Longitude");
+
         }
+
 
 
 
@@ -136,8 +137,8 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
 
         LatLng focusPoint = new LatLng(Double.parseDouble(sLat),Double.parseDouble(sLong));
 
-        mMap.addMarker(new MarkerOptions().position(focusPoint).title("Discount Day").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_menu_send)));
-        mMap.moveCamera(CameraUpdateFactory.zoomTo(25));
+        mMap.addMarker(new MarkerOptions().position(focusPoint).title("Discount Day").icon(BitmapDescriptorFactory.fromResource(R.drawable.lock)));
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(20));
         mMap.animateCamera(CameraUpdateFactory.newLatLng(focusPoint));
     }
     //Called to check if location is enabled on the device.
@@ -290,6 +291,16 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
             checkLocationPermission();
         }
 
+        if (lat != null && lon != null) {
+
+            centerOn(lat, lon);
+
+//            LatLng focusPoint = new LatLng(Double.parseDouble(lat),Double.parseDouble(lon));
+//            Toast.makeText(MapsActivityNew.this, "" + lat + " " + lon + "", Toast.LENGTH_SHORT).show();
+//            mMap.addMarker(new MarkerOptions().position(focusPoint).title("Discount Day").icon(BitmapDescriptorFactory.fromResource(R.drawable.lock)));
+//            mMap.moveCamera(CameraUpdateFactory.zoomTo(25));
+//            mMap.animateCamera(CameraUpdateFactory.newLatLng(focusPoint));
+        }
     }
 
     /**
