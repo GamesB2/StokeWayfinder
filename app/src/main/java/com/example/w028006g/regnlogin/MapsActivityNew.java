@@ -34,7 +34,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 import android.support.design.widget.BottomNavigationView;
 
-
 import com.example.w028006g.regnlogin.helper.SettingsActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -48,6 +47,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -133,7 +133,6 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
                 }
                 return false;
             }
-
         });
 
         btnMenu = (Button) findViewById(R.id.button3);
@@ -143,8 +142,51 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 drawer.openDrawer(GravityCompat.START);
 
-            }
-        });
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+//
+//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener()
+//        {
+//            @Override
+//            public boolean onNavigationItemSelected(MenuItem item)
+//            {
+//                // Handle navigation view item clicks here.
+//                int id = item.getItemId();
+//
+//                if (id == R.id.nav_profile) {
+//                    // Handle the camera action
+//                } else if (id == R.id.nav_events) {
+//
+//                } else if (id == R.id.nav_logout) {
+//
+//                } else if (id == R.id.nav_settings) {
+//                    Intent intent = new Intent(getApplicationContext(),SettingsActivity.class);
+//                    startActivity(intent);
+//                } else if (id == R.id.nav_exit) {
+//                    Intent intent = new Intent(Intent.ACTION_MAIN);
+//                    intent.addCategory(Intent.CATEGORY_HOME);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    startActivity(intent);
+//                }
+//
+//                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//                drawer.closeDrawer(GravityCompat.START);
+//                return true;
+//            }
+//
+//        });
+//
+//        btnMenu = (Button) findViewById(R.id.button3);
+//        btnMenu.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//                drawer.openDrawer(GravityCompat.START);
+//
+//            }
+//        });
 
     }
     public void centerOn(String sLat, String sLong)
@@ -259,6 +301,10 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         mMap.animateCamera(CameraUpdateFactory.newLatLng(focusPoint));
     }
 
+    public void popMap(ArrayList alLocations)
+    {
+
+    }
 
     //Search implementation, pins a marker on the location of the user
     public void onMapSearch(View view)
@@ -281,10 +327,12 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
                 e.printStackTrace();
             }
             Address address = addressList.get(0);
+
             LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
             mMap.addMarker(new MarkerOptions().position(latLng).title("Search query").icon(BitmapDescriptorFactory.fromResource(R.drawable.searchbutton)));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         }
+
     }
 
 
