@@ -2,6 +2,7 @@ package com.example.w028006g.regnlogin.activity;
 
 //Add the imports needed
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -177,10 +178,31 @@ public class RegisterActivity extends AppCompatActivity {
         btnSelPhoto.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent intent = new Intent();
-                intent.setType("image/*");
+                intent.setType("image*//*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent, "Select Image From Gallery"), 1);
+
+
+/*                Intent intent = new Intent();
+
+                intent.setType("image*//*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+
+                intent.putExtra("crop", "true");
+                intent.putExtra("aspectX", 0);
+                intent.putExtra("aspectY", 0);
+                intent.putExtra("outputX", 200);
+                intent.putExtra("outputY", 200);
+                try {
+
+                    intent.putExtra("return-data", true);
+                    startActivityForResult(Intent.createChooser(intent, "Select Image From Gallery"), 1);
+
+                } catch (ActivityNotFoundException e) {
+// Do nothing for now
+                */
             }
+
         });
 
     }
