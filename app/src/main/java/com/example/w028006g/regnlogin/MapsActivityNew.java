@@ -44,6 +44,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallback
@@ -260,6 +261,20 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         dialog.show();
     }
 
+    public void centerOn(String sLat, String sLong)
+    {
+        LatLng focusPoint = new LatLng(Double.parseDouble(sLat),Double.parseDouble(sLong));
+
+        mMap.addMarker(new MarkerOptions().position(focusPoint).title("Discount Day").icon(BitmapDescriptorFactory.fromResource(R.drawable.discountlogo)));
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(25));
+        mMap.animateCamera(CameraUpdateFactory.newLatLng(focusPoint));
+    }
+
+    public void popMap(ArrayList alLocations)
+    {
+
+    }
+
     //Search implementation, pins a marker on the location of the user
     public void onMapSearch(View view)
     {
@@ -281,10 +296,12 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
                 e.printStackTrace();
             }
             Address address = addressList.get(0);
+
             LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
             mMap.addMarker(new MarkerOptions().position(latLng).title("Search query").icon(BitmapDescriptorFactory.fromResource(R.drawable.searchbutton)));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         }
+
     }
 
 
@@ -321,6 +338,8 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         {
             checkLocationPermission();
         }
+        //popMap();
+        //centerOn("53.0412","-2.2098");
     }
 
     /**
