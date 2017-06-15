@@ -4,6 +4,8 @@ import com.example.w028006g.regnlogin.activity.LoginActivity;
 import com.example.w028006g.regnlogin.helper.DownloadImageTask;
 import com.example.w028006g.regnlogin.helper.SQLiteHandler;
 import com.example.w028006g.regnlogin.helper.SessionManager;
+import com.google.firebase.iid.FirebaseInstanceId;
+
 
 import java.net.URL;
 import java.util.HashMap;
@@ -15,11 +17,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import static com.example.w028006g.regnlogin.R.id.imageView;
 import static com.example.w028006g.regnlogin.R.id.img_userprofile;
@@ -34,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
     private SQLiteHandler db;
     private SessionManager session;
+
+    int numMessages = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,11 +91,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        checkIntent(getIntent());
+
+    }
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        checkIntent(intent);
+
 
         new DownloadImageTask((ImageView) findViewById(R.id.img_userprofile))
                 .execute("https://concussive-shirt.000webhostapp.com/uploads/" + u_id + ".png" );
     }
 
+    public void checkIntent(Intent intent) {
+        if (intent.hasExtra("click_action")) {
+            ClickActionHelper.startActivity(intent.getStringExtra("click_action"), intent.getExtras(), this);
+        }
+    }
     /**
      * Logging out the user. Will set isLoggedIn flag to false in shared
      * preferences Clears the user data from sqlite users table
@@ -102,5 +122,17 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    public void addNotification() {
+
+        ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE))
+                .notify(123, new NotificationCompat.Builder(this)
+                        .setContentTitle("WayFarer")
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setStyle(new NotificationCompat.MessagingStyle(null)
+                                .setConversationTitle("Discounts!")
+                                .addMessage("New", 123, null) // Pass in null for user.
+                                .addMessage("MiddlePort", 234, null)).build());
     }
 }

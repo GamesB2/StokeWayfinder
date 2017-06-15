@@ -260,16 +260,6 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         dialog.show();
     }
 
-    public void centerOn(String sLat, String sLong)
-    {
-        LatLng focusPoint = new LatLng(Double.parseDouble(sLat),Double.parseDouble(sLong));
-
-        mMap.addMarker(new MarkerOptions().position(focusPoint).title("Discount Day").icon(BitmapDescriptorFactory.fromResource(R.drawable.discountlogo)));
-        mMap.moveCamera(CameraUpdateFactory.zoomTo(25));
-        mMap.animateCamera(CameraUpdateFactory.newLatLng(focusPoint));
-    }
-
-
     //Search implementation, pins a marker on the location of the user
     public void onMapSearch(View view)
     {
