@@ -83,6 +83,15 @@
             android:value="@string/google_maps_key" />
 
         <activity
+            android:name=".activity.MenuActivity"
+            android:label="@string/title_activity_menu"
+            android:parentActivityName=".MapsActivityNew"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.w028006g.regnlogin.MapsActivityNew" />
+        </activity>
+        <activity
             android:name=".helper.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".MapsActivityNew">
@@ -90,6 +99,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.w028006g.regnlogin.MapsActivityNew" />
         </activity>
+        <service android:name="com.example.w028006g.regnlogin.FireMsgService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <service android:name="com.example.w028006g.regnlogin.FireIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
         <activity android:name=".Profile"></activity>
         <activity android:name=".Adventures"></activity>
         <activity android:name=".Tickets"></activity>
