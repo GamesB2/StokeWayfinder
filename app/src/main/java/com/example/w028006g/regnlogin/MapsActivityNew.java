@@ -90,15 +90,12 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
 
         Bundle extras = getIntent().getExtras();
 
-        if(extras != null) {
+        if (extras != null)
+        {
             lat = extras.getString("Latitude");
             lon = extras.getString("Longitude");
 
         }
-
-
-
-
 
         mSectionsPageAdapter = new SectionsPageAdapter(getSupportFragmentManager());
 
@@ -108,10 +105,13 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         MenuItem menuItem = menu.getItem(0);
         menuItem.setChecked(true);
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener()
+        {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
+            public boolean onNavigationItemSelected(@NonNull MenuItem item)
+            {
+                switch (item.getItemId())
+                {
                     case R.id.ic_map:
 
                         break;
@@ -134,70 +134,8 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
                 return false;
             }
         });
-
-        btnMenu = (Button) findViewById(R.id.button3);
-        btnMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                drawer.openDrawer(GravityCompat.START);
-
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-//
-//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener()
-//        {
-//            @Override
-//            public boolean onNavigationItemSelected(MenuItem item)
-//            {
-//                // Handle navigation view item clicks here.
-//                int id = item.getItemId();
-//
-//                if (id == R.id.nav_profile) {
-//                    // Handle the camera action
-//                } else if (id == R.id.nav_events) {
-//
-//                } else if (id == R.id.nav_logout) {
-//
-//                } else if (id == R.id.nav_settings) {
-//                    Intent intent = new Intent(getApplicationContext(),SettingsActivity.class);
-//                    startActivity(intent);
-//                } else if (id == R.id.nav_exit) {
-//                    Intent intent = new Intent(Intent.ACTION_MAIN);
-//                    intent.addCategory(Intent.CATEGORY_HOME);
-//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    startActivity(intent);
-//                }
-//
-//                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//                drawer.closeDrawer(GravityCompat.START);
-//                return true;
-//            }
-//
-//        });
-//
-//        btnMenu = (Button) findViewById(R.id.button3);
-//        btnMenu.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//                drawer.openDrawer(GravityCompat.START);
-//
-//            }
-//        });
-
     }
-    public void centerOn(String sLat, String sLong)
-    {
 
-        LatLng focusPoint = new LatLng(Double.parseDouble(sLat),Double.parseDouble(sLong));
-
-        mMap.addMarker(new MarkerOptions().position(focusPoint).title("Discount Day").icon(BitmapDescriptorFactory.fromResource(R.drawable.lock)));
-        mMap.moveCamera(CameraUpdateFactory.zoomTo(20));
-        mMap.animateCamera(CameraUpdateFactory.newLatLng(focusPoint));
-    }
     //Called to check if location is enabled on the device.
     //DOES NOT check to see if permission has been granted
     private boolean checkLocation()
@@ -214,19 +152,14 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
     }
 
     //Checks to see if the user has granted location permissions to the app.
-    private boolean checkLocationPermission()
-    {
-        if (ContextCompat.checkSelfPermission(this,
-                                          android.Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED)
-        {
-                // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission. ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_LOCATION);
+    private boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // No explanation needed, we can request the permission.
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_LOCATION);
             return false;
-        } else
-        {
+        } else {
             mMap.setMyLocationEnabled(true);
             return true;
         }
@@ -313,8 +246,7 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         String location = locationSearch.getText().toString();
         List<Address> addressList = null;
 
-        Marker mSearch = null;
-        mSearch.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.searchbutton));
+       //
 
         if (!location.equals(""))
         {
@@ -328,8 +260,12 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
             }
             Address address = addressList.get(0);
 
+            //Marker mSearch = new Marker();
+            //mSearch.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.searchbutton));
+
             LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(latLng).title("Search query").icon(BitmapDescriptorFactory.fromResource(R.drawable.searchbutton)));
+            Marker mSearch = (mMap.addMarker(new MarkerOptions().position(latLng).title("Search query").icon(BitmapDescriptorFactory.fromResource(R.drawable.searchbutton))));
+            mSearch.setDraggable(true);
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         }
 
@@ -384,14 +320,5 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         }
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
-
 }
+

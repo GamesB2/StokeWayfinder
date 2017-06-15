@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.concurrent.Exchanger;
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -40,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
     private SQLiteHandler db;
     private SessionManager session;
 
+    String name;
+    String email;
+    String u_id;
+
     int numMessages = 0;
 
     @Override
@@ -65,9 +71,9 @@ public class MainActivity extends AppCompatActivity {
         // Fetching user details from sqlite
         HashMap<String, String> user = db.getUserDetails();
 
-        String name = user.get("name");
-        String email = user.get("email");
-        String u_id = user.get("uid");
+        name = user.get("name");
+        email = user.get("email");
+        u_id = user.get("uid");
 
         // Displaying the user details on the screen
         txtName.setText(name);
@@ -122,17 +128,5 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
-    }
-
-    public void addNotification() {
-
-        ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE))
-                .notify(123, new NotificationCompat.Builder(this)
-                        .setContentTitle("WayFarer")
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setStyle(new NotificationCompat.MessagingStyle(null)
-                                .setConversationTitle("Discounts!")
-                                .addMessage("New", 123, null) // Pass in null for user.
-                                .addMessage("MiddlePort", 234, null)).build());
     }
 }
