@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.w028006g.regnlogin.MapsActivityNew"
+    android:id="@+id/T_V">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp">
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.88"
+                app:cardCornerRadius="2dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true">
+
+
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:columnCount="1"
+                    android:rowCount="3">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="90dp"
+                        android:scaleType="center"
+                        android:src="@drawable/middleport" />
+
+
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="20dp"
+                        android:text="Middleport Pottery Show"
+                        android:textAlignment="center"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/event_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:paddingStart="20dp"
+                        android:text="Time: 10:00 - 16:00" />
+
+                    <TextView
+                        android:id="@+id/event_Location"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:paddingStart="20dp"
+                        android:text="Location: Middleport Pottery" />
+
+                    <TextView
+                        android:id="@+id/event_Organiser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:paddingStart="20dp"
+                        android:text="Organiser: Middleport Pottery" />
+
+                    <TextView
+                        android:id="@+id/summary"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="20dp"
+                        android:text="In 1862 William Leigh and Frederick Rathbone Burgess took over Central Pottery in the heart of Burslem, calling their new business Burgess + Leigh Ltd. Eventually the founders’ surnames would be combined to form the brand name Burleigh. In 1889 they moved to their state of the art, purpose built site beside the Trent and Mersey Canal at Burslem.
+
+Middleport Pottery was described as ‘The Model Pottery of the Staffordshire Pottery Industry’ when it was first built. It was designed to make all production processes more efficient and to improve conditions for the workforce.
+
+The passageways between the ranges were just wide enough for a cart to get through, and for the easy movement of workers and pottery." />
+
+                </GridLayout>
+
+            </android.support.v7.widget.CardView>
+
+
+        </android.support.v4.widget.NestedScrollView>
+
+
+    </LinearLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

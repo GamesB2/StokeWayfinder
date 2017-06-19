@@ -55,8 +55,8 @@ public class FireMsgService extends com.google.firebase.messaging.FirebaseMessag
     private void sendNotification(String title, String messageBody, String lat, String lon, Map data) {
         Intent intent = new Intent(this, MapsActivityNew.class);
         if (!data.containsKey("NoCoord")) {
-            intent.putExtra("Latitude", ""+lat+"");
-            intent.putExtra("Longitude", ""+lon+"");
+            intent.putExtra("Latitude", lat);
+            intent.putExtra("Longitude", lon);
         }
         //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
