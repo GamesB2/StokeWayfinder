@@ -113,6 +113,7 @@
         <activity android:name=".Profile"></activity>
         <activity android:name=".Adventures"></activity>
         <activity android:name=".Tickets"></activity>
+        <activity android:name=".Tickets_View"></activity>
     </application>
 
 </manifest>
