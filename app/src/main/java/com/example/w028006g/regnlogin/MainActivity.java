@@ -20,14 +20,18 @@ import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.transition.Fade;
+import android.transition.TransitionManager;
 import android.util.Log;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import static android.transition.Fade.IN;
 import static com.example.w028006g.regnlogin.R.id.imageView;
 import static com.example.w028006g.regnlogin.R.id.img_userprofile;
 
@@ -38,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     private Button btnLogout;
     private Button btnMaps;
     private ImageView imgUser;
+
+
 
     private SQLiteHandler db;
     private SessionManager session;

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.LocationManager;
@@ -14,6 +15,7 @@ import android.os.Looper;
 import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -25,34 +27,57 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebStorage;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.support.design.widget.BottomNavigationView;
 
+
 import com.example.w028006g.regnlogin.helper.Attraction;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
+
+import com.akexorcist.googledirection.DirectionCallback;
+import com.akexorcist.googledirection.GoogleDirection;
+import com.akexorcist.googledirection.constant.TransportMode;
+import com.akexorcist.googledirection.model.Direction;
+import com.akexorcist.googledirection.model.Step;
+import com.akexorcist.googledirection.util.DirectionConverter;
+import com.akexorcist.googledirection.model.Leg;
+import com.akexorcist.googledirection.model.Route;
+
 import com.example.w028006g.regnlogin.helper.SettingsActivity;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.gson.Gson;
+
+
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallback
 {
@@ -61,15 +86,17 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
     private static final String TAG = MapsActivityNew.class.getSimpleName();
 
     private GoogleMap mMap;
-    //private Button btnMenu;
-
+    private Marker currentMarker = null;
+    private Marker destMarker = null;
+    private LatLng currentLatLng = null;
+    private Polyline line = null;
+    private GoogleApiClient googleApiClient;
+    //Global flags
+    private boolean firstRefresh = true;
     private SectionsPageAdapter mSectionsPageAdapter;
-
     private ViewPager mViewPager;
-
     private LatLngBounds Demo = new LatLngBounds(new LatLng(52.5027,-2.6794), new LatLng(53.5025,-1.6794));
     private Button btnMenu;
-
     LocationManager locationManager;
 
     //Constant used as a request code for the location permissions
@@ -99,6 +126,7 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
        Toast.makeText(getApplicationContext(),
                 "TEST DATA: " + at.getName() + " Lat: " + at.getLat() + " Long: " + at.getLng(),
                 Toast.LENGTH_LONG).show();
+
 
 
 
@@ -143,6 +171,21 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
             }
         });
     }
+
+
+//    protected void displayGeofences() {
+//        HashMap<String, SimpleGeofence> geofences = SimpleGeofenceStore.getInstance().getSimpleGeofences();
+//
+//        for(Map.Entry<String, SimpleGeofence>item : geofences.entrySet()){
+//            SimpleGeofence sg = item.getValue();
+//
+//            CircleOptions circleOptions1 = new CircleOptions()
+//                    .center(new LatLng(sg.getLatitude(), sg.getLongitude()))
+//                    .radius(sg.getRadius()).strokeColor(Color.BLACK)
+//                    .strokeWidth(2).fillColor(0x500000ff);
+//            mMap.addCircle(circleOptions1);
+//        }
+//    }
 
     //Called to check if location is enabled on the device.
     //DOES NOT check to see if permission has been granted
@@ -207,6 +250,38 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
             }
         }
     }
+
+    private void ListingNearbyDirection(final LatLng Origin, final LatLng Destination){
+        String serverKey = "AIzaSyDkTMy7dLmxu3GLQttBfDBDsnwPLFseiCM";
+
+        GoogleDirection.withServerKey(serverKey)
+                .from(Origin)
+                .to(Destination)
+                .transportMode(TransportMode.WALKING)
+                .alternativeRoute(true)
+                .execute(new DirectionCallback() {
+
+                    @Override
+                    public void onDirectionSuccess(Direction direction, String rawBody) {
+                            Toast.makeText(getApplicationContext(), "Test", Toast.LENGTH_SHORT).show();
+                            mMap.addMarker(new MarkerOptions().position(Origin));
+                            mMap.addMarker(new MarkerOptions().position(Destination));
+
+                            ArrayList<LatLng> directionPositionList = direction.getRouteList().get(0).getLegList().get(0).getDirectionPoint();
+                            mMap.addPolyline(DirectionConverter.createPolyline(getApplicationContext(), directionPositionList, 5, Color.RED));
+
+
+                    }
+
+                    @Override
+                    public void onDirectionFailure(Throwable t) {
+
+                    }
+                }
+                );}
+
+
+
 
     //Creates an alert window to prompt the user to turn their location settings on
     private void showOffAlert()
@@ -284,53 +359,45 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
 
 
     @Override
-    public void onMapReady(GoogleMap googleMap)
-    {
+    public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setLatLngBoundsForCameraTarget(Demo);
         mMap.setMinZoomPreference(5);
 
-        try
-        {
+        try {
             boolean success = mMap.setMapStyle
                     (MapStyleOptions.loadRawResourceStyle
                             (this, R.raw.style_json));
-            if (!success)
-            {
+            if (!success) {
                 Log.e(TAG, "Style parsing failed.");
             }
-        }catch (Resources.NotFoundException e)
-        {
+        } catch (Resources.NotFoundException e) {
             Log.e(TAG, "Can't find style. Error: ", e);
         }
 
         LatLng sydney = new LatLng(-34, 151);
-        LatLng stoke = new LatLng(53.0027,-2.1794);
-        LatLng center = new LatLng(0,0);
+        LatLng stoke = new LatLng(53.0027, -2.1794);
+        LatLng center = new LatLng(0, 0);
 
         mMap.addMarker(new MarkerOptions().position(stoke).title("Marker in Sydney").snippet("Test Snippet inserting text").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(stoke));
         mMap.addMarker(new MarkerOptions().position(sydney).title("'Ere be prisoners").snippet("Why are you even reading this?").icon(BitmapDescriptorFactory.fromResource(R.drawable.lock)));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(Demo,0));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Demo.getCenter(),10));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(Demo, 0));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Demo.getCenter(), 10));
 
-        if (checkLocation())
-        {
+        if (checkLocation()) {
             checkLocationPermission();
         }
 
         if (lat != null && lon != null) {
 
             centerOn(lat, lon);
-
-//            LatLng focusPoint = new LatLng(Double.parseDouble(lat),Double.parseDouble(lon));
-//            Toast.makeText(MapsActivityNew.this, "" + lat + " " + lon + "", Toast.LENGTH_SHORT).show();
-//            mMap.addMarker(new MarkerOptions().position(focusPoint).title("Discount Day").icon(BitmapDescriptorFactory.fromResource(R.drawable.lock)));
-//            mMap.moveCamera(CameraUpdateFactory.zoomTo(25));
-//            mMap.animateCamera(CameraUpdateFactory.newLatLng(focusPoint));
         }
         popMap();
+
     }
+
+
 
 }
 
