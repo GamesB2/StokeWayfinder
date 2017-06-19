@@ -38,6 +38,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 import android.support.design.widget.BottomNavigationView;
 
+
+import com.example.w028006g.regnlogin.helper.Attraction;
+import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
+
 import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.GoogleDirection;
 import com.akexorcist.googledirection.constant.TransportMode;
@@ -46,6 +50,7 @@ import com.akexorcist.googledirection.model.Step;
 import com.akexorcist.googledirection.util.DirectionConverter;
 import com.akexorcist.googledirection.model.Leg;
 import com.akexorcist.googledirection.model.Route;
+
 import com.example.w028006g.regnlogin.helper.SettingsActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -61,6 +66,8 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -96,6 +103,7 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
     final int MY_PERMISSIONS_REQUEST_LOCATION = 14;
     public String lat;
     public String lon;
+    private Attraction at;
 
 
     @Override
@@ -111,14 +119,18 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        Bundle extras = getIntent().getExtras();
+//        Gson gS = new Gson();
+//        String target = getIntent().getStringExtra("MyObjectAsString");
+//        Attraction src = gS.fromJson(target, Attraction.class); // Converts the JSON String to an Object
+        at = DatabaseRetrieval.att;
+       Toast.makeText(getApplicationContext(),
+                "TEST DATA: " + at.getName() + " Lat: " + at.getLat() + " Long: " + at.getLng(),
+                Toast.LENGTH_LONG).show();
 
-        if (extras != null)
-        {
-            lat = extras.getString("Latitude");
-            lon = extras.getString("Longitude");
 
-        }
+
+
+
 
 
         mSectionsPageAdapter = new SectionsPageAdapter(getSupportFragmentManager());
@@ -305,8 +317,11 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         mMap.animateCamera(CameraUpdateFactory.newLatLng(focusPoint));
     }
 
-    public void popMap(ArrayList alLocations)
+    public void popMap()
     {
+        LatLng attLat = new LatLng(Double.parseDouble(at.getLat()),Double.parseDouble(at.getLng()));
+        mMap.addMarker(new MarkerOptions().position(attLat).title(at.getName()).snippet("Why are you even reading this?").icon(BitmapDescriptorFactory.fromResource(R.drawable.lock)));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(attLat));
 
     }
 
@@ -378,11 +393,7 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
 
             centerOn(lat, lon);
         }
-
-//        LatLng origin = new LatLng(53.0027, -2.1794);
-//        LatLng destination = new LatLng(53.010541, -2.228589);
-//        ListingNearbyDirection(origin, destination);
-
+        popMap();
 
     }
 

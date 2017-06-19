@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
     private SQLiteHandler db;
     private SessionManager session;
+    public static Person userDetails;
 
     String name;
     String email;
@@ -58,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        userDetails = new Person();
 
         txtName = (TextView) findViewById(R.id.name);
         txtEmail = (TextView) findViewById(R.id.email);
@@ -80,6 +83,10 @@ public class MainActivity extends AppCompatActivity {
         name = user.get("name");
         email = user.get("email");
         u_id = user.get("uid");
+        userDetails.setName(name);
+        userDetails.setEmail(email);
+        userDetails.setU_id(u_id);
+
 
         // Displaying the user details on the screen
         txtName.setText(name);
