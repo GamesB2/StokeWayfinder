@@ -8,9 +8,14 @@ import android.location.Address;
 
 public abstract class POI
 {
-    Address aAdressInfo;
+    Address aAddressInfo;
     String sDescription;
     double dPrice = 0;
+
+    public Address getAddressInfo()
+    {
+        return aAddressInfo;
+    }
 
     public String getDescription()
     {
@@ -26,7 +31,7 @@ public abstract class POI
     {
         try
         {
-            aAdressInfo.setUrl(sWeb);
+            aAddressInfo.setUrl(sWeb);
             return true;
         }
         catch (Exception e)
@@ -72,7 +77,7 @@ public abstract class POI
             sAdNum = (extractNumber(sALine));
             nAdNum = Integer.parseInt(sAdNum);
             sRemString = (sALine.substring(sAdNum.length()).trim());
-            aAdressInfo.setAddressLine(nAdNum,sRemString);
+            aAddressInfo.setAddressLine(nAdNum,sRemString);
             return true;
         }
         else
@@ -85,7 +90,7 @@ public abstract class POI
     {
         try
         {
-            aAdressInfo.setPostalCode(sPC);
+            aAddressInfo.setPostalCode(sPC);
             return true;
         }
         catch (Exception e)
@@ -94,40 +99,28 @@ public abstract class POI
         }
     }
 
-    public void setLat (String sLat) throws Exception
+    public void setLat (String sLat)
     {
-        try
-        {
-            aAdressInfo.setLatitude(Double.parseDouble(sLat));
-        }
-        catch (Exception e)
-        {
-            throw new Exception("Unable to set Latitude");
-        }
+
+            aAddressInfo.setLatitude(Double.parseDouble(sLat));
+
+
     }
 
-    public void setLong (String sLong) throws Exception
+    public void setLong (String sLong)
     {
-        try
-        {
-            aAdressInfo.setLongitude(Double.parseDouble(sLong));
-        }
-        catch (Exception e)
-        {
-            throw new Exception("Unable to set Longitude");
-        }
+
+            aAddressInfo.setLongitude(Double.parseDouble(sLong));
+
+
     }
 
-    public void setName (String sName) throws Exception
+    public void setName (String sName)
     {
-        try
-        {
-            aAdressInfo.setFeatureName(sName);
-        }
-        catch (Exception e)
-        {
-            throw new Exception("All points of interest Require a name that was unable to be set");
-        }
+
+            aAddressInfo.setFeatureName(sName);
+
+
     }
 
     //Method used to extract the number from the address
