@@ -46,6 +46,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.support.design.widget.BottomNavigationView;
 
+
+import com.example.w028006g.regnlogin.helper.Attraction;
+import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
+
+import com.example.w028006g.regnlogin.helper.Event;
+import com.example.w028006g.regnlogin.helper.Landmark;
+import com.example.w028006g.regnlogin.helper.POI;
+
 import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.GoogleDirection;
 import com.akexorcist.googledirection.constant.TransportMode;
@@ -54,6 +62,7 @@ import com.akexorcist.googledirection.model.Step;
 import com.akexorcist.googledirection.util.DirectionConverter;
 import com.akexorcist.googledirection.model.Leg;
 import com.akexorcist.googledirection.model.Route;
+
 import com.example.w028006g.regnlogin.helper.SettingsActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.location.Geofence;
@@ -61,19 +70,33 @@ import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
+
+
+import com.example.w028006g.regnlogin.helper.SettingsActivity;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+
 import com.google.android.gms.maps.model.Circle;
+
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+
+
+
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -94,19 +117,29 @@ import com.google.android.gms.location.LocationListener;
 public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCallback {
 
 
+
     //Assigns the String "TAG" the name of the class for error reports
     private static final String TAG = MapsActivityNew.class.getSimpleName();
+
+
+    private GoogleMap mMap;
 
     private Marker currentMarker = null;
     private Marker destMarker = null;
     private LatLng currentLatLng = null;
     private Polyline line = null;
 
+    private GoogleApiClient googleApiClient;
+
     //Global flags
     private boolean firstRefresh = true;
     private SectionsPageAdapter mSectionsPageAdapter;
     private ViewPager mViewPager;
+
     private LatLngBounds Demo = new LatLngBounds(new LatLng(52.5027, -2.6794), new LatLng(53.5025, -1.6794));
+
+    private LatLngBounds Demo = new LatLngBounds(new LatLng(52.5027,-2.6794), new LatLng(53.5025,-1.6794));
+
     private Button btnMenu;
     LocationManager locationManager;
 
@@ -114,6 +147,8 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     final int MY_PERMISSIONS_REQUEST_LOCATION = 14;
     public String lat;
     public String lon;
+    public ArrayList<POI> poiArrayList = new ArrayList<>();
+    public POI att;
 
     private GoogleMap mMap;
     private GoogleApiClient googleApiClient;
@@ -145,14 +180,16 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        poiArrayList = DatabaseRetrieval.poiArrayList;
 
-        Bundle extras = getIntent().getExtras();
+
 
         if (extras != null) {
             lat = extras.getString("Latitude");
             lon = extras.getString("Longitude");
 
         }
+
 
         mSectionsPageAdapter = new SectionsPageAdapter(getSupportFragmentManager());
 
@@ -287,6 +324,21 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
                         piGeolocationService);
     }
 
+
+//    protected void displayGeofences() {
+//        HashMap<String, SimpleGeofence> geofences = SimpleGeofenceStore.getInstance().getSimpleGeofences();
+//
+//        for(Map.Entry<String, SimpleGeofence>item : geofences.entrySet()){
+//            SimpleGeofence sg = item.getValue();
+//
+//            CircleOptions circleOptions1 = new CircleOptions()
+//                    .center(new LatLng(sg.getLatitude(), sg.getLongitude()))
+//                    .radius(sg.getRadius()).strokeColor(Color.BLACK)
+//                    .strokeWidth(2).fillColor(0x500000ff);
+//            mMap.addCircle(circleOptions1);
+//        }
+//    }
+
     //Called to check if location is enabled on the device.
     //DOES NOT check to see if permission has been granted
     private boolean checkLocation() {
@@ -342,7 +394,9 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         }
     }
 
+
     private void ListingNearbyDirection(final LatLng Origin, final LatLng Destination) {
+
         String serverKey = "AIzaSyDkTMy7dLmxu3GLQttBfDBDsnwPLFseiCM";
 
         GoogleDirection.withServerKey(serverKey)
@@ -352,25 +406,27 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
                 .alternativeRoute(true)
                 .execute(new DirectionCallback() {
 
-                             @Override
-                             public void onDirectionSuccess(Direction direction, String rawBody) {
-                                 Toast.makeText(getApplicationContext(), "Test", Toast.LENGTH_SHORT).show();
-                                 mMap.addMarker(new MarkerOptions().position(Origin));
-                                 mMap.addMarker(new MarkerOptions().position(Destination));
+                    @Override
+                    public void onDirectionSuccess(Direction direction, String rawBody) {
+                            Toast.makeText(getApplicationContext(), "Test", Toast.LENGTH_SHORT).show();
+                            mMap.addMarker(new MarkerOptions().position(Origin));
+                            mMap.addMarker(new MarkerOptions().position(Destination));
 
-                                 ArrayList<LatLng> directionPositionList = direction.getRouteList().get(0).getLegList().get(0).getDirectionPoint();
-                                 mMap.addPolyline(DirectionConverter.createPolyline(getApplicationContext(), directionPositionList, 5, Color.RED));
+                            ArrayList<LatLng> directionPositionList = direction.getRouteList().get(0).getLegList().get(0).getDirectionPoint();
+                            mMap.addPolyline(DirectionConverter.createPolyline(getApplicationContext(), directionPositionList, 5, Color.RED));
 
 
-                             }
+                    }
 
-                             @Override
-                             public void onDirectionFailure(Throwable t) {
+                    @Override
+                    public void onDirectionFailure(Throwable t) {
 
-                             }
-                         }
-                );
-    }
+                    }
+                }
+                );}
+
+
+
 
 
     //Creates an alert window to prompt the user to turn their location settings on
@@ -401,6 +457,106 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         mMap.moveCamera(CameraUpdateFactory.zoomTo(25));
         mMap.animateCamera(CameraUpdateFactory.newLatLng(focusPoint));
     }
+
+
+    public void popMap()
+    {
+        popMapAtt();
+        popMapLnd();
+        popMapEvents();
+    }
+    public void popMapAtt()
+    {
+        for (int i = 0; i < poiArrayList.size(); i++)
+        {
+            POI item = poiArrayList.get(i);
+            if(item instanceof Attraction)
+            {
+                Address add = item.getAddressInfo();
+                LatLng dest = new LatLng(add.getLatitude(), add.getLongitude());
+                switch (((Attraction) item).getIcon())
+                {
+                    case 0:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                        break;
+                    case 1:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+                        break;
+                    case 2:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                        break;
+                    case 3:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                        break;
+                    case 4:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+                        break;
+                    case 5:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                        break;
+                    default:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName()));
+
+                        break;
+                }
+            }
+        }
+    }
+
+    public void popMapLnd()
+    {
+        for (int i = 0; i < poiArrayList.size(); i++)
+        {
+            POI item = poiArrayList.get(i);
+            if(item instanceof Landmark)
+            {
+                Address add = item.getAddressInfo();
+                LatLng dest = new LatLng(add.getLatitude(), add.getLongitude());
+                mMap.addMarker(new MarkerOptions()
+                        .position(dest)
+                        .title(add.getFeatureName())
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
+            }
+        }
+    }
+
+    public void popMapEvents()
+    {
+        for (int i = 0; i < poiArrayList.size(); i++)
+        {
+            POI item = poiArrayList.get(i);
+            if(item instanceof Event)
+            {
+                Address add = item.getAddressInfo();
+                LatLng dest = new LatLng(add.getLatitude(), add.getLongitude());
+                mMap.addMarker(new MarkerOptions()
+                        .position(dest)
+                        .title(add.getFeatureName())
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+            }
+        }
+    }
+
 
     //Search implementation, pins a marker on the location of the user
     public void onMapSearch(View view) {
@@ -438,7 +594,9 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         mMap.setLatLngBoundsForCameraTarget(Demo);
         mMap.setMinZoomPreference(5);
 
+
         displayGeofences();
+
 
         try {
             boolean success = mMap.setMapStyle
@@ -455,8 +613,6 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         LatLng stoke = new LatLng(53.0027, -2.1794);
         LatLng center = new LatLng(0, 0);
 
-        mMap.addMarker(new MarkerOptions().position(stoke).title("Marker in Sydney").snippet("Test Snippet inserting text").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(stoke));
         mMap.addMarker(new MarkerOptions().position(sydney).title("'Ere be prisoners").snippet("Why are you even reading this?").icon(BitmapDescriptorFactory.fromResource(R.drawable.lock)));
         mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(Demo, 0));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Demo.getCenter(), 10));
@@ -469,10 +625,10 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
 
             centerOn(lat, lon);
         }
+        popMap();
+
     }
-//        LatLng origin = new LatLng(53.0027, -2.1794);
-//        LatLng destination = new LatLng(53.010541, -2.228589);
-//        ListingNearbyDirection(origin, destination);
+
 }
 
 

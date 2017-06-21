@@ -20,7 +20,20 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.RelativeLayout;
 
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.example.w028006g.regnlogin.helper.DownloadImageTask;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.RelativeLayout;
+
 public class Profile extends AppCompatActivity {
+
+    private TextView txtName;
+    private TextView txtEmail;
+
     private Scene scene1, scene2;
     //transition to move between scenes
     private Transition transition;
@@ -32,6 +45,9 @@ public class Profile extends AppCompatActivity {
         getWindow().requestFeature(android.view.Window.FEATURE_CONTENT_TRANSITIONS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile);
+
+        txtName = (TextView) findViewById(R.id.txtName);
+        txtEmail = (TextView) findViewById(R.id.txtUserEmail);
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView_Bar);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
@@ -69,6 +85,13 @@ public class Profile extends AppCompatActivity {
                 return false;
             }
         });
+
+        //Download user image
+        new DownloadImageTask((ImageView) findViewById(R.id.profilePic))
+                .execute("https://concussive-shirt.000webhostapp.com/uploads/" + MainActivity.userDetails.getU_id() + ".png" );
+        // Displaying the user details on the screen
+        txtName.setText(MainActivity.userDetails.getName());
+        txtEmail.setText(MainActivity.userDetails.getEmail());
     }
 
     public void changeScene(View v){
@@ -83,5 +106,20 @@ public class Profile extends AppCompatActivity {
             start=true;
         }
     }
+
+
+    public void changeScene(View v){
+
+        //check flag
+        if(start) {
+            TransitionManager.go(scene2, transition);
+            start=false;
+        }
+        else {
+            TransitionManager.go(scene1, transition);
+            start=true;
+        }
+    }
+
 
 }
