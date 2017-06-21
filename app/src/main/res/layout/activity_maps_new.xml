@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#D32F2F">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -23,19 +24,18 @@
 
             <EditText
                 android:id="@+id/gSearch"
-                android:layout_width="309dp"
+                android:layout_width="333dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.03"
-                android:background="#D32F2F"
+                android:background="@color/white"
                 android:hint="Search"
                 android:paddingLeft="10dp"
-                android:textColor="@color/white" />
+                android:textColor="#b71c1c" />
 
             <ImageView
                 android:id="@+id/search_button"
                 android:layout_width="43dp"
                 android:layout_height="match_parent"
-                android:background="#D32F2F"
                 android:onClick="onMapSearch"
                 android:padding="5dp"
                 android:src="@drawable/sbaricon" />
@@ -48,8 +48,8 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.example.w028006g.regnlogin.MapsActivityNew"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        tools:context="com.example.w028006g.regnlogin.MapsActivityNew" />
 
     <RelativeLayout
         android:layout_width="match_parent"
