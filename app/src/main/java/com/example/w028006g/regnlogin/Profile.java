@@ -15,6 +15,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.transition.Slide;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.RelativeLayout;
 
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,9 +30,10 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.RelativeLayout;
 
 public class Profile extends AppCompatActivity {
-  
+
     private TextView txtName;
     private TextView txtEmail;
+
     private Scene scene1, scene2;
     //transition to move between scenes
     private Transition transition;
@@ -101,5 +106,20 @@ public class Profile extends AppCompatActivity {
             start=true;
         }
     }
+
+
+    public void changeScene(View v){
+
+        //check flag
+        if(start) {
+            TransitionManager.go(scene2, transition);
+            start=false;
+        }
+        else {
+            TransitionManager.go(scene1, transition);
+            start=true;
+        }
+    }
+
 
 }

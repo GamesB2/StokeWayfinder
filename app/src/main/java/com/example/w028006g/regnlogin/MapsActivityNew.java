@@ -1,14 +1,20 @@
 package com.example.w028006g.regnlogin;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Handler;
 import android.os.Looper;
@@ -30,11 +36,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebStorage;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.support.design.widget.BottomNavigationView;
 
@@ -57,19 +65,36 @@ import com.akexorcist.googledirection.model.Route;
 
 import com.example.w028006g.regnlogin.helper.SettingsActivity;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingRequest;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
+
+
+import com.example.w028006g.regnlogin.helper.SettingsActivity;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+
+import com.google.android.gms.maps.model.Circle;
+
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+
 
 
 import com.google.android.gms.maps.model.Polyline;
@@ -83,23 +108,38 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallback
-{
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+
+import com.google.android.gms.location.LocationListener;
+
+public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCallback {
+
+
 
     //Assigns the String "TAG" the name of the class for error reports
     private static final String TAG = MapsActivityNew.class.getSimpleName();
 
+
     private GoogleMap mMap;
+
     private Marker currentMarker = null;
     private Marker destMarker = null;
     private LatLng currentLatLng = null;
     private Polyline line = null;
+
     private GoogleApiClient googleApiClient;
+
     //Global flags
     private boolean firstRefresh = true;
     private SectionsPageAdapter mSectionsPageAdapter;
     private ViewPager mViewPager;
+
+    private LatLngBounds Demo = new LatLngBounds(new LatLng(52.5027, -2.6794), new LatLng(53.5025, -1.6794));
+
     private LatLngBounds Demo = new LatLngBounds(new LatLng(52.5027,-2.6794), new LatLng(53.5025,-1.6794));
+
     private Button btnMenu;
     LocationManager locationManager;
 
@@ -110,10 +150,27 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
     public ArrayList<POI> poiArrayList = new ArrayList<>();
     public POI att;
 
+    private GoogleMap mMap;
+    private GoogleApiClient googleApiClient;
+    private Location lastLocation;
 
+    private TextView textLat, textLong;
+
+    private MapFragment mapFragment;
+
+    private static final String NOTIFICATION_MSG = "NOTIFICATION MSG";
+
+    // Create a Intent send by the notification
+    public static Intent makeNotificationIntent(Context context, String msg) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra(NOTIFICATION_MSG, msg);
+        return intent;
+    }
+
+    protected Marker myPositionMarker;
+    static public boolean geofencesAlreadyRegistered = false;
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps_new);
 
@@ -127,6 +184,13 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
 
 
 
+        if (extras != null) {
+            lat = extras.getString("Latitude");
+            lon = extras.getString("Longitude");
+
+        }
+
+
         mSectionsPageAdapter = new SectionsPageAdapter(getSupportFragmentManager());
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView_Bar);
@@ -135,13 +199,10 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         MenuItem menuItem = menu.getItem(0);
         menuItem.setChecked(true);
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener()
-        {
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item)
-            {
-                switch (item.getItemId())
-                {
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
                     case R.id.ic_map:
 
                         break;
@@ -164,6 +225,103 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
                 return false;
             }
         });
+            startService(new Intent(this, GeolocationService.class));
+    }
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            if (bundle != null) {
+                int resultCode = bundle.getInt("done");
+                if (resultCode == 1) {
+                    Double latitude = bundle.getDouble("latitude");
+                    Double longitude = bundle.getDouble("longitude");
+
+                    updateMarker(latitude, longitude);
+                }
+            }
+        }
+    };
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        this.unregisterReceiver(receiver);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(new OnMapReadyCallback() {
+
+                @Override
+                public void onMapReady(GoogleMap googleMap) {
+                    mMap = googleMap;
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+                    displayGeofences();
+                }
+            });
+        }
+
+        this.registerReceiver(receiver,
+                new IntentFilter("me.hoen.geofence_21.geolocation.service"));
+    }
+
+    protected void displayGeofences() {
+//		HashMap<String, SimpleGeofence> geofences = SimpleGeofenceStore.getInstance().getSimpleGeofences();
+        HashMap<String, SimpleGeofence> geofences = SimpleGeofenceStore.getInstance().getSimpleGeofences();
+
+//		for (Map.Entry<String, SimpleGeofence> item : geofences.entrySet()) {
+//			SimpleGeofence sg = item.getValue();
+//
+//			CircleOptions circleOptions1 = new CircleOptions()
+//					.center(new LatLng(sg.getLatitude(), sg.getLongitude()))
+//					.radius(sg.getRadius()).strokeColor(Color.BLACK)
+//					.strokeWidth(2).fillColor(0x500000ff);
+//			map.addCircle(circleOptions1);
+//		}
+
+        for (Map.Entry<String, SimpleGeofence> item : geofences.entrySet()) {
+            SimpleGeofence sg = item.getValue();
+
+            CircleOptions circleOptions1 = new CircleOptions()
+                    .center(new LatLng(sg.getLatitude(), sg.getLongitude()))
+                    .radius(sg.getRadius()).strokeColor(Color.BLACK)
+                    .strokeWidth(2).fillColor(0x500000ff);
+            mMap.addCircle(circleOptions1);
+        }
+    }
+
+    protected void createMarker(Double latitude, Double longitude) {
+        LatLng latLng = new LatLng(latitude, longitude);
+
+        myPositionMarker = mMap.addMarker(new MarkerOptions().position(latLng));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+    }
+
+    protected void updateMarker(Double latitude, Double longitude) {
+        if (myPositionMarker == null) {
+            createMarker(latitude, longitude);
+        }
+    }
+
+    static public void startGeolocationService(Context context) {
+
+        Intent geolocationService = new Intent(context,
+                GeolocationService.class);
+        PendingIntent piGeolocationService = PendingIntent.getService(context,
+                0, geolocationService, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) context
+                .getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(piGeolocationService);
+        alarmManager
+                .setInexactRepeating(AlarmManager.RTC_WAKEUP,
+                        System.currentTimeMillis(), 2 * 60 * 1000,
+                        piGeolocationService);
     }
 
 
@@ -183,15 +341,13 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
 
     //Called to check if location is enabled on the device.
     //DOES NOT check to see if permission has been granted
-    private boolean checkLocation()
-    {
-        if(!isLocationEnabled())
+    private boolean checkLocation() {
+        if (!isLocationEnabled())
             showOffAlert();
         return isLocationEnabled();
     }
 
-    private boolean isLocationEnabled()
-    {
+    private boolean isLocationEnabled() {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
                 locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
@@ -213,29 +369,22 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults)
-    {
-        LatLng stoke = new LatLng(53.0027,-2.1794);
+                                           String permissions[], int[] grantResults) {
+        LatLng stoke = new LatLng(53.0027, -2.1794);
 
-        switch (requestCode)
-        {
-            case MY_PERMISSIONS_REQUEST_LOCATION:
-                {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_LOCATION: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                {
-                    try
-                    {
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    try {
                         mMap.setMyLocationEnabled(true);
-                    }catch (SecurityException SE)
-                    {
+                    } catch (SecurityException SE) {
                         Log.e(TAG, "Permissions error: Requires Location Permissions to be enabled manually");
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(stoke));
                     }
 
-                } else
-                {
+                } else {
                     Log.e(TAG, "Location permissions denied");
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(stoke));
                     // permission denied, boo! Disable the
@@ -245,7 +394,9 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         }
     }
 
-    private void ListingNearbyDirection(final LatLng Origin, final LatLng Destination){
+
+    private void ListingNearbyDirection(final LatLng Origin, final LatLng Destination) {
+
         String serverKey = "AIzaSyDkTMy7dLmxu3GLQttBfDBDsnwPLFseiCM";
 
         GoogleDirection.withServerKey(serverKey)
@@ -277,39 +428,36 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
 
 
 
+
     //Creates an alert window to prompt the user to turn their location settings on
-    private void showOffAlert()
-    {
+    private void showOffAlert() {
         final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle("Enable Location")
                 .setMessage("Your Locations Settings are turned off.\nPlease Enable Location to " +
                         "use this app")
-                .setPositiveButton("Location Settings", new DialogInterface.OnClickListener()
-                {
+                .setPositiveButton("Location Settings", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface paramDialogInterface, int paramInt)
-                    {
+                    public void onClick(DialogInterface paramDialogInterface, int paramInt) {
                         Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                         startActivity(myIntent);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface paramDialogInterface, int paramInt)
-                    {
+                    public void onClick(DialogInterface paramDialogInterface, int paramInt) {
                     }
                 });
         dialog.show();
     }
 
-    public void centerOn(String sLat, String sLong)
-    {
-        LatLng focusPoint = new LatLng(Double.parseDouble(sLat),Double.parseDouble(sLong));
+    public void centerOn(String sLat, String sLong) {
+        LatLng focusPoint = new LatLng(Double.parseDouble(sLat), Double.parseDouble(sLong));
 
         mMap.addMarker(new MarkerOptions().position(focusPoint).title("Discount Day").icon(BitmapDescriptorFactory.fromResource(R.drawable.discountlogo)));
         mMap.moveCamera(CameraUpdateFactory.zoomTo(25));
         mMap.animateCamera(CameraUpdateFactory.newLatLng(focusPoint));
     }
+
 
     public void popMap()
     {
@@ -409,20 +557,18 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         }
     }
 
+
     //Search implementation, pins a marker on the location of the user
-    public void onMapSearch(View view)
-    {
+    public void onMapSearch(View view) {
         EditText locationSearch = (EditText) findViewById(R.id.gSearch);
         String location = locationSearch.getText().toString();
         List<Address> addressList = null;
 
-       //
+        //
 
-        if (!location.equals(""))
-        {
+        if (!location.equals("")) {
             Geocoder geocoder = new Geocoder(this);
-            try
-            {
+            try {
                 addressList = geocoder.getFromLocationName(location, 1);
 
             } catch (IOException e) {
@@ -447,6 +593,10 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         mMap = googleMap;
         mMap.setLatLngBoundsForCameraTarget(Demo);
         mMap.setMinZoomPreference(5);
+
+
+        displayGeofences();
+
 
         try {
             boolean success = mMap.setMapStyle
@@ -479,7 +629,7 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
 
     }
 
-
-
 }
+
+
 
