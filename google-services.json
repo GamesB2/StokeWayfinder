@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "303056141171",
+    "firebase_url": "https://wayfarer-a0063.firebaseio.com",
+    "project_id": "wayfarer-a0063",
+    "storage_bucket": "wayfarer-a0063.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:303056141171:android:5797d4a317c2eada",
+        "android_client_info": {
+          "package_name": "com.example.w028006.regnlogin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "303056141171-o9ukopft5tn4uopqlhp10v40dl8onrci.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWnd-h1-mXe42UGkqwli1awlV3-XMnXXo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

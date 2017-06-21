@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+      >
+
+    <item
+        android:id="@+id/ic_map"
+        android:icon="@drawable/map"
+        android:title="Map"
+        />
+
+    <item
+        android:id="@+id/ic_Profile"
+        android:checkable="true"
+        android:icon="@drawable/profile"
+        android:title="Profile"
+        android:visible="true" />
+    <item
+            android:id="@+id/ic_Adventures"
+            android:icon="@drawable/route"
+            android:title="Adventures"
+            />
+        <item
+            android:id="@+id/ic_Tickets"
+            android:icon="@drawable/ticket"
+            android:title="Tickets"
+            />
+
+</menu>
