@@ -48,8 +48,8 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.example.w028006g.regnlogin.MapsActivityNew"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        tools:context="com.example.w028006g.regnlogin.MapsActivityNew" />
 
     <RelativeLayout
         android:layout_width="match_parent"

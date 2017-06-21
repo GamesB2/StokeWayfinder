@@ -15,6 +15,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.transition.Slide;
 import android.view.Menu;
 import android.view.MenuItem;
+<<<<<<< HEAD
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.example.w028006g.regnlogin.helper.DownloadImageTask;
+=======
+>>>>>>> ce5e1b75dd12b9851a9d384404651901db85b903
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.RelativeLayout;
+
+<<<<<<< HEAD
+public class Profile extends AppCompatActivity {
+    private TextView txtName;
+    private TextView txtEmail;
+=======
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,8 +42,11 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.RelativeLayout;
 
 public class Profile extends AppCompatActivity {
+
     private TextView txtName;
     private TextView txtEmail;
+
+>>>>>>> ce5e1b75dd12b9851a9d384404651901db85b903
     private Scene scene1, scene2;
     //transition to move between scenes
     private Transition transition;
@@ -96,5 +116,20 @@ public class Profile extends AppCompatActivity {
             start=true;
         }
     }
+
+
+    public void changeScene(View v){
+
+        //check flag
+        if(start) {
+            TransitionManager.go(scene2, transition);
+            start=false;
+        }
+        else {
+            TransitionManager.go(scene1, transition);
+            start=true;
+        }
+    }
+
 
 }
