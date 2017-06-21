@@ -21,6 +21,7 @@ import com.example.w028006g.regnlogin.MainActivity;
 import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.app.AppConfig;
 import com.example.w028006g.regnlogin.app.AppController;
+import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 import com.example.w028006g.regnlogin.helper.SQLiteHandler;
 import com.example.w028006g.regnlogin.helper.SessionManager;
 
@@ -45,6 +46,13 @@ public class LoginActivity extends Activity {
         btnLogin = (Button) findViewById(R.id.btnLogin);
         btnLinkToRegister = (Button) findViewById(R.id.btnLinkToRegisterScreen);
         btnLinkToReset = (Button) findViewById(R.id.btnLinkToReset);
+
+        //Start Service
+        // use this to start and trigger a service
+        Intent i= new Intent(LoginActivity.this, DatabaseRetrieval.class);
+        // potentially add data to the intent
+        i.putExtra("KEY1", "Value to be used by the service");
+        LoginActivity.this.startService(i);
 
         // Progress dialog
         pDialog = new ProgressDialog(this);
@@ -202,5 +210,14 @@ public class LoginActivity extends Activity {
     private void hideDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();
+    }
+
+    public void startService(View view) {
+        startService(new Intent(getBaseContext(), DatabaseRetrieval.class));
+    }
+
+    // Method to stop the service
+    public void stopService(View view) {
+        stopService(new Intent(getBaseContext(), DatabaseRetrieval.class));
     }
 }

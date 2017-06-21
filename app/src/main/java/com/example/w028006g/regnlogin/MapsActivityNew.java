@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Handler;
 import android.os.Looper;
@@ -38,6 +39,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 import android.support.design.widget.BottomNavigationView;
 
+import com.example.w028006g.regnlogin.helper.Attraction;
+import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
+import com.example.w028006g.regnlogin.helper.Event;
+import com.example.w028006g.regnlogin.helper.Landmark;
+import com.example.w028006g.regnlogin.helper.POI;
 import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.GoogleDirection;
 import com.akexorcist.googledirection.constant.TransportMode;
@@ -61,6 +67,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -71,6 +78,8 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Locale;
+
 
 public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallback
 {
@@ -86,16 +95,48 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
     private GoogleApiClient googleApiClient;
     //Global flags
     private boolean firstRefresh = true;
+    public static GoogleMap mMap;
+    public static Location userLocation;
+    public static LatLng userLatLng;
+    //private Button btnMenu;
+
     private SectionsPageAdapter mSectionsPageAdapter;
+
     private ViewPager mViewPager;
+
     private LatLngBounds Demo = new LatLngBounds(new LatLng(52.5027,-2.6794), new LatLng(53.5025,-1.6794));
     private Button btnMenu;
+
     LocationManager locationManager;
 
     //Constant used as a request code for the location permissions
     final int MY_PERMISSIONS_REQUEST_LOCATION = 14;
     public String lat;
     public String lon;
+    public ArrayList<POI> poiArrayList = new ArrayList<>();
+    public POI att;
+
+    //List of constants declared to sort the markers
+    final int MUSIC= 0;
+    final int BUSINESS= 1;
+    final int FOOD_AND_DRINK=2;
+    final int COMMUNITY=3;
+    final int ARTS=4;
+    final int FILM_AND_MEDIA=5;
+    final int SPORTS=6;
+    final int HEALTH_AND_FITNESS=7;
+    final int SCIENCE_AND_TECH=8;
+    final int TRAVEL_AND_OUTDOOR=9;
+    final int CHARITY=10;
+    final int SPIRITUALITY=11;
+    final int FAMILY_AND_EDUCATION=12;
+    final int HOLIDAY=13;
+    final int GOVERNMENT=14;
+    final int FASHION=15;
+    final int HOME_AND_LIFESTYLE=16;
+    final int AUTO_BOAT_AND_AIR=17;
+    final int HOBBIES=18;
+
 
 
     @Override
@@ -110,6 +151,7 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        poiArrayList = DatabaseRetrieval.poiArrayList;
 
         Bundle extras = getIntent().getExtras();
 
@@ -305,9 +347,180 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         mMap.animateCamera(CameraUpdateFactory.newLatLng(focusPoint));
     }
 
-    public void popMap(ArrayList alLocations)
+    public void popMap()
     {
+        popMapAtt();
+        popMapLnd();
+        popMapEvents();
+    }
+    public void popMapAtt()
+    {
+        for (int i = 0; i < poiArrayList.size(); i++)
+        {
+            POI item = poiArrayList.get(i);
+            if(item instanceof Attraction)
+            {
+                Address add = item.getAddressInfo();
+                LatLng dest = new LatLng(add.getLatitude(), add.getLongitude());
+                switch (((Attraction) item).getIcon())
+                {
+                    case MUSIC:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.music)));
+                        break;
+                    case BUSINESS:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.business)));
+                        break;
+                    case FOOD_AND_DRINK:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.film_and_media)));
+                        break;
+                    case COMMUNITY:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                        break;
+                    case ARTS:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+                        break;
+                    case FILM_AND_MEDIA:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.film_and_media)));
+                        break;
+                    case SPORTS:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.health_and_fitness)));
+                        break;
+                    case HEALTH_AND_FITNESS:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.health)));
+                        break;
+                    case SCIENCE_AND_TECH:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.science)));
+                        break;
+                    case TRAVEL_AND_OUTDOOR:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                        break;
+                    case CHARITY:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                        break;
+                    case SPIRITUALITY:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                        break;
+                    case FAMILY_AND_EDUCATION:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                        break;
+                    case HOLIDAY:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                        break;
+                    case GOVERNMENT:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                        break;
+                    case FASHION:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                        break;
+                    case HOME_AND_LIFESTYLE:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                        break;
+                    case AUTO_BOAT_AND_AIR:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                        break;
+                    case HOBBIES:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                        break;
+                    default:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName()));
 
+                        break;
+                }
+            }
+        }
+    }
+
+    public void popMapLnd()
+    {
+        for (int i = 0; i < poiArrayList.size(); i++)
+        {
+            POI item = poiArrayList.get(i);
+            if(item instanceof Landmark)
+            {
+                Address add = item.getAddressInfo();
+                LatLng dest = new LatLng(add.getLatitude(), add.getLongitude());
+                mMap.addMarker(new MarkerOptions()
+                        .position(dest)
+                        .title(add.getFeatureName())
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
+            }
+        }
+    }
+
+    public void popMapEvents()
+    {
+        for (int i = 0; i < poiArrayList.size(); i++)
+        {
+            POI item = poiArrayList.get(i);
+            if(item instanceof Event)
+            {
+                Address add = item.getAddressInfo();
+                LatLng dest = new LatLng(add.getLatitude(), add.getLongitude());
+                mMap.addMarker(new MarkerOptions()
+                        .position(dest)
+                        .title(add.getFeatureName())
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+            }
+        }
     }
 
     //Search implementation, pins a marker on the location of the user
@@ -344,49 +557,63 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
 
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(GoogleMap googleMap)
+    {
         mMap = googleMap;
         mMap.setLatLngBoundsForCameraTarget(Demo);
         mMap.setMinZoomPreference(5);
 
-        try {
+        try
+        {
             boolean success = mMap.setMapStyle
                     (MapStyleOptions.loadRawResourceStyle
                             (this, R.raw.style_json));
-            if (!success) {
+            if (!success)
+            {
                 Log.e(TAG, "Style parsing failed.");
             }
-        } catch (Resources.NotFoundException e) {
+        }catch (Resources.NotFoundException e)
+        {
             Log.e(TAG, "Can't find style. Error: ", e);
         }
 
         LatLng sydney = new LatLng(-34, 151);
-        LatLng stoke = new LatLng(53.0027, -2.1794);
-        LatLng center = new LatLng(0, 0);
+        LatLng stoke = new LatLng(53.0027,-2.1794);
+        LatLng center = new LatLng(0,0);
 
         mMap.addMarker(new MarkerOptions().position(stoke).title("Marker in Sydney").snippet("Test Snippet inserting text").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(stoke));
         mMap.addMarker(new MarkerOptions().position(sydney).title("'Ere be prisoners").snippet("Why are you even reading this?").icon(BitmapDescriptorFactory.fromResource(R.drawable.lock)));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(Demo, 0));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Demo.getCenter(), 10));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(Demo,0));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Demo.getCenter(),10));
 
-        if (checkLocation()) {
+        if (checkLocation())
+        {
             checkLocationPermission();
         }
 
         if (lat != null && lon != null) {
 
             centerOn(lat, lon);
-        }
 
+//            LatLng focusPoint = new LatLng(Double.parseDouble(lat),Double.parseDouble(lon));
+//            Toast.makeText(MapsActivityNew.this, "" + lat + " " + lon + "", Toast.LENGTH_SHORT).show();
+//            mMap.addMarker(new MarkerOptions().position(focusPoint).title("Discount Day").icon(BitmapDescriptorFactory.fromResource(R.drawable.lock)));
+//            mMap.moveCamera(CameraUpdateFactory.zoomTo(25));
+//            mMap.animateCamera(CameraUpdateFactory.newLatLng(focusPoint));
+        }
+        popMap();
+//        userLocation = new Location(mMap.getMyLocation());
+//        double uLat = userLocation.getLatitude();
+//        double uLong = userLocation.getLongitude();
+//        userLatLng = new LatLng(uLat,uLong);
+//        Toast.makeText(MapsActivityNew.this, "User Location" + uLat + " " + uLong + "", Toast.LENGTH_SHORT).show();
 //        LatLng origin = new LatLng(53.0027, -2.1794);
 //        LatLng destination = new LatLng(53.010541, -2.228589);
 //        ListingNearbyDirection(origin, destination);
 
 
     }
-
-
 
 }
 
