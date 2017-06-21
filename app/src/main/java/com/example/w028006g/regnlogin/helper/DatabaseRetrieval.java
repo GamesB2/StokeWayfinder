@@ -247,72 +247,72 @@ public class DatabaseRetrieval  extends Service {
                     });*/
 
                 }
-            if (jsonStrE != null)
-            {
-                try {
-                    JSONObject jsonObj = new JSONObject(jsonStrE);
-
-                    // Getting JSON Array node
-                    JSONArray dataRe = jsonObj.getJSONArray("attractions");
-
-                    // looping through All Attractions
-                    for (int i = 0; i < dataRe.length(); i++) {
-                        JSONObject c = dataRe.getJSONObject(i);
-                        String id = c.getString("autoNum");
-                        String name = c.getString("name");
-                        String desc = c.getString("des");
-                        String price = c.getString("price");
-                        String address = c.getString("address");
-                        String postcode = c.getString("postcode");
-                        String website = c.getString("website");
-                        String lat = c.getString("lat");
-                        String lng = c.getString("lng");
-
-
-                        // tmp hash map for single contact
-                        HashMap<String, String> data = new HashMap<>();
-
-                        // adding each child node to HashMap key => value
-                        data.put("id", id);
-                        data.put("name", name);
-                        data.put("des", desc);
-                        data.put("price", price);
-                        data.put("address", address);
-                        data.put("postcode", postcode);
-                        data.put("website", website);
-                        data.put("lat", lat);
-                        data.put("lng", lng);
-
-                        event = new Event(name, lat, lng);
-
-                        event.setDesc(desc);
-                        event.setPrice(price);
-                        event.setAddressLine(address);
-                        event.setPostCode(postcode);
-                        event.setWeb(website);
-                        poiArrayList.add(event);
-
-
-                        // adding contact to contact list
-                        dataList.add(data);
-
-
-                        Log.e(TAG, "Attractions Added OK!: ");
-
-                    }
-                } catch (final JSONException eA) {
-                    Log.i(TAG, "Json parsing error: " + eA.getMessage());
-                /*runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getApplicationContext(),
-                                "Json parsing error: " + e.getMessage(),
-                                Toast.LENGTH_LONG).show();
-                    }
-                });*/
-
-                }
-            }
+//            if (jsonStrE != null)
+//            {
+//                try {
+//                    JSONObject jsonObj = new JSONObject(jsonStrE);
+//
+//                    // Getting JSON Array node
+//                    JSONArray dataRe = jsonObj.getJSONArray("attractions");
+//
+//                    // looping through All Attractions
+//                    for (int i = 0; i < dataRe.length(); i++) {
+//                        JSONObject c = dataRe.getJSONObject(i);
+//                        String id = c.getString("autoNum");
+//                        String name = c.getString("name");
+//                        String desc = c.getString("des");
+//                        String price = c.getString("price");
+//                        String address = c.getString("address");
+//                        String postcode = c.getString("postcode");
+//                        String website = c.getString("website");
+//                        String lat = c.getString("lat");
+//                        String lng = c.getString("lng");
+//
+//
+//                        // tmp hash map for single contact
+//                        HashMap<String, String> data = new HashMap<>();
+//
+//                        // adding each child node to HashMap key => value
+//                        data.put("id", id);
+//                        data.put("name", name);
+//                        data.put("des", desc);
+//                        data.put("price", price);
+//                        data.put("address", address);
+//                        data.put("postcode", postcode);
+//                        data.put("website", website);
+//                        data.put("lat", lat);
+//                        data.put("lng", lng);
+//
+//                        event = new Event(name, lat, lng);
+//
+//                        event.setDesc(desc);
+//                        event.setPrice(price);
+//                        event.setAddressLine(address);
+//                        event.setPostCode(postcode);
+//                        event.setWeb(website);
+//                        poiArrayList.add(event);
+//
+//
+//                        // adding contact to contact list
+//                        dataList.add(data);
+//
+//
+//                        Log.e(TAG, "Attractions Added OK!: ");
+//
+//                    }
+//                } catch (final JSONException eA) {
+//                    Log.i(TAG, "Json parsing error: " + eA.getMessage());
+//                /*runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Toast.makeText(getApplicationContext(),
+//                                "Json parsing error: " + e.getMessage(),
+//                                Toast.LENGTH_LONG).show();
+//                    }
+//                });*/
+//
+//                }
+//            }
 
             } else
                 {
