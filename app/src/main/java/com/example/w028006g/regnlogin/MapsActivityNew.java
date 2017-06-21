@@ -84,6 +84,8 @@ import java.util.Locale;
 public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallback
 {
 
+
+    //
     //Assigns the String "TAG" the name of the class for error reports
     private static final String TAG = MapsActivityNew.class.getSimpleName();
 
