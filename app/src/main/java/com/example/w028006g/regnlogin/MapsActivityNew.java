@@ -54,6 +54,10 @@ import com.example.w028006g.regnlogin.helper.Event;
 import com.example.w028006g.regnlogin.helper.Landmark;
 import com.example.w028006g.regnlogin.helper.POI;
 
+import com.example.w028006g.regnlogin.helper.Event;
+import com.example.w028006g.regnlogin.helper.Landmark;
+import com.example.w028006g.regnlogin.helper.POI;
+
 import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.GoogleDirection;
 import com.akexorcist.googledirection.constant.TransportMode;
@@ -70,7 +74,6 @@ import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
-
 
 import com.example.w028006g.regnlogin.helper.SettingsActivity;
 import com.google.android.gms.common.ConnectionResult;
@@ -92,13 +95,15 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import com.google.gson.Gson;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 
-
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+
 
 
 import java.io.IOException;
@@ -108,6 +113,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import java.util.Locale;
+
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
@@ -115,6 +122,7 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 
 public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCallback {
+
 
 
 
@@ -127,14 +135,27 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     private LatLng currentLatLng = null;
     private Polyline line = null;
 
-    //Global flags
+
     private boolean firstRefresh = true;
+
+
+
+    //Global flags
+
+
+    public static Location userLocation;
+    public static LatLng userLatLng;
+    //private Button btnMenu;
+
     private SectionsPageAdapter mSectionsPageAdapter;
+
     private ViewPager mViewPager;
+
 
     private LatLngBounds Demo = new LatLngBounds(new LatLng(52.5027,-2.6794), new LatLng(53.5025,-1.6794));
 
     private Button btnMenu;
+
     LocationManager locationManager;
 
     //Constant used as a request code for the location permissions
@@ -143,6 +164,29 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     public String lon;
     public ArrayList<POI> poiArrayList = new ArrayList<>();
     public POI att;
+
+
+    //List of constants declared to sort the markers
+    final int MUSIC= 0;
+    final int BUSINESS= 1;
+    final int FOOD_AND_DRINK=2;
+    final int COMMUNITY=3;
+    final int ARTS=4;
+    final int FILM_AND_MEDIA=5;
+    final int SPORTS=6;
+    final int HEALTH_AND_FITNESS=7;
+    final int SCIENCE_AND_TECH=8;
+    final int TRAVEL_AND_OUTDOOR=9;
+    final int CHARITY=10;
+    final int SPIRITUALITY=11;
+    final int FAMILY_AND_EDUCATION=12;
+    final int HOLIDAY=13;
+    final int GOVERNMENT=14;
+    final int FASHION=15;
+    final int HOME_AND_LIFESTYLE=16;
+    final int AUTO_BOAT_AND_AIR=17;
+    final int HOBBIES=18;
+
 
     private GoogleMap mMap;
     private GoogleApiClient googleApiClient;
@@ -419,9 +463,35 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
 //                }
 //                );}
 
+    private void ListingNearbyDirection(final LatLng Origin, final LatLng Destination) {
+
+        String serverKey = "AIzaSyDkTMy7dLmxu3GLQttBfDBDsnwPLFseiCM";
+
+        GoogleDirection.withServerKey(serverKey)
+                .from(Origin)
+                .to(Destination)
+                .transportMode(TransportMode.WALKING)
+                .alternativeRoute(true)
+                .execute(new DirectionCallback() {
+
+                    @Override
+                    public void onDirectionSuccess(Direction direction, String rawBody) {
+                            Toast.makeText(getApplicationContext(), "Test", Toast.LENGTH_SHORT).show();
+                            mMap.addMarker(new MarkerOptions().position(Origin));
+                            mMap.addMarker(new MarkerOptions().position(Destination));
+
+                            ArrayList<LatLng> directionPositionList = direction.getRouteList().get(0).getLegList().get(0).getDirectionPoint();
+                            mMap.addPolyline(DirectionConverter.createPolyline(getApplicationContext(), directionPositionList, 5, Color.RED));
 
 
+                    }
 
+                    @Override
+                    public void onDirectionFailure(Throwable t) {
+
+                    }
+                }
+                );}
 
     //Creates an alert window to prompt the user to turn their location settings on
     private void showOffAlert() {
@@ -470,37 +540,119 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
                 LatLng dest = new LatLng(add.getLatitude(), add.getLongitude());
                 switch (((Attraction) item).getIcon())
                 {
-                    case 0:
+                    case MUSIC:
                         mMap.addMarker(new MarkerOptions()
                                 .position(dest)
                                 .title(add.getFeatureName())
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.music)));
                         break;
-                    case 1:
+                    case BUSINESS:
                         mMap.addMarker(new MarkerOptions()
                                 .position(dest)
                                 .title(add.getFeatureName())
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.business)));
                         break;
-                    case 2:
+                    case FOOD_AND_DRINK:
                         mMap.addMarker(new MarkerOptions()
                                 .position(dest)
                                 .title(add.getFeatureName())
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.film_and_media)));
                         break;
-                    case 3:
+                    case COMMUNITY:
+
                         mMap.addMarker(new MarkerOptions()
                                 .position(dest)
                                 .title(add.getFeatureName())
                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
                         break;
-                    case 4:
+
+                    case ARTS:
+
                         mMap.addMarker(new MarkerOptions()
                                 .position(dest)
                                 .title(add.getFeatureName())
                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
                         break;
-                    case 5:
+
+                    case FILM_AND_MEDIA:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.film_and_media)));
+                        break;
+                    case SPORTS:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.health_and_fitness)));
+                        break;
+                    case HEALTH_AND_FITNESS:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.health)));
+                        break;
+                    case SCIENCE_AND_TECH:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.science)));
+                        break;
+                    case TRAVEL_AND_OUTDOOR:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                        break;
+                    case CHARITY:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                        break;
+                    case SPIRITUALITY:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                        break;
+                    case FAMILY_AND_EDUCATION:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                        break;
+                    case HOLIDAY:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                        break;
+                    case GOVERNMENT:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                        break;
+                    case FASHION:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                        break;
+                    case HOME_AND_LIFESTYLE:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                        break;
+                    case AUTO_BOAT_AND_AIR:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                        break;
+                    case HOBBIES:
                         mMap.addMarker(new MarkerOptions()
                                 .position(dest)
                                 .title(add.getFeatureName())
@@ -583,10 +735,14 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
 
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+
+    public void onMapReady(GoogleMap googleMap)
+    {
+
         mMap = googleMap;
         mMap.setLatLngBoundsForCameraTarget(Demo);
         mMap.setMinZoomPreference(5);
+
 
 
         displayGeofences();
@@ -600,10 +756,29 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
                 Log.e(TAG, "Style parsing failed.");
             }
         } catch (Resources.NotFoundException e) {
-            Log.e(TAG, "Can't find style. Error: ", e);
+
+        try
+        {
+
+
+        displayGeofences();
+
+
+            boolean success = mMap.setMapStyle
+                    (MapStyleOptions.loadRawResourceStyle
+                            (this, R.raw.style_json));
+            if (!success)
+            {
+                Log.e(TAG, "Style parsing failed.");
+            }
+        }catch (Resources.NotFoundException ex)
+        {
+
+            Log.e(TAG, "Can't find style. Error: ", ex);
         }
 
         LatLng sydney = new LatLng(-34, 151);
+
         LatLng stoke = new LatLng(53.0027, -2.1794);
         LatLng center = new LatLng(0, 0);
 
@@ -612,18 +787,55 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Demo.getCenter(), 10));
 
         if (checkLocation()) {
+
+        mMap.addMarker(new MarkerOptions().position(stoke).title("Marker in Sydney").snippet("Test Snippet inserting text").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(stoke));
+        mMap.addMarker(new MarkerOptions().position(sydney).title("'Ere be prisoners").snippet("Why are you even reading this?").icon(BitmapDescriptorFactory.fromResource(R.drawable.lock)));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(Demo,0));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Demo.getCenter(),10));
+
+        if (checkLocation())
+        {
             checkLocationPermission();
         }
 
         if (lat != null && lon != null) {
 
             centerOn(lat, lon);
+
         }
         popMap();
 
     }
 
 }
+
+
+
+//            LatLng focusPoint = new LatLng(Double.parseDouble(lat),Double.parseDouble(lon));
+//            Toast.makeText(MapsActivityNew.this, "" + lat + " " + lon + "", Toast.LENGTH_SHORT).show();
+//            mMap.addMarker(new MarkerOptions().position(focusPoint).title("Discount Day").icon(BitmapDescriptorFactory.fromResource(R.drawable.lock)));
+//            mMap.moveCamera(CameraUpdateFactory.zoomTo(25));
+//            mMap.animateCamera(CameraUpdateFactory.newLatLng(focusPoint));
+        }
+        //popMap();
+//        userLocation = new Location(mMap.getMyLocation());
+//        double uLat = userLocation.getLatitude();
+//        double uLong = userLocation.getLongitude();
+//        userLatLng = new LatLng(uLat,uLong);
+//        Toast.makeText(MapsActivityNew.this, "User Location" + uLat + " " + uLong + "", Toast.LENGTH_SHORT).show();
+//        LatLng origin = new LatLng(53.0027, -2.1794);
+//        LatLng destination = new LatLng(53.010541, -2.228589);
+//        ListingNearbyDirection(origin, destination);
+
+
+        }
+        //popMap();
+
+
+
+
+
 
 
 

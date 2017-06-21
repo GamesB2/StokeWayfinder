@@ -15,6 +15,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.transition.Slide;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.example.w028006g.regnlogin.helper.DownloadImageTask;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -33,6 +38,7 @@ public class Profile extends AppCompatActivity {
 
     private TextView txtName;
     private TextView txtEmail;
+
 
     private Scene scene1, scene2;
     //transition to move between scenes
@@ -54,8 +60,6 @@ public class Profile extends AppCompatActivity {
         Menu menu = bottomNavigationView.getMenu();
         MenuItem menuItem = menu.getItem(1);
         menuItem.setChecked(true);
-
-
 
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -107,6 +111,4 @@ public class Profile extends AppCompatActivity {
             start=true;
         }
     }
-
-
 }
