@@ -24,7 +24,7 @@
 
             <EditText
                 android:id="@+id/gSearch"
-                android:layout_width="333dp"
+                android:layout_width="301dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.03"
                 android:background="@color/white"
