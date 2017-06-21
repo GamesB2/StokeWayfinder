@@ -4,27 +4,23 @@ package com.example.w028006g.regnlogin.helper;
  * Created by a025178g on 15/06/2017.
  */
 
-public class Attraction
+public class Attraction extends POI
 {
-    String name ="";
-    String lat = "";
-    String lng ="";
-
+    private int icon = 0;
     public Attraction(String sName,String sLat, String sLong)
     {
-        name = sName;
-        lat = sLat;
-        lng = sLong;
+        super.setName(sName);
+        super.setLat(sLat);
+        super.setLong(sLong);
     }
 
-    public String getName(){
-        return name;
+    public void setIcon(String code)
+    {
+        icon = Integer.parseInt(code);
     }
 
-    public String getLat() {
-        return lat;
-    }
-    public String getLng(){
-        return lng;
+    public int getIcon()
+    {
+        return icon;
     }
 }

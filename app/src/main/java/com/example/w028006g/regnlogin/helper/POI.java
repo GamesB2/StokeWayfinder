@@ -2,13 +2,15 @@ package com.example.w028006g.regnlogin.helper;
 
 import android.location.Address;
 
+import java.util.Locale;
+
 /**
  * Created by a025178g on 15/06/2017.
  */
 
 public abstract class POI
 {
-    Address aAddressInfo;
+    Address aAddressInfo = new Address(Locale.getDefault());
     String sDescription;
     double dPrice = 0;
 
@@ -29,74 +31,39 @@ public abstract class POI
 
     public boolean setWeb(String sWeb)
     {
-        try
-        {
+
             aAddressInfo.setUrl(sWeb);
             return true;
-        }
-        catch (Exception e)
-        {
-            return false;
-        }
+
     }
 
     public boolean setPrice(String sPrice)
     {
-        try
-        {
             Double.parseDouble(sPrice);
             return true;
-        }
-        catch (Exception e)
-        {
-            return false;
-        }
+
     }
 
     public boolean setDesc(String sDesc)
     {
-        if (sDesc != null)
-        {
+
             sDescription = sDesc;
             return true;
-        }
-        else
-        {
-            return false;
-        }
     }
 
     public boolean setAddressLine(String sALine)
     {
-        int nAdNum = 0;
-        String sAdNum;
-        String sRemString;
+            aAddressInfo.setAddressLine(0,sALine);
 
-        if (Character.isDigit(sALine.charAt(0)))
-        {
-            sAdNum = (extractNumber(sALine));
-            nAdNum = Integer.parseInt(sAdNum);
-            sRemString = (sALine.substring(sAdNum.length()).trim());
-            aAddressInfo.setAddressLine(nAdNum,sRemString);
             return true;
-        }
-        else
-        {
-            return false;
-        }
     }
 
     public boolean setPostCode(String sPC)
     {
-        try
-        {
+
             aAddressInfo.setPostalCode(sPC);
             return true;
-        }
-        catch (Exception e)
-        {
-            return false;
-        }
+
     }
 
     public void setLat (String sLat)

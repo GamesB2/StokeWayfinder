@@ -42,6 +42,10 @@ import android.support.design.widget.BottomNavigationView;
 import com.example.w028006g.regnlogin.helper.Attraction;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 
+import com.example.w028006g.regnlogin.helper.Event;
+import com.example.w028006g.regnlogin.helper.Landmark;
+import com.example.w028006g.regnlogin.helper.POI;
+
 import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.GoogleDirection;
 import com.akexorcist.googledirection.constant.TransportMode;
@@ -103,7 +107,8 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
     final int MY_PERMISSIONS_REQUEST_LOCATION = 14;
     public String lat;
     public String lon;
-    private Attraction at;
+    public ArrayList<POI> poiArrayList = new ArrayList<>();
+    public POI att;
 
 
     @Override
@@ -118,18 +123,7 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-//        Gson gS = new Gson();
-//        String target = getIntent().getStringExtra("MyObjectAsString");
-//        Attraction src = gS.fromJson(target, Attraction.class); // Converts the JSON String to an Object
-        at = DatabaseRetrieval.att;
-       Toast.makeText(getApplicationContext(),
-                "TEST DATA: " + at.getName() + " Lat: " + at.getLat() + " Long: " + at.getLng(),
-                Toast.LENGTH_LONG).show();
-
-
-
-
+        poiArrayList = DatabaseRetrieval.poiArrayList;
 
 
 
@@ -319,10 +313,100 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
 
     public void popMap()
     {
-        LatLng attLat = new LatLng(Double.parseDouble(at.getLat()),Double.parseDouble(at.getLng()));
-        mMap.addMarker(new MarkerOptions().position(attLat).title(at.getName()).snippet("Why are you even reading this?").icon(BitmapDescriptorFactory.fromResource(R.drawable.lock)));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(attLat));
+        popMapAtt();
+        popMapLnd();
+        popMapEvents();
+    }
+    public void popMapAtt()
+    {
+        for (int i = 0; i < poiArrayList.size(); i++)
+        {
+            POI item = poiArrayList.get(i);
+            if(item instanceof Attraction)
+            {
+                Address add = item.getAddressInfo();
+                LatLng dest = new LatLng(add.getLatitude(), add.getLongitude());
+                switch (((Attraction) item).getIcon())
+                {
+                    case 0:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                        break;
+                    case 1:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+                        break;
+                    case 2:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                        break;
+                    case 3:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                        break;
+                    case 4:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+                        break;
+                    case 5:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                        break;
+                    default:
+                        mMap.addMarker(new MarkerOptions()
+                                .position(dest)
+                                .title(add.getFeatureName()));
 
+                        break;
+                }
+            }
+        }
+    }
+
+    public void popMapLnd()
+    {
+        for (int i = 0; i < poiArrayList.size(); i++)
+        {
+            POI item = poiArrayList.get(i);
+            if(item instanceof Landmark)
+            {
+                Address add = item.getAddressInfo();
+                LatLng dest = new LatLng(add.getLatitude(), add.getLongitude());
+                mMap.addMarker(new MarkerOptions()
+                        .position(dest)
+                        .title(add.getFeatureName())
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
+            }
+        }
+    }
+
+    public void popMapEvents()
+    {
+        for (int i = 0; i < poiArrayList.size(); i++)
+        {
+            POI item = poiArrayList.get(i);
+            if(item instanceof Event)
+            {
+                Address add = item.getAddressInfo();
+                LatLng dest = new LatLng(add.getLatitude(), add.getLongitude());
+                mMap.addMarker(new MarkerOptions()
+                        .position(dest)
+                        .title(add.getFeatureName())
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+            }
+        }
     }
 
     //Search implementation, pins a marker on the location of the user
@@ -379,8 +463,6 @@ public class MapsActivityNew extends FragmentActivity implements OnMapReadyCallb
         LatLng stoke = new LatLng(53.0027, -2.1794);
         LatLng center = new LatLng(0, 0);
 
-        mMap.addMarker(new MarkerOptions().position(stoke).title("Marker in Sydney").snippet("Test Snippet inserting text").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(stoke));
         mMap.addMarker(new MarkerOptions().position(sydney).title("'Ere be prisoners").snippet("Why are you even reading this?").icon(BitmapDescriptorFactory.fromResource(R.drawable.lock)));
         mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(Demo, 0));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Demo.getCenter(), 10));

@@ -47,7 +47,10 @@ public class DatabaseRetrieval  extends Service {
 
     ArrayList<HashMap<String, String>> dataList;
 
-     public static Attraction att;
+    public static ArrayList<POI> poiArrayList = new ArrayList<>();
+    public static Attraction att;
+    public static Landmark lndmk;
+    public static Event event;
 
     @Nullable
     @Override
@@ -78,7 +81,8 @@ public class DatabaseRetrieval  extends Service {
         dataList = new ArrayList<>();
     }
 
-    private class GetAttractions extends AsyncTask<Void, Void, Void> {
+    private class GetAttractions extends AsyncTask<Void, Void, Void>
+    {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -87,16 +91,166 @@ public class DatabaseRetrieval  extends Service {
         }
 
         @Override
-        protected Void doInBackground(Void... arg0)  {
-            HttpHandler sh = new HttpHandler();
-            // Making a request to url and getting response
-            String url = "https://concussive-shirt.000webhostapp.com/get_details_attractions.php";
-            String jsonStr = sh.makeServiceCall(url);
+        protected Void doInBackground(Void... arg0)
+        {
+            HttpHandler shA = new HttpHandler();
+            HttpHandler shL = new HttpHandler();
+            HttpHandler shE = new HttpHandler();
 
-            Log.e(TAG, "Response from url: " + jsonStr);
-            if (jsonStr != null) {
+            // Making a request to url and getting response
+
+            String urlA = "https://concussive-shirt.000webhostapp.com/get_details_attractions.php";
+            String urlL = "https://concussive-shirt.000webhostapp.com/get_details_landmarks.php";
+            String urlE = "https://concussive-shirt.000webhostapp.com/get_details_events.php";
+
+            String jsonStrA = shA.makeServiceCall(urlA);
+            String jsonStrL = shL.makeServiceCall(urlL);
+            String jsonStrE = shE.makeServiceCall(urlE);
+
+            Log.e(TAG, "Response from url: " + jsonStrA);
+            Log.e(TAG, "Response from url: " + jsonStrL);
+            Log.e(TAG, "Response from url: " + jsonStrE);
+            if (jsonStrA != null)
+            {
                 try {
-                    JSONObject jsonObj = new JSONObject(jsonStr);
+                    JSONObject jsonObj = new JSONObject(jsonStrA);
+
+                    // Getting JSON Array node
+                    JSONArray dataRe = jsonObj.getJSONArray("attractions");
+
+                    // looping through All Attractions
+                    for (int i = 0; i < dataRe.length(); i++) {
+                        JSONObject c = dataRe.getJSONObject(i);
+                        String id = c.getString("autoNum");
+                        String name = c.getString("name");
+                        String desc = c.getString("des");
+                        String price = c.getString("price");
+                        String address = c.getString("address");
+                        String postcode = c.getString("postcode");
+                        String website = c.getString("website");
+                        String lat = c.getString("lat");
+                        String lng = c.getString("lng");
+                        String icon = c.getString("cat");
+
+
+                        // tmp hash map for single contact
+                        HashMap<String, String> data = new HashMap<>();
+
+                        // adding each child node to HashMap key => value
+                        data.put("id", id);
+                        data.put("name", name);
+                        data.put("des", desc);
+                        data.put("price", price);
+                        data.put("address", address);
+                        data.put("postcode", postcode);
+                        data.put("website", website);
+                        data.put("lat", lat);
+                        data.put("lng", lng);
+                        data.put("icon", icon);
+
+                        att = new Attraction(name, lat, lng);
+
+                        att.setDesc(desc);
+                        att.setPrice(price);
+                        att.setAddressLine(address);
+                        att.setPostCode(postcode);
+                        att.setWeb(website);
+                        att.setIcon(icon);
+                        poiArrayList.add(att);
+
+
+                        // adding contact to contact list
+                        dataList.add(data);
+
+
+                        Log.e(TAG, "Attractions Added OK!: ");
+
+                    }
+                } catch (final JSONException eA) {
+                    Log.i(TAG, "Json parsing error: " + eA.getMessage());
+                    /*runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),
+                                    "Json parsing error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });*/
+
+                }
+            }
+            if (jsonStrL != null)
+            {
+                try
+                {
+                    JSONObject jsonObj = new JSONObject(jsonStrL);
+
+                    // Getting JSON Array node
+                    JSONArray dataRe = jsonObj.getJSONArray("landmark");
+
+                    // looping through All Attractions
+                    for (int i = 0; i < dataRe.length(); i++)
+                    {
+                        JSONObject c = dataRe.getJSONObject(i);
+                        String id = c.getString("autoNum");
+                        String name = c.getString("name");
+                        String desc = c.getString("des");
+                        String price = c.getString("price");
+                        String address = c.getString("address");
+                        String postcode = c.getString("postcode");
+                        String website = c.getString("website");
+                        String lat = c.getString("lat");
+                        String lng = c.getString("lng");
+
+
+                        // tmp hash map for single contact
+                        HashMap<String, String> data = new HashMap<>();
+
+                        // adding each child node to HashMap key => value
+                        data.put("id", id);
+                        data.put("name", name);
+                        data.put("des", desc);
+                        data.put("price", price);
+                        data.put("address", address);
+                        data.put("postcode", postcode);
+                        data.put("website", website);
+                        data.put("lat", lat);
+                        data.put("lng", lng);
+
+                        lndmk = new Landmark(name, lat, lng);
+
+                        lndmk.setDesc(desc);
+                        lndmk.setPrice(price);
+                        lndmk.setAddressLine(address);
+                        lndmk.setPostCode(postcode);
+                        lndmk.setWeb(website);
+                        poiArrayList.add(lndmk);
+
+
+                        // adding contact to contact list
+                        dataList.add(data);
+
+
+                        Log.e(TAG, "Landmarks Added OK!: ");
+
+                    }
+                } catch (final JSONException eL)
+                {
+                    Log.i(TAG, "Json parsing error: " + eL.getMessage());
+                    /*runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),
+                                    "Json parsing error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });*/
+
+                }
+            if (jsonStrE != null)
+            {
+                try {
+                    JSONObject jsonObj = new JSONObject(jsonStrE);
 
                     // Getting JSON Array node
                     JSONArray dataRe = jsonObj.getJSONArray("attractions");
@@ -114,9 +268,6 @@ public class DatabaseRetrieval  extends Service {
                         String lat = c.getString("lat");
                         String lng = c.getString("lng");
 
-                        if(price.equalsIgnoreCase("0")) {
-                            price = "FREE!";
-                        }
 
                         // tmp hash map for single contact
                         HashMap<String, String> data = new HashMap<>();
@@ -132,33 +283,40 @@ public class DatabaseRetrieval  extends Service {
                         data.put("lat", lat);
                         data.put("lng", lng);
 
-                        att = new Attraction(name,lat,lng);
-                        //att.setAddressLine(address);
-                        //att.setPostCode(postcode);
+                        event = new Event(name, lat, lng);
 
+                        event.setDesc(desc);
+                        event.setPrice(price);
+                        event.setAddressLine(address);
+                        event.setPostCode(postcode);
+                        event.setWeb(website);
+                        poiArrayList.add(event);
 
 
                         // adding contact to contact list
                         dataList.add(data);
 
-                        Log.e(TAG, "Added Added OK!: ");
+
+                        Log.e(TAG, "Attractions Added OK!: ");
 
                     }
-                } catch (final JSONException e) {
-                    Log.i(TAG, "Json parsing error: " + e.getMessage());
-                    /*runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getApplicationContext(),
-                                    "Json parsing error: " + e.getMessage(),
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    });*/
+                } catch (final JSONException eA) {
+                    Log.i(TAG, "Json parsing error: " + eA.getMessage());
+                /*runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),
+                                "Json parsing error: " + e.getMessage(),
+                                Toast.LENGTH_LONG).show();
+                    }
+                });*/
 
                 }
+            }
 
-            } else {
-                Log.e(TAG, "Couldn't get json from server.");
+            } else
+                {
+                Log.e(TAG, "Couldn't get json from attractions server.");
                 /*runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -168,7 +326,6 @@ public class DatabaseRetrieval  extends Service {
                     }
                 });*/
             }
-
             return null;
         }
 

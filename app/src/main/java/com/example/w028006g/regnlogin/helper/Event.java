@@ -9,7 +9,7 @@ public class Event extends POI
 {
     public char markerCode;
 
-    public Event(String sName,String sLat, String sLong) throws Exception
+    public Event(String sName,String sLat, String sLong)
     {
         super.setName(sName);
         super.setLat(sLat);

@@ -6,7 +6,7 @@ package com.example.w028006g.regnlogin.helper;
 
 public class Landmark extends POI
 {
-    public Landmark(String sName,String sLat, String sLong) throws Exception
+    public Landmark(String sName,String sLat, String sLong)
     {
         super.setName(sName);
         super.setLat(sLat);
