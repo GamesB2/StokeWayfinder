@@ -1,13 +1,16 @@
 package com.example.w028006g.regnlogin;
 
 import com.example.w028006g.regnlogin.activity.LoginActivity;
+import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 import com.example.w028006g.regnlogin.helper.DownloadImageTask;
+import com.example.w028006g.regnlogin.helper.Events;
 import com.example.w028006g.regnlogin.helper.SQLiteHandler;
 import com.example.w028006g.regnlogin.helper.SessionManager;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.Exchanger;
 
@@ -111,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         checkIntent(getIntent());
+
 
     }
     @Override

@@ -9,6 +9,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.transition.Explode;
 import android.transition.Fade;
 import android.transition.Slide;
@@ -22,6 +24,13 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
+import com.example.w028006g.regnlogin.helper.MyRecyclerViewAdapter;
+import com.example.w028006g.regnlogin.helper.Ticket;
+
+import java.util.ArrayList;
 
 import static android.transition.Fade.IN;
 
@@ -32,20 +41,29 @@ import static android.transition.Fade.IN;
 public class Tickets extends AppCompatActivity {
 
     private CardView btnCard1;
+    public ArrayList<Ticket> t = DatabaseRetrieval.ticketsAl;
+    private RecyclerView mRecyclerView;
+    private MyRecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tickets);
 
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView_Bar);
-        BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
-        Menu menu = bottomNavigationView.getMenu();
-        MenuItem menuItem = menu.getItem(3);
-        menuItem.setChecked(true);
+//        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView_Bar);
+//        BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
+//        Menu menu = bottomNavigationView.getMenu();
+//        MenuItem menuItem = menu.getItem(3);
+//        menuItem.setChecked(true);
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.rv);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new MyRecyclerViewAdapter(Tickets.this, t);
+        mRecyclerView.setAdapter(adapter);
 
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+/*        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
@@ -74,18 +92,9 @@ public class Tickets extends AppCompatActivity {
                 return false;
 
             }
-        });
+        });*/
 
-        btnCard1 = (CardView) findViewById(R.id.Card1);
 
-        btnCard1.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),Tickets_View.class);
-                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(Tickets.this).toBundle());;
-            }
-        });
 
     }
 }

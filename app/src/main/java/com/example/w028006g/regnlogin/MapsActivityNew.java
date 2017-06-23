@@ -23,8 +23,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.support.design.widget.BottomNavigationView;
+import android.widget.Toast;
 
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
+import com.example.w028006g.regnlogin.helper.Events;
 import com.example.w028006g.regnlogin.helper.POI;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -59,6 +61,8 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     public String lat;
     public String lon;
     private GoogleMap mMap;
+
+    private ArrayList<Events> ev = DatabaseRetrieval.eventsAl;
 
     //List of constants declared to sort the markers
     final int MUSIC= 0;
@@ -106,6 +110,13 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
             lon = FireNotification.getString("Longitude");
 
         }
+
+
+        for(int i=0;i<ev.size();i++)
+        {
+            Toast.makeText(this, "Event:\n" + ev.get(i).getName(), Toast.LENGTH_LONG).show();
+        }
+
 
         //Menu bar at the bottom
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView_Bar);
