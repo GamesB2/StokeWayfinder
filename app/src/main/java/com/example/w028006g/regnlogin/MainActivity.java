@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     String name;
     String email;
     String u_id;
+    String tickets;
 
     int numMessages = 0;
 
@@ -86,9 +87,11 @@ public class MainActivity extends AppCompatActivity {
         name = user.get("name");
         email = user.get("email");
         u_id = user.get("uid");
+        tickets = user.get("tickets");
         userDetails.setName(name);
         userDetails.setEmail(email);
         userDetails.setU_id(u_id);
+        userDetails.setTickets(tickets);
 
 
         // Displaying the user details on the screen

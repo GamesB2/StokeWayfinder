@@ -51,7 +51,7 @@ public class DatabaseRetrieval  extends Service {
     public static ArrayList<Events> eventsAl = new ArrayList(); //Main events list.
     public static Attraction att;
     public static Landmark lndmk;
-    public static Event event;
+    public static Events event;
     public static Ticket ticket;
 
 
@@ -171,38 +171,85 @@ public class DatabaseRetrieval  extends Service {
             Log.e(TAG, "Response from url: " + jsonStrE);
             Log.e(TAG, "Response from url: " + jsonStrT);
             if (jsonStrA != null)
+        {
+            try {
+                JSONObject jsonObj = new JSONObject(jsonStrA);
+
+                // Getting JSON Array node
+                JSONArray dataRe = jsonObj.getJSONArray("attractions");
+
+                // looping through All Attractions
+                for (int i = 0; i < dataRe.length(); i++) {
+                    JSONObject c = dataRe.getJSONObject(i);
+                    String id = c.getString("autoNum");
+                    String name = c.getString("name");
+                    String desc = c.getString("des");
+                    String price = c.getString("price");
+                    String address = c.getString("address");
+                    String postcode = c.getString("postcode");
+                    String website = c.getString("website");
+                    String lat = c.getString("lat");
+                    String lng = c.getString("lng");
+                    String icon = c.getString("cat");
+
+                    att = new Attraction(name, lat, lng);
+
+                    att.setDesc(desc);
+                    att.setPrice(price);
+                    att.setAddressLine(address);
+                    att.setPostCode(postcode);
+                    att.setWeb(website);
+                    att.setIcon(icon);
+                    poiArrayList.add(att);
+
+                    Log.e(TAG, "Attractions Added OK!: ");
+
+                }
+            } catch (final JSONException eA) {
+                Log.i(TAG, "Json parsing error: " + eA.getMessage());
+                    /*runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),
+                                    "Json parsing error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });*/
+
+            }
+        }
+            if (jsonStrE != null)
             {
                 try {
-                    JSONObject jsonObj = new JSONObject(jsonStrA);
+                    JSONObject jsonObj = new JSONObject(jsonStrE);
 
                     // Getting JSON Array node
-                    JSONArray dataRe = jsonObj.getJSONArray("attractions");
+                    JSONArray dataRe = jsonObj.getJSONArray("events");
 
                     // looping through All Attractions
                     for (int i = 0; i < dataRe.length(); i++) {
                         JSONObject c = dataRe.getJSONObject(i);
-                        String id = c.getString("autoNum");
+                        String id = c.getString("autoNumber");
                         String name = c.getString("name");
-                        String desc = c.getString("des");
-                        String price = c.getString("price");
-                        String address = c.getString("address");
-                        String postcode = c.getString("postcode");
+                        String dateStart = c.getString("dateStart");
+                        String desc = c.getString("description");
+                        String cName = c.getString("contactName");
+                        String cNumber = c.getString("contactNumber");
                         String website = c.getString("website");
+                        String price = c.getString("price");
+                        String time = c.getString("time");
+                        String dateEnd = c.getString("dateEnd");
+                        String cat = c.getString("cat");
+                        String add = c.getString("address");
+                        String pcode = c.getString("postcode");
                         String lat = c.getString("lat");
                         String lng = c.getString("lng");
-                        String icon = c.getString("cat");
 
-                        att = new Attraction(name, lat, lng);
+                        event = new Events(id,name,dateStart,desc,cName,cNumber,website,price,time,dateEnd,cat,add,pcode,lat,lng);
 
-                        att.setDesc(desc);
-                        att.setPrice(price);
-                        att.setAddressLine(address);
-                        att.setPostCode(postcode);
-                        att.setWeb(website);
-                        att.setIcon(icon);
-                        poiArrayList.add(att);
+                        eventsAl.add(event);
 
-                        Log.e(TAG, "Attractions Added OK!: ");
+                        Log.e(TAG, "Events Added OK!: ");
 
                     }
                 } catch (final JSONException eA) {

@@ -19,6 +19,7 @@ public class Ticket {
     public Ticket(){
 
     }
+    
     public Ticket(int id, String name, String sDate, String loc, String desc, String organ, String type, double price, String img){
         this.id = id;
         this.name = name;
@@ -120,6 +121,10 @@ public class Ticket {
 
     public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
+    }
+
+    public String getIDs(){
+        return String.valueOf(id);
     }
 
 

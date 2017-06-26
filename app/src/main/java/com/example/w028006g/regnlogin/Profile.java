@@ -16,6 +16,7 @@ import android.transition.Slide;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,6 +39,7 @@ public class Profile extends AppCompatActivity {
 
     private TextView txtName;
     private TextView txtEmail;
+    private Button btnView;
 
 
     private Scene scene1, scene2;
@@ -54,6 +56,7 @@ public class Profile extends AppCompatActivity {
 
         txtName = (TextView) findViewById(R.id.txtName);
         txtEmail = (TextView) findViewById(R.id.txtUserEmail);
+        btnView = (Button) findViewById(R.id.btnTickets);
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView_Bar);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
@@ -96,6 +99,16 @@ public class Profile extends AppCompatActivity {
         // Displaying the user details on the screen
         txtName.setText(MainActivity.userDetails.getName());
         txtEmail.setText(MainActivity.userDetails.getEmail());
+
+        btnView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent4 = new Intent(Profile.this, Tickets_My.class);
+                startActivity(intent4);
+            }
+        });
+
     }
 
 

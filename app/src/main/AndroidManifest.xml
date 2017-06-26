@@ -132,6 +132,7 @@
         <activity android:name=".Adventures"></activity>
         <activity android:name=".Tickets"></activity>
         <activity android:name=".Tickets_View"></activity>
+        <activity android:name=".Tickets_My"></activity>
 
         <activity android:name=".MainActivity1">
             <intent-filter>

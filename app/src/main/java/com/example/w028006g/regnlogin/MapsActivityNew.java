@@ -62,7 +62,6 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     public String lon;
     private GoogleMap mMap;
 
-    private ArrayList<Events> ev = DatabaseRetrieval.eventsAl;
 
     //List of constants declared to sort the markers
     final int MUSIC= 0;
@@ -100,6 +99,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+
         //Landmarks, Attractions, and Events Stored in POI Array
         poiArrayList = DatabaseRetrieval.poiArrayList;
         //Lat and Long from FireMSGService brought in here
@@ -110,13 +110,6 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
             lon = FireNotification.getString("Longitude");
 
         }
-
-
-        for(int i=0;i<ev.size();i++)
-        {
-            Toast.makeText(this, "Event:\n" + ev.get(i).getName(), Toast.LENGTH_LONG).show();
-        }
-
 
         //Menu bar at the bottom
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView_Bar);

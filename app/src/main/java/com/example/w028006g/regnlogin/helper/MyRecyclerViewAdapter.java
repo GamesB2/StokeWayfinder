@@ -1,6 +1,7 @@
 package com.example.w028006g.regnlogin.helper;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
@@ -9,10 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.w028006g.regnlogin.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.example.w028006g.regnlogin.Tickets_View;
 import com.squareup.picasso.Picasso;
 
 
@@ -34,10 +39,9 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     }
 
     @Override
-    public void onBindViewHolder(CustomViewHolder customViewHolder, int i) {
+    public void onBindViewHolder(final CustomViewHolder customViewHolder, int i) {
         final Ticket feedItem = feedItemList.get(i);
 
-        //Download image using picasso library
         if (!TextUtils.isEmpty(feedItem.getThumbnail())) {
             Picasso.with(mContext).load(feedItem.getThumbnail())
                     .error(R.drawable.lock)
@@ -54,11 +58,20 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onItemClickListener.onItemClick(feedItem);
+                //onItemClickListener.onItemClick(feedItem);
+                //if (v.getId() == feedItem.getId()){
+                    //Toast.makeText(v.getContext(), "ITEM PRESSED = " + String.valueOf(customViewHolder.getAdapterPosition()), Toast.LENGTH_SHORT).show();
+                //} else {
+                Toast.makeText(v.getContext(), "ROW PRESSED = " + String.valueOf(customViewHolder.getAdapterPosition()), Toast.LENGTH_SHORT).show();
+                Intent myIntent = new Intent(v.getContext(), Tickets_View.class);
+                myIntent.putExtra("id", customViewHolder.getAdapterPosition());
+                mContext.startActivity(myIntent);
+
+                //}
             }
         };
         customViewHolder.imageView.setOnClickListener(listener);
-        customViewHolder.textViewE.setOnClickListener(listener);
+        //customViewHolder.textViewE.setOnClickListener(listener);
     }
 
     @Override

@@ -5,18 +5,52 @@ package com.example.w028006g.regnlogin.helper;
  */
 
 public class Events {
+    String id="";
     String name="";
-    String date="";
+    String dateS="";
     String desc="";
+    String cName="";
+    String cNumber="";
+    String web="";
+    String price="";
+    String time="";
+    String dateE="";
+    String cat="";
     String add="";
+    String pcode="";
+    String lat="";
+    String lng="";
+
+    public Events(String id, String name, String dateS, String desc, String cName, String cNumber, String web, String price, String time, String dateE, String cat, String add, String pcode, String lat, String lng) {
+        this.id = id;
+        this.name = name;
+        this.dateS = dateS;
+        this.desc = desc;
+        this.cName = cName;
+        this.cNumber = cNumber;
+        this.web = web;
+        this.price = price;
+        this.time = time;
+        this.dateE = dateE;
+        this.cat = cat;
+        this.add=add;
+        this.pcode=pcode;
+        this.lat=lat;
+        this.lng=lng;
+    }
+
 
     public Events(){
 
     }
 
-    public Events(String name, String date){
-        this.name = name;
-        this.date = date;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -27,12 +61,12 @@ public class Events {
         this.name = name;
     }
 
-    public String getDate() {
-        return date;
+    public String getDateS() {
+        return dateS;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setDateS(String dateS) {
+        this.dateS = dateS;
     }
 
     public String getDesc() {
@@ -43,12 +77,61 @@ public class Events {
         this.desc = desc;
     }
 
-    public String getAdd() {
-        return add;
+    public String getcName() {
+        return cName;
     }
 
-    public void setAdd(String add) {
-        this.add = add;
+    public void setcName(String cName) {
+        this.cName = cName;
     }
+
+    public String getcNumber() {
+        return cNumber;
+    }
+
+    public void setcNumber(String cNumber) {
+        this.cNumber = cNumber;
+    }
+
+    public String getWeb() {
+        return web;
+    }
+
+    public void setWeb(String web) {
+        this.web = web;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getDateE() {
+        return dateE;
+    }
+
+    public void setDateE(String dateE) {
+        this.dateE = dateE;
+    }
+
+    public String getCat() {
+        return cat;
+    }
+
+    public void setCat(String cat) {
+        this.cat = cat;
+    }
+
 
 }
