@@ -21,9 +21,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.support.design.widget.BottomNavigationView;
 
+import com.example.w028006g.regnlogin.activity.FilterActivity;
+import com.example.w028006g.regnlogin.activity.RegisterActivity;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 import com.example.w028006g.regnlogin.helper.POI;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -44,6 +47,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCallback
 {
 
@@ -52,6 +56,8 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     private LatLngBounds Demo = new LatLngBounds(new LatLng(49.495091,-10.722460), new LatLng(59.497134,1.843598));
     private static ArrayList<POI> poiArrayList = new ArrayList<>();
     LocationManager locationManager;
+    private boolean pauseState = false;
+    private MarkerManager mm;
 
     //Constant used as a request code for the location permissions
     final int MY_PERMISSIONS_REQUEST_LOCATION = 14;
@@ -81,7 +87,12 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     final int AUTO_BOAT_AND_AIR=17;
     final int HOBBIES=18;
 
+    final int ATTRACTIONS=19;
+    final int LANDMARKS=20;
+    final int EVENTS=21;
+
     private static final String NOTIFICATION_MSG = "NOTIFICATION MSG";
+    public Button btnFilter;
 
     static public boolean geofencesAlreadyRegistered = false;
 
@@ -143,8 +154,21 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
                 return false;
             }
         });
-            //Starts Geolocation Service
-            startService(new Intent(this, GeolocationService.class));
+        //Starts Geolocation Service
+        startService(new Intent(this, GeolocationService.class));
+
+        btnFilter = (Button)findViewById(R.id.button2);
+        btnFilter.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+                Intent i = new Intent(MapsActivityNew.this,
+                        FilterActivity.class);
+                startActivity(i);
+
+            }
+        });
+
+
     }
 
     //Displays the circle around the geofence - wont need this for final just so we can see where they are
@@ -164,7 +188,8 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
 
     //Called to check if location is enabled on the device.
     //DOES NOT check to see if permission has been granted
-    private boolean checkLocation() {
+    private boolean checkLocation()
+    {
         if (!isLocationEnabled())
             showOffAlert();
         return isLocationEnabled();
@@ -282,6 +307,18 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
 
     }
 
+    @Override
+    protected void onResume()
+    {
+        if (pauseState)
+        {
+            mMap.clear();
+            mm.popMap();
+        }
+        pauseState = true;
+        super.onResume();
+
+    }
 
     @Override
     public void onMapReady(GoogleMap googleMap)
@@ -320,7 +357,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         mMap.moveCamera(CameraUpdateFactory.newLatLng(stoke));
         mMap.moveCamera(CameraUpdateFactory.zoomTo(10));
 
-
+        checkLocation();
         checkLocationPermission();
 
         //Checks that something has been passed to lat and lon before trying to execute
@@ -332,10 +369,9 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         }
 
         //Executes popMap to populate the markers on the map
-        MarkerManager mm = new MarkerManager(mMap,poiArrayList);
+        mm = new MarkerManager(mMap,poiArrayList);
         mm.popMap();
     }
-
 
 }
 
