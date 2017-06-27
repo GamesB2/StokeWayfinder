@@ -33,11 +33,18 @@
                     android:rowCount="3">
 
                     <ImageView
+                        android:id="@+id/ticketView_id"
                         android:layout_width="match_parent"
                         android:layout_height="90dp"
                         android:scaleType="center"
                         android:src="@drawable/middleport" />
 
+
+                    <Button
+                        android:id="@+id/btnBuy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Buy Ticket(s)" />
 
                     <TextView
                         android:id="@+id/title"
