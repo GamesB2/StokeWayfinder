@@ -24,10 +24,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.support.design.widget.BottomNavigationView;
+import android.widget.Toast;
 
 import com.example.w028006g.regnlogin.activity.FilterActivity;
 import com.example.w028006g.regnlogin.activity.RegisterActivity;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
+import com.example.w028006g.regnlogin.helper.Events;
 import com.example.w028006g.regnlogin.helper.POI;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -65,6 +67,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     public String lat;
     public String lon;
     private GoogleMap mMap;
+
 
     //List of constants declared to sort the markers
     final int MUSIC= 0;
@@ -106,6 +109,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
 
         //Landmarks, Attractions, and Events Stored in POI Array
         poiArrayList = DatabaseRetrieval.poiArrayList;

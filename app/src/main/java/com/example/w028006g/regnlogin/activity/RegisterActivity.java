@@ -240,9 +240,10 @@ public class RegisterActivity extends AppCompatActivity {
                         String email = user.getString("email");
                         String created_at = user
                                 .getString("created_at");
+                        String tickets="";
 
                         // Inserting row in users table
-                        db.addUser(name, email, uid, created_at);
+                        db.addUser(name, email, uid, created_at, tickets);
 
                         //Upload Image to web Server
                         unique_id = uid;

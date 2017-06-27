@@ -9,6 +9,7 @@ public class Person {
     private String name="";
     private String email = "";
     private String u_id="";
+    private String tickets="";
 
     public String getName() {
         return name;
@@ -33,5 +34,15 @@ public class Person {
     public void setU_id(String u_id) {
         this.u_id = u_id;
     }
+
+    public String getTickets() {
+        return tickets;
+    }
+
+    public void setTickets(String tickets) {
+        this.tickets = tickets;
+    }
+
+
 
 }
