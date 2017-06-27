@@ -146,7 +146,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
                         break;
 
                     case R.id.ic_Adventures:
-                        Intent intent2 = new Intent(MapsActivityNew.this, Adventures.class);
+                        Intent intent2 = new Intent(MapsActivityNew.this, MultiMedia.class);
                         startActivity(intent2);
                         break;
 
@@ -164,13 +164,13 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         btnFilter = (Button)findViewById(R.id.button2);
         btnFilter.setOnClickListener(new View.OnClickListener() {
 
-            public void onClick(View view) {
-                Intent i = new Intent(MapsActivityNew.this,
-                        FilterActivity.class);
-                startActivity(i);
+        public void onClick(View view) {
+            Intent i = new Intent(MapsActivityNew.this,
+                    FilterActivity.class);
+            startActivity(i);
 
-            }
-        });
+        }
+    });
 
 
     }
