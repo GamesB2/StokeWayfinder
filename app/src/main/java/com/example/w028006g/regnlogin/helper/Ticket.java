@@ -32,7 +32,7 @@ public class Ticket {
         thumbnail = img;
     }
 
-    public   int getId() {
+    public  int getId() {
         return id;
     }
 

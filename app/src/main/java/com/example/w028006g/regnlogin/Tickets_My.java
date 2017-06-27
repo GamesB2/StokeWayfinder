@@ -45,12 +45,14 @@ public class Tickets_My extends AppCompatActivity {
         ArrayList<Ticket> ticketList = new ArrayList<>();
         for(int i=0;i<ticketParts.length;i++)
         {
-
-            //DO ThIS
-            //for (int j=0;)
-            if (ticketParts[i].equalsIgnoreCase(DatabaseRetrieval.ticketsAl.get(i).getIDs()));
+            for (int j=0;j<DatabaseRetrieval.ticketsAl.size();j++)
             {
-                ticketList.add(DatabaseRetrieval.ticketsAl.get(i));
+                Integer check = Integer.parseInt(ticketParts[i]);
+
+                if(check == DatabaseRetrieval.ticketsAl.get(j).getId())
+                {
+                    ticketList.add(DatabaseRetrieval.ticketsAl.get(j));
+                }
             }
         }
 
