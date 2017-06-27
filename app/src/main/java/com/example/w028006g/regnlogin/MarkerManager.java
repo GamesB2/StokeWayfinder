@@ -27,7 +27,7 @@ public class MarkerManager
     public static ArrayList<Marker> markerArrayList = new ArrayList<>();
     public static GoogleMap mMap;
     private static boolean[] filter;
-    private static int maxRange;
+    private static int maxRange = 50000; //Should be the same as MAX constant in FilterActivity
     private static LatLng userLatLng;
 
     final static int MUSIC= 0;
@@ -350,4 +350,10 @@ public class MarkerManager
     {
         maxRange = nRange;
     }
+
+    public static int getMaxRange()
+    {
+        return maxRange;
+    }
 }
+

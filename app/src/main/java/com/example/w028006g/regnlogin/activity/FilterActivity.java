@@ -38,8 +38,10 @@ public class FilterActivity extends AppCompatActivity
     public Switch swRadius;
     public SeekBar slider;
     public EditText radius;
-    public int nRadius = 50000;
     private int MAX = 50000;
+    public int nRadius;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -71,8 +73,41 @@ public class FilterActivity extends AppCompatActivity
                 R.id.landmarks,
                 R.id.events};
 
-
         boolean[] filter = MarkerManager.getFilter();
+        btnClearFilter = (Button)findViewById(R.id.clearFilter);
+        btnClearMap = (Button)findViewById(R.id.clearMap);
+        swRadius = (Switch)findViewById(R.id.switch3);
+        radius = (EditText)findViewById(R.id.radiusID);
+        slider = (SeekBar)findViewById(seekBar);
+        tv1 = (TextView)findViewById(textView);
+        tv2 = (TextView)findViewById(textView2);
+        nRadius = MarkerManager.getMaxRange();
+        if(nRadius == MAX)
+        {
+            swRadius.setChecked(true);
+
+            slider.setProgress(MAX);
+            slider.setEnabled(false);
+
+            radius.setText(String.valueOf(MAX));
+            radius.setEnabled(false);
+
+            tv1.setAlpha((float)0.5);
+            tv2.setAlpha((float)0.5);
+        }
+        else
+        {
+            swRadius.setChecked(false);
+
+            slider.setProgress(nRadius);
+            slider.setEnabled(true);
+
+            radius.setText(String.valueOf(nRadius));
+            radius.setEnabled(true);
+
+            tv1.setAlpha(1);
+            tv2.setAlpha(1);
+        }
 
         for (int i = 0; i < boxID.length; i++)
         {
@@ -84,7 +119,6 @@ public class FilterActivity extends AppCompatActivity
             checkBoxes.add(i,temp);
         }
 
-        btnClearFilter = (Button)findViewById(R.id.clearFilter);
         btnClearFilter.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View view)
@@ -95,8 +129,6 @@ public class FilterActivity extends AppCompatActivity
                 }
             }
         });
-
-        btnClearMap = (Button)findViewById(R.id.clearMap);
 
         btnClearMap.setOnClickListener(new View.OnClickListener()
         {
@@ -109,44 +141,32 @@ public class FilterActivity extends AppCompatActivity
             }
         });
 
-
-
-
-        radius = (EditText)findViewById(R.id.radiusID);
-        radius.setText(String.valueOf(nRadius));
-        slider = (SeekBar)findViewById(seekBar);
         slider.setMax(MAX);
         slider.setProgress(nRadius);
-        tv1 = (TextView)findViewById(textView);
-        tv2 = (TextView)findViewById(textView2);
 
-        swRadius = (Switch)findViewById(R.id.switch3);
         swRadius.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                if(slider.isClickable())
+                if(swRadius.isChecked())
                 {
                     slider.setProgress(MAX);
-                    slider.setClickable(false);
-                    slider.setAlpha((float)0.5);
+                    slider.setEnabled(false);
 
                     radius.setText(String.valueOf(MAX));
-                    radius.setClickable(false);
-                    radius.setAlpha((float)0.5);
+                    radius.setEnabled(false);
+
 
                     tv1.setAlpha((float)0.5);
                     tv2.setAlpha((float)0.5);
                 }
-                else if(!slider.isClickable())
+                else if(!swRadius.isChecked())
                 {
-                    slider.setClickable(true);
-                    slider.setAlpha(1);
+                    slider.setEnabled(true);
 
                     radius.setText(String.valueOf(MAX));
-                    radius.setClickable(true);
-                    radius.setAlpha(1);
+                    radius.setEnabled(true);
 
                     tv1.setAlpha(1);
                     tv2.setAlpha(1);
