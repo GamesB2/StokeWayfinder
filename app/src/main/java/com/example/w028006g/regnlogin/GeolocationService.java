@@ -22,6 +22,7 @@ import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +33,7 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
 	public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 5;
 	protected GoogleApiClient mGoogleApiClient;
 	protected LocationRequest mLocationRequest;
-
+    private static Location userLocation;
 	private PendingIntent mPendingIntent;
 
 	@Override
@@ -118,7 +119,7 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
 	@Override
 	public void onLocationChanged(Location location) {
 		//Log.d(MainActivity.TAG,"new location : " + location.getLatitude() + ", " + location.getLongitude() + ". " + location.getAccuracy());
-
+        userLocation = location;
 		broadcastLocationFound(location);
 
 		if (!MapsActivityNew.geofencesAlreadyRegistered) {
@@ -185,5 +186,11 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
 			return "Unknown Error";
 		}
 	}
+
+	public static LatLng getLatLng()
+    {
+        LatLng userLatLng = new LatLng(userLocation.getLatitude(),userLocation.getLongitude());
+        return userLatLng;
+    }
 
 }

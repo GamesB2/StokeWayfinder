@@ -62,6 +62,12 @@
                     android:textStyle="bold"
                     android:textColor="@color/white"/>
 
+                <Button
+                    android:id="@+id/btnTickets"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="My Tickets" />
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
