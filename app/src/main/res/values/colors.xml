@@ -20,4 +20,5 @@
     <color name="btn_text_login">#f14545</color>
     <color name="btn_bg_login">#fff</color>
     <color name="colorGrey">#ffffffff </color>
+    <color name="filterPrimary">#ef5350</color>
 </resources>
