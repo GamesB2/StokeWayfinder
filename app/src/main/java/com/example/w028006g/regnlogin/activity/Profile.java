@@ -1,4 +1,4 @@
-package com.example.w028006g.regnlogin;
+package com.example.w028006g.regnlogin.activity;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
@@ -6,13 +6,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
-import android.transition.AutoTransition;
-import android.transition.Explode;
 import android.transition.Scene;
 import android.transition.Transition;
 import android.transition.TransitionManager;
 import android.support.v7.app.AppCompatActivity;
-import android.transition.Slide;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -20,20 +17,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
+import com.example.w028006g.regnlogin.R;
+import com.example.w028006g.regnlogin.Tickets_My;
 import com.example.w028006g.regnlogin.helper.DownloadImageTask;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.RelativeLayout;
-
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.example.w028006g.regnlogin.helper.DownloadImageTask;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.RelativeLayout;
 
 public class Profile extends AppCompatActivity {
 

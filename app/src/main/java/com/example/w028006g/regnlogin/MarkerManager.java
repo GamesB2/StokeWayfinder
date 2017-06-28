@@ -27,7 +27,9 @@ public class MarkerManager
     public static ArrayList<Marker> markerArrayList = new ArrayList<>();
     public static GoogleMap mMap;
     private static boolean[] filter;
-    private static int maxRange = 50000; //Should be the same as MAX constant in FilterActivity
+    private static int maxRange = 500000000;
+    private static boolean rangeFilter = false;//Should be the same as MAX constant in FilterActivity
+    private static Location location;
     private static LatLng userLatLng;
 
     final static int MUSIC= 0;
@@ -59,6 +61,7 @@ public class MarkerManager
         poiArrayList = arrayList;
         mMap = map;
         filter = new boolean[25];
+
         userLatLng = GeolocationService.getLatLng();
     }
 
@@ -80,6 +83,10 @@ public class MarkerManager
     //Populates the map with ALL markers and icons from the POI Array
     public static void popMap()
     {
+        location = new Location("");
+        location.setLatitude(userLatLng.latitude);
+        location.setLongitude(userLatLng.longitude);
+
         if(!filter[ATTRACTIONS])
         {
             popMapAtt();
@@ -98,9 +105,6 @@ public class MarkerManager
     //Populates the map with Attractions markers from the POI Array
     public static void popMapAtt()
     {
-        Location location = new Location("");
-        location.setLatitude(userLatLng.latitude);
-        location.setLongitude(userLatLng.longitude);
         Marker temp = null;
         for (int i = 0; i < poiArrayList.size(); i++)
         {
@@ -317,11 +321,22 @@ public class MarkerManager
             {
                 Address add = item.getAddressInfo();
                 LatLng dest = new LatLng(add.getLatitude(), add.getLongitude());
-                temp = mMap.addMarker(new MarkerOptions()
-                        .position(dest)
-                        .title(add.getFeatureName())
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
-                markerArrayList.add(temp);
+
+
+                Location destLoc = new Location("");
+                destLoc.setLatitude(dest.latitude);
+                destLoc.setLongitude(dest.longitude);
+
+                float distance = location.distanceTo(destLoc);
+
+                if (distance <= maxRange)
+                {
+                    temp = mMap.addMarker(new MarkerOptions()
+                            .position(dest)
+                            .title(add.getFeatureName())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
+                    markerArrayList.add(temp);
+                }
             }
         }
     }
@@ -337,11 +352,22 @@ public class MarkerManager
             {
                 Address add = item.getAddressInfo();
                 LatLng dest = new LatLng(add.getLatitude(), add.getLongitude());
-                temp = mMap.addMarker(new MarkerOptions()
-                        .position(dest)
-                        .title(add.getFeatureName())
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-                markerArrayList.add(temp);
+
+
+                Location destLoc = new Location("");
+                destLoc.setLatitude(dest.latitude);
+                destLoc.setLongitude(dest.longitude);
+
+                float distance = location.distanceTo(destLoc);
+
+                if (distance <= maxRange)
+                {
+                    temp = mMap.addMarker(new MarkerOptions()
+                            .position(dest)
+                            .title(add.getFeatureName())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                    markerArrayList.add(temp);
+                }
             }
         }
     }
@@ -354,6 +380,16 @@ public class MarkerManager
     public static int getMaxRange()
     {
         return maxRange;
+    }
+
+    public static void setRangeFilter(boolean filter)
+    {
+        rangeFilter = filter;
+    }
+
+    public static boolean getRangeFilter()
+    {
+        return rangeFilter;
     }
 }
 

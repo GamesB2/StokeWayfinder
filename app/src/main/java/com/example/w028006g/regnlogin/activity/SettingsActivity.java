@@ -1,4 +1,4 @@
-package com.example.w028006g.regnlogin.helper;
+package com.example.w028006g.regnlogin.activity;
 
 
 import android.annotation.TargetApi;

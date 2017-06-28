@@ -8,9 +8,10 @@ import android.content.res.Resources;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.Log;
+import android.support.annotation.IntDef;
 import android.widget.Toast;
 
+import com.example.w028006g.regnlogin.activity.MapsActivityNew;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -34,6 +35,7 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
 	protected GoogleApiClient mGoogleApiClient;
 	protected LocationRequest mLocationRequest;
     private static Location userLocation;
+	private static LatLng userLatLng;
 	private PendingIntent mPendingIntent;
 
 	@Override
@@ -41,6 +43,13 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
 		buildGoogleApiClient();
 
 		mGoogleApiClient.connect();
+
+	}
+
+	@Override
+	public int onStartCommand(Intent intent,  int flags, int startId)
+	{
+		return super.onStartCommand(intent, flags, START_STICKY);
 	}
 
 	@Override
@@ -113,13 +122,16 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
 	@Override
 	public void onConnected(Bundle connectionHint) {
 		//Log.i(MainActivity.TAG, "Connected to GoogleApiClient");
-		startLocationUpdates();
+		if (mGoogleApiClient.isConnected()) {
+			startLocationUpdates();
+		}
 	}
 
 	@Override
 	public void onLocationChanged(Location location) {
 		//Log.d(MainActivity.TAG,"new location : " + location.getLatitude() + ", " + location.getLongitude() + ". " + location.getAccuracy());
         userLocation = location;
+		userLatLng = new LatLng(userLocation.getLatitude(),userLocation.getLongitude());
 		broadcastLocationFound(location);
 
 		if (!MapsActivityNew.geofencesAlreadyRegistered) {
@@ -189,7 +201,6 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
 
 	public static LatLng getLatLng()
     {
-        LatLng userLatLng = new LatLng(userLocation.getLatitude(),userLocation.getLongitude());
         return userLatLng;
     }
 
