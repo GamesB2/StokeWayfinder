@@ -14,6 +14,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +27,7 @@ import android.support.design.widget.BottomNavigationView;
 
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 import com.example.w028006g.regnlogin.helper.POI;
+import com.github.gorbin.asne.twitter.TwitterSocialNetwork;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -93,8 +95,8 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+//        SupportMapFragment mapFragment = ((SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map));
+//        mapFragment.getMapsync(this);
 
         //Landmarks, Attractions, and Events Stored in POI Array
         poiArrayList = DatabaseRetrieval.poiArrayList;
@@ -145,7 +147,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         });
             //Starts Geolocation Service
             startService(new Intent(this, GeolocationService.class));
-    }
+        }
 
     //Displays the circle around the geofence - wont need this for final just so we can see where they are
     protected void displayGeofences() {

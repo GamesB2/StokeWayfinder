@@ -4,10 +4,14 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -26,6 +30,8 @@ import com.google.android.gms.location.LocationServices;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.security.AccessController.getContext;
+
 public class GeolocationService extends Service implements ConnectionCallbacks,
         OnConnectionFailedListener, LocationListener, ResultCallback<Status> {
 	public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
@@ -35,11 +41,13 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
 
 	private PendingIntent mPendingIntent;
 
+	LocationManager locationManager;
+
 	@Override
 	public void onStart(Intent intent, int startId) {
 		buildGoogleApiClient();
-
 		mGoogleApiClient.connect();
+		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 	}
 
 	@Override
@@ -51,6 +59,7 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
 		}
 
 	}
+
 
 	protected void registerGeofences() {
 		if (MapsActivityNew.geofencesAlreadyRegistered) {
@@ -71,8 +80,12 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
 		GeofencingRequest geofencingRequest = geofencingRequestBuilder.build();
 
 		mPendingIntent = requestPendingIntent();
+		if (ContextCompat.checkSelfPermission(this, "android.permission.ACCESS_FINE_LOCATION") == PackageManager.PERMISSION_GRANTED) {
+			LocationServices.GeofencingApi.addGeofences(mGoogleApiClient, geofencingRequest, mPendingIntent).setResultCallback(this);
+		} else {
+			isLocationEnabled();
+		}
 
-		LocationServices.GeofencingApi.addGeofences(mGoogleApiClient, geofencingRequest, mPendingIntent).setResultCallback(this);
 
 		MapsActivityNew.geofencesAlreadyRegistered = true;
 	}
@@ -101,7 +114,11 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
 	}
 
 	protected void startLocationUpdates() {
-		LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+		if (ContextCompat.checkSelfPermission(this, "android.permission.ACCESS_FINE_LOCATION") == PackageManager.PERMISSION_GRANTED) {
+			LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+		} else {
+			isLocationEnabled();
+		}
 	}
 
 	protected void stopLocationUpdates() {
@@ -184,6 +201,11 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
 		default:
 			return "Unknown Error";
 		}
+	}
+
+	private boolean isLocationEnabled() {
+		return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+				locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 	}
 
 }
