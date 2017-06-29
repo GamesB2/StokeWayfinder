@@ -22,11 +22,9 @@ public class qrActivity extends AppCompatActivity implements View.OnClickListene
 
     //View Objects
     private Button buttonScan;
-    private TextView textViewName, textViewAddress;
 
     //qr code scanner object
     private IntentIntegrator qrScan;
-    private CaptureManager captureManager;
     private BeepManager beepManager;
     private String sResult;
     private final String URL = "www.examplesite.com";
@@ -39,13 +37,11 @@ public class qrActivity extends AppCompatActivity implements View.OnClickListene
 
         //View objects
         buttonScan = (Button) findViewById(R.id.buttonScan);
-        textViewName = (TextView) findViewById(R.id.textViewName);
-        textViewAddress = (TextView) findViewById(R.id.textViewAddress);
 
         //intializing scan object
         qrScan = new IntentIntegrator(this);
         qrScan.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-        qrScan.setBeepEnabled(false);
+        qrScan.setBeepEnabled(true);
 
         //attaching onclick listener
         buttonScan.setOnClickListener(this);
@@ -65,16 +61,20 @@ public class qrActivity extends AppCompatActivity implements View.OnClickListene
             } else
                 {
                 //if qr contains data
+
                 try
                 {
                     //converting the data to json
                     //JSONObject obj = new JSONObject(result.getContents());
                     //setting values to textviews
                     sResult = result.getContents();
-                    System.out.println("First Flag: " + sResult);;
+                    System.out.println("First Flag: " + sResult);
                     sResult = sResult.substring(URL.length()+1);
                     System.out.println("Second Flag: " + sResult);
-
+                    int nResult = Integer.parseInt(sResult);
+                    Intent info = new Intent(qrActivity.this,testActivity.class);
+                    info.putExtra("locCode", nResult);
+                    startActivity(info);
 
                 } catch (Exception e)
                 {

@@ -137,9 +137,12 @@
             android:label="activity_filter"
             android:parentActivityName=".activity.MapsActivityNew"
             android:theme="@style/AppTheme"/>
-        <activity android:name=".activity.qrActivity"
+        <activity
+            android:name=".activity.qrActivity"
             android:screenOrientation="fullSensor"
-            tools:replace="screenOrientation" />
+            tools:replace="screenOrientation"/>
+        <activity android:name=".activity.testActivity">
+        </activity>
     </application>
 
 </manifest>

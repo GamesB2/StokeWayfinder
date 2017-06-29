@@ -146,6 +146,7 @@ public class FilterActivity extends AppCompatActivity
                 {
                     slider.setProgress(MAX);
                     slider.setEnabled(false);
+                    MarkerManager.setRangeFilter(false);
 
                     radius.setText(String.valueOf(MAX));
                     radius.setEnabled(false);
@@ -238,7 +239,6 @@ public class FilterActivity extends AppCompatActivity
     @Override
     public void onBackPressed()
     {
-        MarkerManager.setMaxRange(slider.getProgress());
         for (int i = 0; i < checkBoxes.size(); i++)
         {
             if(checkBoxes.get(i).isChecked())
@@ -250,14 +250,7 @@ public class FilterActivity extends AppCompatActivity
                 MarkerManager.filterOut(i);
             }
         }
-        if(!MarkerManager.getRangeFilter())
-        {
-            MarkerManager.setMaxRange(500000000);
-        }
-        else
-        {
-            MarkerManager.setMaxRange(nRadius);
-        }
+        MarkerManager.setMaxRange(nRadius);
         this.finish();
     }
 }

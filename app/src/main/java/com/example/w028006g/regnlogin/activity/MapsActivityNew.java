@@ -122,7 +122,6 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         {
             lat = FireNotification.getString("Latitude");
             lon = FireNotification.getString("Longitude");
-
         }
 
         //Menu bar at the bottom
