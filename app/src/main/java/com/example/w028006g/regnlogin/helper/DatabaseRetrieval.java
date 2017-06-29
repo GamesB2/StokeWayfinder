@@ -6,17 +6,39 @@ import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.w028006g.regnlogin.activity.MapsActivityNew;
+import com.example.w028006g.regnlogin.MapsActivityNew;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class DatabaseRetrieval  extends Service {
 
@@ -26,11 +48,14 @@ public class DatabaseRetrieval  extends Service {
 
     public static ArrayList<POI> poiArrayList = new ArrayList<>();
     public static ArrayList<Ticket> ticketsAl = new ArrayList<>();
+    public static ArrayList<Events> eventsAl = new ArrayList(); //Main events list.
+    public static ArrayList<Post> postsAl = new ArrayList();
     public static ArrayList<Event> eventsAl = new ArrayList(); //Main events list.
     public static Attraction att;
     public static Landmark lndmk;
-    public static Event event;
+    public static Events event;
     public static Ticket ticket;
+    public static Post post;
 
 
     //Event Stuff
@@ -131,6 +156,8 @@ public class DatabaseRetrieval  extends Service {
             HttpHandler shA = new HttpHandler();
             HttpHandler shL = new HttpHandler();
             HttpHandler shE = new HttpHandler();
+            HttpHandler shT = new HttpHandler();
+            HttpHandler shP = new HttpHandler();
 
             // Making a request to url and getting response
 
@@ -138,6 +165,7 @@ public class DatabaseRetrieval  extends Service {
             String urlL = "https://concussive-shirt.000webhostapp.com/get_details_landmarks.php";
             String urlE = "https://concussive-shirt.000webhostapp.com/get_details_events.php";
             String urlT = "https://concussive-shirt.000webhostapp.com/get_details_tickets.php";
+            String urlP = "https://concussive-shirt.000webhostapp.com/get_details_posts.php";
 
             String jsonStrA = shA.makeServiceCall(urlA);
             String jsonStrL = shL.makeServiceCall(urlL);
@@ -148,6 +176,7 @@ public class DatabaseRetrieval  extends Service {
             Log.e(TAG, "Response from url: " + jsonStrL);
             Log.e(TAG, "Response from url: " + jsonStrE);
             Log.e(TAG, "Response from url: " + jsonStrT);
+            Log.e(TAG, "Response from url: " + jsonStrP);
             if (jsonStrA != null)
         {
             try {
@@ -196,6 +225,49 @@ public class DatabaseRetrieval  extends Service {
 
             }
         }
+
+            if (jsonStrP != null)
+            {
+                try {
+                    JSONObject jsonObj = new JSONObject(jsonStrP);
+
+                    // Getting JSON Array node
+                    JSONArray dataRp = jsonObj.getJSONArray("posts");
+
+                    // looping through All Attractions
+                    for (int i = 0; i < dataRp.length(); i++) {
+                        JSONObject c = dataRp.getJSONObject(i);
+                        String id = c.getString("id");
+                        String name = c.getString("name");
+                        String website = c.getString("website");
+                        String lat = c.getString("lat");
+                        String lng = c.getString("lng");
+                        String txt = c.getString("txt");
+                        String video = c.getString("video");
+                        String summary = c.getString("summary");
+                        String qr = c.getString("qr");
+
+                        post = new Post(id,name,website,lat,lng,txt,video,summary,qr);
+
+                        postsAl.add(post);
+
+                        Log.e(TAG, "Posts Added OK!: ");
+
+                    }
+                } catch (final JSONException eA) {
+                    Log.i(TAG, "Json parsing error: " + eA.getMessage());
+                    /*runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),
+                                    "Json parsing error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });*/
+
+                }
+            }
+
             if (jsonStrE != null)
             {
                 try {
