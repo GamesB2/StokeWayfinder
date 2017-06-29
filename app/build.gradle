@@ -6,6 +6,9 @@ android {
     compileSdkVersion 25
     buildToolsVersion '25.0.3'
 
+        useLibrary 'org.apache.http.legacy'
+
+
     defaultConfig {
         applicationId "com.example.w028006g.regnlogin"
         minSdkVersion 21

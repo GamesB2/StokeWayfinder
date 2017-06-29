@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.example.w028006g.regnlogin.app.AppConfig;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
+import com.example.w028006g.regnlogin.helper.Post;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -26,6 +27,10 @@ public class MultiMedia extends YouTubeBaseActivity implements
     private YouTubePlayerView youTubeView;
     private Button btnClose;
     private TextView txtSummary;
+    private TextView txtMoreInfo;
+    private TextView txtName;
+    private boolean open = false;
+    private Post p;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,18 +43,42 @@ public class MultiMedia extends YouTubeBaseActivity implements
 
         youTubeView = (YouTubePlayerView) findViewById(R.id.youtube_view);
         txtSummary = (TextView) findViewById(R.id.txtAbout);
+        txtMoreInfo = (TextView) findViewById(R.id.txtMoreInfo);
+        txtName = (TextView) findViewById(R.id.txtInfoName);
+        final String method="register";
 
-        txtSummary.setText(DatabaseRetrieval.postsAl.get(0).getSummary());
+        p = DatabaseRetrieval.postsAl.get(2);
+
+        txtSummary.setText(p.getSummary());
+        txtName.setText(p.getName());
 
 
         // Initializing video player with developer key
         youTubeView.initialize(AppConfig.DEVELOPER_KEY, this);
         btnClose = (Button)findViewById(R.id.btnClose);
+
         btnClose.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
+                BackgroundTaskPosts backgroundTask=new BackgroundTaskPosts(MultiMedia.this);
+                backgroundTask.execute(method,MainActivity.userDetails.getEmail(), p.getId());
+                Toast.makeText(getApplicationContext(),
+                        "You Sucessfully Added This Post To Your Collection:\n" + p.getName(),
+                        Toast.LENGTH_LONG).show();
                 finish();
+            }
+        });
 
+        txtMoreInfo.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+                if (open){
+                    txtMoreInfo.setText("see more...");
+                    open = false;
+                }else {
+                    txtMoreInfo.setText(p.getTxt());
+                    open = true;
+                }
             }
         });
 
@@ -75,7 +104,7 @@ public class MultiMedia extends YouTubeBaseActivity implements
             // loadVideo() will auto play video
             // Use cueVideo() method, if you don't want to play it automatically
             //player.loadVideo(AppConfig.YOUTUBE_VIDEO_CODE);
-            player.loadVideo(DatabaseRetrieval.postsAl.get(0).getVideo());
+            player.loadVideo(p.getVideo());
 
             // Hiding player controls
             player.setPlayerStyle(PlayerStyle.CHROMELESS);

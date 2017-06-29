@@ -320,8 +320,17 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
             mm.popMap();
         }
         pauseState = true;
+
+        startService(new Intent(this, DatabaseRetrieval.class));
         super.onResume();
 
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        stopService(new Intent(this, DatabaseRetrieval.class));
+        super.onDestroy();
     }
 
     @Override

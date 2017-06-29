@@ -40,6 +40,7 @@ public class Profile extends AppCompatActivity {
     private TextView txtName;
     private TextView txtEmail;
     private Button btnView;
+    private Button btnHistory;
 
 
     private Scene scene1, scene2;
@@ -57,6 +58,7 @@ public class Profile extends AppCompatActivity {
         txtName = (TextView) findViewById(R.id.txtName);
         txtEmail = (TextView) findViewById(R.id.txtUserEmail);
         btnView = (Button) findViewById(R.id.btnTickets);
+        btnHistory = (Button) findViewById(R.id.btnHistory);
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView_Bar);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
@@ -105,6 +107,15 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent4 = new Intent(Profile.this, Tickets_My.class);
+                startActivity(intent4);
+            }
+        });
+
+        btnHistory.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent4 = new Intent(Profile.this, History.class);
                 startActivity(intent4);
             }
         });
