@@ -149,6 +149,7 @@
         <activity android:name=".Tickets_View"></activity>
         <activity android:name=".Tickets_My"></activity>
         <activity android:name=".MultiMedia"></activity>
+        <activity android:name=".History"></activity>
 
         <activity android:name=".activity.Profile"/>
         <activity android:name=".activity.Adventures"/>

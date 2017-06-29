@@ -33,6 +33,10 @@ public class Post {
         return id;
     }
 
+    public Integer getIdI() {
+        return Integer.parseInt(id);
+    }
+
     public void setId(String id) {
         this.id = id;
     }

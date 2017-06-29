@@ -13,4 +13,6 @@ public class AppConfig {
 
     // YouTube video id
     public static final String YOUTUBE_VIDEO_CODE = "exM-5Lr4YAo";
+
+    public static String URL_GET_POSTS = "https://concussive-shirt.000webhostapp.com/get_details_user_posts.php";
 }
