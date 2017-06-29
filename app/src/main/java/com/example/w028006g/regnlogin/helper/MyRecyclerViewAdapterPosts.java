@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.w028006g.regnlogin.History;
+import com.example.w028006g.regnlogin.MultiMedia;
 import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.Tickets_View;
 import com.squareup.picasso.Picasso;
@@ -22,6 +24,7 @@ public class MyRecyclerViewAdapterPosts extends RecyclerView.Adapter<MyRecyclerV
     private ArrayList<Post> feedItemList;
     private Context mContext;
     private OnItemClickListener onItemClickListener;
+    private ArrayList<Integer> ints = new ArrayList<Integer>();
 
     public MyRecyclerViewAdapterPosts(Context context, ArrayList<Post> feedItemList) {
         this.feedItemList = feedItemList;
@@ -38,6 +41,7 @@ public class MyRecyclerViewAdapterPosts extends RecyclerView.Adapter<MyRecyclerV
     @Override
     public void onBindViewHolder(final CustomViewHolder customViewHolder, int i) {
         final Post feedItem = feedItemList.get(i);
+        ints.add(feedItemList.get(i).getIdI());
 
 /*        if (!TextUtils.isEmpty(feedItem.getThumbnail())) {
             Picasso.with(mContext).load(feedItem.getThumbnail())
@@ -57,17 +61,18 @@ public class MyRecyclerViewAdapterPosts extends RecyclerView.Adapter<MyRecyclerV
             public void onClick(View v) {
                 //onItemClickListener.onItemClick(feedItem);
                 //if (v.getId() == feedItem.getId()){
-                    //Toast.makeText(v.getContext(), "ITEM PRESSED = " + String.valueOf(customViewHolder.getAdapterPosition()), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(v.getContext(), "ITEM PRESSED = " + String.valueOf(customViewHolder.getAdapterPosition()), Toast.LENGTH_SHORT).show();
                 //} else {
                 Toast.makeText(v.getContext(), "ROW PRESSED = " + String.valueOf(customViewHolder.getAdapterPosition()), Toast.LENGTH_SHORT).show();
-                Intent myIntent = new Intent(v.getContext(), Tickets_View.class);
-                myIntent.putExtra("id", customViewHolder.getAdapterPosition());
-                mContext.startActivity(myIntent);
+                Intent myIntent1 = new Intent(v.getContext(), MultiMedia.class);
+                myIntent1.putExtra("id", ints.get(customViewHolder.getAdapterPosition()));
+                System.out.println(ints.get(customViewHolder.getAdapterPosition()));
+                mContext.startActivity(myIntent1);
 
                 //}
             }
         };
-        //customViewHolder.imageView.setOnClickListener(listener);
+        customViewHolder.imageView.setOnClickListener(listener);
         //customViewHolder.textViewE.setOnClickListener(listener);
     }
 
@@ -85,8 +90,9 @@ public class MyRecyclerViewAdapterPosts extends RecyclerView.Adapter<MyRecyclerV
 
         public CustomViewHolder(View view) {
             super(view);
-            //this.imageView = (ImageView) view.findViewById(R.id.thumbnail);
+            this.imageView = (ImageView) view.findViewById(R.id.img_vid);
             this.textViewE = (TextView) view.findViewById(R.id.title);
+            //myInt = feedItemList.get(view.findViewById(getAdapterPosition()));
             //this.textViewD = (TextView) view.findViewById(R.id.tDesc);
             //this.textViewP = (TextView) view.findViewById(R.id.tPrice);
         }

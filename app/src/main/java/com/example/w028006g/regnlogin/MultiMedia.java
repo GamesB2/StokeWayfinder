@@ -47,7 +47,24 @@ public class MultiMedia extends YouTubeBaseActivity implements
         txtName = (TextView) findViewById(R.id.txtInfoName);
         final String method="register";
 
-        p = DatabaseRetrieval.postsAl.get(2);
+        Intent mIntent1 = getIntent();
+        final int intValue = mIntent1.getIntExtra("id", 0);
+
+        if( intValue > 0)
+        {
+            for(int i =0;i< DatabaseRetrieval.postsAl.size();i++)
+            {
+                if(DatabaseRetrieval.postsAl.get(i).getIdI() == intValue)
+                {
+                    p = DatabaseRetrieval.postsAl.get(i);
+                }
+            }
+
+        }
+        else
+        {
+            p = DatabaseRetrieval.postsAl.get(2);
+        }
 
         txtSummary.setText(p.getSummary());
         txtName.setText(p.getName());
