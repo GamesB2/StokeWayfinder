@@ -26,11 +26,16 @@ public class DatabaseRetrieval  extends Service {
 
     public static ArrayList<POI> poiArrayList = new ArrayList<>();
     public static ArrayList<Ticket> ticketsAl = new ArrayList<>();
+    //public static ArrayList<Events> eventsAl = new ArrayList(); //Main events list.
+    public static ArrayList<Post> postsAl = new ArrayList();
+
     public static ArrayList<Event> eventsAl = new ArrayList(); //Main events list.
+
     public static Attraction att;
     public static Landmark lndmk;
     public static Event event;
     public static Ticket ticket;
+    public static Post post;
 
 
     //Event Stuff
@@ -131,6 +136,8 @@ public class DatabaseRetrieval  extends Service {
             HttpHandler shA = new HttpHandler();
             HttpHandler shL = new HttpHandler();
             HttpHandler shE = new HttpHandler();
+            HttpHandler shT = new HttpHandler();
+            HttpHandler shP = new HttpHandler();
 
             // Making a request to url and getting response
 
@@ -138,18 +145,21 @@ public class DatabaseRetrieval  extends Service {
             String urlL = "https://concussive-shirt.000webhostapp.com/get_details_landmarks.php";
             String urlE = "https://concussive-shirt.000webhostapp.com/get_details_events.php";
             String urlT = "https://concussive-shirt.000webhostapp.com/get_details_tickets.php";
+            String urlP = "https://concussive-shirt.000webhostapp.com/get_details_posts.php";
 
             String jsonStrA = shA.makeServiceCall(urlA);
             String jsonStrL = shL.makeServiceCall(urlL);
             String jsonStrE = shE.makeServiceCall(urlE);
-            String jsonStrT = shE.makeServiceCall(urlT);
+            String jsonStrT = shT.makeServiceCall(urlT);
+            String jsonStrP = shP.makeServiceCall(urlP);
 
             Log.e(TAG, "Response from url: " + jsonStrA);
             Log.e(TAG, "Response from url: " + jsonStrL);
             Log.e(TAG, "Response from url: " + jsonStrE);
             Log.e(TAG, "Response from url: " + jsonStrT);
+            Log.e(TAG, "Response from url: " + jsonStrP);
             if (jsonStrA != null)
-        {
+            {
             try {
                 JSONObject jsonObj = new JSONObject(jsonStrA);
 
@@ -196,6 +206,49 @@ public class DatabaseRetrieval  extends Service {
 
             }
         }
+
+            if (jsonStrP != null)
+            {
+                try {
+                    JSONObject jsonObj = new JSONObject(jsonStrP);
+
+                    // Getting JSON Array node
+                    JSONArray dataRp = jsonObj.getJSONArray("posts");
+
+                    // looping through All Attractions
+                    for (int i = 0; i < dataRp.length(); i++) {
+                        JSONObject c = dataRp.getJSONObject(i);
+                        String id = c.getString("id");
+                        String name = c.getString("name");
+                        String website = c.getString("website");
+                        String lat = c.getString("lat");
+                        String lng = c.getString("lng");
+                        String txt = c.getString("txt");
+                        String video = c.getString("video");
+                        String summary = c.getString("summary");
+                        String qr = c.getString("qr");
+
+                        post = new Post(id,name,website,lat,lng,txt,video,summary,qr);
+
+                        postsAl.add(post);
+
+                        Log.e(TAG, "Posts Added OK!: ");
+
+                    }
+                } catch (final JSONException eA) {
+                    Log.i(TAG, "Json parsing error: " + eA.getMessage());
+                    /*runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),
+                                    "Json parsing error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });*/
+
+                }
+            }
+
             if (jsonStrE != null)
             {
                 try {

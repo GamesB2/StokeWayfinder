@@ -127,6 +127,11 @@
             </intent-filter>
         </receiver>
 
+
+        <activity android:name=".MultiMedia"/>
+        <activity android:name=".History"/>
+
+
         <activity android:name=".activity.Profile"/>
         <activity android:name=".activity.Adventures"/>
         <activity android:name=".activity.Tickets"/>
