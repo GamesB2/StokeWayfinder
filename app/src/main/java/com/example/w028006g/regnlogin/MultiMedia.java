@@ -48,6 +48,7 @@ public class MultiMedia extends YouTubeBaseActivity implements
         txtName = (TextView) findViewById(R.id.txtInfoName);
         final String method="register";
 
+
         Intent mIntent1 = getIntent();
         final int intValue = mIntent1.getIntExtra("id", 0);
 
@@ -66,7 +67,7 @@ public class MultiMedia extends YouTubeBaseActivity implements
         {
             p = DatabaseRetrieval.postsAl.get(2);
         }
-
+      
         txtSummary.setText(p.getSummary());
         txtName.setText(p.getName());
 
@@ -79,7 +80,9 @@ public class MultiMedia extends YouTubeBaseActivity implements
 
             public void onClick(View view) {
                 BackgroundTaskPosts backgroundTask=new BackgroundTaskPosts(MultiMedia.this);
+
                 backgroundTask.execute(method, MainActivity.userDetails.getEmail(), p.getId());
+
                 Toast.makeText(getApplicationContext(),
                         "You Sucessfully Added This Post To Your Collection:\n" + p.getName(),
                         Toast.LENGTH_LONG).show();

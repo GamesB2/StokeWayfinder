@@ -1,4 +1,4 @@
-package com.example.w028006g.regnlogin.activity;
+package com.example.w028006g.regnlogin;
 
 import android.Manifest;
 import android.content.Context;
@@ -24,6 +24,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.support.design.widget.BottomNavigationView;
+import android.widget.Toast;
 
 import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
 import com.example.w028006g.regnlogin.GeolocationService;
@@ -33,6 +34,7 @@ import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.SimpleGeofence;
 import com.example.w028006g.regnlogin.SimpleGeofenceStore;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
+import com.example.w028006g.regnlogin.helper.Events;
 import com.example.w028006g.regnlogin.helper.POI;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -122,11 +124,11 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         if (FireNotification != null) {
             lat = FireNotification.getString("Latitude");
             lon = FireNotification.getString("Longitude");
+
         }
 
         //Menu bar at the bottom
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView_Bar);
-
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
         Menu menu = bottomNavigationView.getMenu();
         MenuItem menuItem = menu.getItem(0);
@@ -398,7 +400,9 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         //Checks that something has been passed to lat and lon before trying to execute
         if (lat != null && lon != null)
         {
+
             centerOn(lat, lon);
+
         }
 
         //Executes popMap to populate the markers on the map

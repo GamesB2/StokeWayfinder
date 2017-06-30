@@ -6,17 +6,39 @@ import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.w028006g.regnlogin.activity.MapsActivityNew;
+import com.example.w028006g.regnlogin.MapsActivityNew;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class DatabaseRetrieval  extends Service {
 
@@ -28,12 +50,11 @@ public class DatabaseRetrieval  extends Service {
     public static ArrayList<Ticket> ticketsAl = new ArrayList<>();
     //public static ArrayList<Events> eventsAl = new ArrayList(); //Main events list.
     public static ArrayList<Post> postsAl = new ArrayList();
-
     public static ArrayList<Event> eventsAl = new ArrayList(); //Main events list.
 
     public static Attraction att;
     public static Landmark lndmk;
-    public static Event event;
+    public static Events event;
     public static Ticket ticket;
     public static Post post;
 
