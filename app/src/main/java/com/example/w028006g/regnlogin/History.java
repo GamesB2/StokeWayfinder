@@ -36,6 +36,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.example.w028006g.regnlogin.app.AppConfig.CONNECTION_TIMEOUT;
+import static com.example.w028006g.regnlogin.app.AppConfig.READ_TIMEOUT;
+
 /**
  * Created by w028006g on 28/06/2017.
  */
@@ -44,8 +47,7 @@ public class History extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private MyRecyclerViewAdapterPosts adapter;
     private ArrayList<Post> postist = new ArrayList<>();
-    public static final int CONNECTION_TIMEOUT=10000;
-    public static final int READ_TIMEOUT=15000;
+
     private String posts="";
 
     @Override

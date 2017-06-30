@@ -57,7 +57,7 @@ public class MyRecyclerViewAdapterPosts extends RecyclerView.Adapter<MyRecyclerV
 
         //Setting text view title
         customViewHolder.textViewE.setText((feedItem.getName()));
-        //customViewHolder.textViewD.setText((feedItem.getDesc()));
+        customViewHolder.textViewD.setText((feedItem.getSummary()));
         //customViewHolder.textViewP.setText((feedItem.getPriceS()));
 
 
@@ -102,6 +102,7 @@ public class MyRecyclerViewAdapterPosts extends RecyclerView.Adapter<MyRecyclerV
 
             this.imageView = (ImageView) view.findViewById(R.id.img_vid);
             this.textViewE = (TextView) view.findViewById(R.id.title);
+            this.textViewD = (TextView) view.findViewById(R.id.histDesc);
             //myInt = feedItemList.get(view.findViewById(getAdapterPosition()));
 
             //this.textViewD = (TextView) view.findViewById(R.id.tDesc);

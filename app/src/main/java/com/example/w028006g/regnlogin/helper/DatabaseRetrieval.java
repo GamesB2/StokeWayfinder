@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.w028006g.regnlogin.MapsActivityNew;
+import com.example.w028006g.regnlogin.activity.MapsActivityNew;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -54,7 +54,7 @@ public class DatabaseRetrieval  extends Service {
 
     public static Attraction att;
     public static Landmark lndmk;
-    public static Events event;
+    public static Event event;
     public static Ticket ticket;
     public static Post post;
 
