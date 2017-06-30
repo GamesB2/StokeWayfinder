@@ -4,6 +4,7 @@ import com.example.w028006g.regnlogin.ClickActionHelper;
 import com.example.w028006g.regnlogin.GeolocationService;
 import com.example.w028006g.regnlogin.Person;
 import com.example.w028006g.regnlogin.R;
+import com.example.w028006g.regnlogin.helper.DatabaseRetrievalNow;
 import com.example.w028006g.regnlogin.helper.DownloadImageTask;
 import com.example.w028006g.regnlogin.helper.SQLiteHandler;
 import com.example.w028006g.regnlogin.helper.SessionManager;
@@ -46,8 +47,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Intent intent = new Intent(MainActivity.this, GeolocationService.class);
-
         startService(intent);
+        Intent intent1 = new Intent(MainActivity.this, DatabaseRetrievalNow.class);
+        startService(intent1);
 
         userDetails = new Person();
 

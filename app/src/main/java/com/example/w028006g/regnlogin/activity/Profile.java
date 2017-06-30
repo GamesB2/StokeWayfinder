@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
+import com.example.w028006g.regnlogin.History;
 import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.Tickets_My;
 import com.example.w028006g.regnlogin.helper.DownloadImageTask;

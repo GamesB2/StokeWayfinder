@@ -48,9 +48,10 @@ public class DatabaseRetrieval  extends Service {
 
     public static ArrayList<POI> poiArrayList = new ArrayList<>();
     public static ArrayList<Ticket> ticketsAl = new ArrayList<>();
-    public static ArrayList<Events> eventsAl = new ArrayList(); //Main events list.
+    //public static ArrayList<Events> eventsAl = new ArrayList(); //Main events list.
     public static ArrayList<Post> postsAl = new ArrayList();
     public static ArrayList<Event> eventsAl = new ArrayList(); //Main events list.
+
     public static Attraction att;
     public static Landmark lndmk;
     public static Events event;
@@ -170,7 +171,8 @@ public class DatabaseRetrieval  extends Service {
             String jsonStrA = shA.makeServiceCall(urlA);
             String jsonStrL = shL.makeServiceCall(urlL);
             String jsonStrE = shE.makeServiceCall(urlE);
-            String jsonStrT = shE.makeServiceCall(urlT);
+            String jsonStrT = shT.makeServiceCall(urlT);
+            String jsonStrP = shP.makeServiceCall(urlP);
 
             Log.e(TAG, "Response from url: " + jsonStrA);
             Log.e(TAG, "Response from url: " + jsonStrL);
@@ -178,7 +180,7 @@ public class DatabaseRetrieval  extends Service {
             Log.e(TAG, "Response from url: " + jsonStrT);
             Log.e(TAG, "Response from url: " + jsonStrP);
             if (jsonStrA != null)
-        {
+            {
             try {
                 JSONObject jsonObj = new JSONObject(jsonStrA);
 

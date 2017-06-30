@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
 import com.example.w028006g.regnlogin.GeolocationService;
 import com.example.w028006g.regnlogin.MarkerManager;
+import com.example.w028006g.regnlogin.MultiMedia;
 import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.SimpleGeofence;
 import com.example.w028006g.regnlogin.SimpleGeofenceStore;
@@ -120,8 +121,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         poiArrayList = DatabaseRetrieval.poiArrayList;
         //Lat and Long from FireMSGService brought in here
         Bundle FireNotification = getIntent().getExtras();
-        if (FireNotification != null)
-        {
+        if (FireNotification != null) {
             lat = FireNotification.getString("Latitude");
             lon = FireNotification.getString("Longitude");
 
@@ -139,8 +139,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item)
             {
-                switch (item.getItemId())
-                {
+                switch (item.getItemId()) {
                     case R.id.ic_map:
 
                         break;
@@ -166,30 +165,39 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         //Starts Geolocation Service
         startService(new Intent(this, GeolocationService.class));
 
-        btnQR = (Button)findViewById(R.id.QRbutton);
-        btnQR.setOnClickListener(new View.OnClickListener() {
+        btnQR = (Button) findViewById(R.id.QRbutton);
+        btnQR.setOnClickListener(new View.OnClickListener()
+        {
 
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 Intent i = new Intent(MapsActivityNew.this,
                         qrActivity.class);
                 startActivity(i);
             }
         });
 
-        btnFilter = (Button)findViewById(R.id.FilterButton);
-        btnFilter.setOnClickListener(new View.OnClickListener() {
+        btnFilter = (Button) findViewById(R.id.FilterButton);
+        btnFilter.setOnClickListener(new View.OnClickListener()
+        {
 
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 Intent i = new Intent(MapsActivityNew.this,
                         FilterActivity.class);
                 startActivity(i);
             }
         });
-
-
-
-
     }
+
+
+    public void onClick(View view)
+    {
+        Intent i = new Intent(MapsActivityNew.this,
+                FilterActivity.class);
+        startActivity(i);
+    }
+
 
     //Displays the circle around the geofence - wont need this for final just so we can see where they are
     protected void displayGeofences() {
