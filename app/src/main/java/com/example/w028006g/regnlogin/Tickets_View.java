@@ -1,9 +1,12 @@
 package com.example.w028006g.regnlogin;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
@@ -23,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.w028006g.regnlogin.activity.LoginActivity;
+import com.example.w028006g.regnlogin.app.AppController;
 import com.facebook.FacebookSdk;
 import com.facebook.share.widget.LikeView;
 import com.facebook.share.widget.ShareButton;
@@ -35,6 +39,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.example.w028006g.regnlogin.R.id.container;
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by User on 4/15/2017.
@@ -46,8 +51,8 @@ public class Tickets_View extends AppCompatActivity {
     private String link = "https://wayfarer-app.com";
     private String message = "Test share:";
     private SocialNetwork socialNetwork;
+    public int NetID;
     private int networkId;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,13 +81,21 @@ public class Tickets_View extends AppCompatActivity {
 
         share = (Button) findViewById(R.id.twittershare);
 
-        if (networkId != 0) {
-            socialNetwork = LoginActivity.mSocialNetworkManager.getSocialNetwork(networkId);
-//        socialNetwork.setOnRequestCurrentPersonCompleteListener(this);
-            socialNetwork.requestCurrentPerson();
-        } else {
+        SharedPreferences prefs = AppController.getInstance().getSharedPreferences("MYPREFS", Context.MODE_PRIVATE);
+        networkId  = prefs.getInt("SocialNet", -1);
 
+        if (networkId == -1){
+
+        } else {
+            if (networkId != 0) {
+                socialNetwork = LoginActivity.mSocialNetworkManager.getSocialNetwork(networkId);
+                //socialNetwork.setOnRequestCurrentPersonCompleteListener(this);
+                socialNetwork.requestCurrentPerson();
+            } else {
+
+            }
         }
+
 
 
         FBLikeView fbLikeView = (FBLikeView) this.findViewById(R.id.fbLikeView);
@@ -91,38 +104,36 @@ public class Tickets_View extends AppCompatActivity {
                 LikeView.ObjectType.OPEN_GRAPH);
 
         ImageView sharingButton = (ImageView) findViewById(R.id.share);
-        share.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder ad = alertDialogInit("Would you like to share:", link);
-                ad.setPositiveButton("Post link", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        Bundle postParams = new Bundle();
-                        postParams.putString(SocialNetwork.BUNDLE_NAME, "Wayfarer");
-                        postParams.putString(SocialNetwork.BUNDLE_LINK, link);
-                        if(networkId != 0) {
-                            socialNetwork.requestPostLink(postParams, message, postingComplete);
-                        } else {
+        if (networkId != 4 && networkId != 1){
+            AlertDialog.Builder ad = alertDialogInit("Please login via Facebook or Twitter", link);
+            ad.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
 
-                        }
-                    }
-                });
-                        ad.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int i) {
-                                dialog.cancel();
-                            }
-                        });
-                        ad.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                            public void onCancel(DialogInterface dialog) {
-                                dialog.cancel();
-                            }
-                        });
-                        ad.create().show();
-                    }
+                }
+            });
+            ad.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int i) {
+                    dialog.cancel();
+                }
+            });
+            ad.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                public void onCancel(DialogInterface dialog) {
+                    dialog.cancel();
+                }
+            });
+            ad.create().show();
+        } else {
+            share.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick (View v){
+                    shareClick();
+                }
+            });
+        }
 
-                });
 
         sharingButton.setOnClickListener(new View.OnClickListener()
         {
@@ -147,20 +158,18 @@ public class Tickets_View extends AppCompatActivity {
                 startActivity(Intent.createChooser(sharingIntent, "Share via"));
             }
 
-            private View.OnClickListener shareClick = new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            private void shareClick() {
                     AlertDialog.Builder ad = alertDialogInit("Would you like to post Link:", link);
                     ad.setPositiveButton("Post link", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             Bundle postParams = new Bundle();
-                            postParams.putString(SocialNetwork.BUNDLE_NAME, "Simple and easy way to add social networks for android application");
+                            postParams.putString(SocialNetwork.BUNDLE_NAME, "Share Social Network");
                             postParams.putString(SocialNetwork.BUNDLE_LINK, link);
-//                    if(networkId == GooglePlusSocialNetwork.ID) {
-//                        socialNetwork.requestPostDialog(postParams, postingComplete);
-//                    } else {
-//                        socialNetwork.requestPostLink(postParams, message, postingComplete);
-//                    }
+                    if(networkId != 0) {
+                        socialNetwork.requestPostLink(postParams, message, postingComplete);
+                    } else {
+
+                    }
                         }
                     });
                     ad.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -175,7 +184,7 @@ public class Tickets_View extends AppCompatActivity {
                         }
                     });
                     ad.create().show();
-                }
+
             };
 
             private OnPostingCompleteListener postingComplete = new OnPostingCompleteListener() {

@@ -1,5 +1,7 @@
 package com.example.w028006g.regnlogin.activity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -27,8 +29,6 @@ import java.util.List;
 import java.util.Map;
 import com.example.w028006g.regnlogin.MainActivity;
 import com.example.w028006g.regnlogin.MainActivity1;
-import com.example.w028006g.regnlogin.MapsActivityNew;
-import com.example.w028006g.regnlogin.ProfileFragment;
 import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.app.AppConfig;
 import com.example.w028006g.regnlogin.app.AppController;
@@ -42,6 +42,7 @@ import com.github.gorbin.asne.facebook.FacebookSocialNetwork;
 import com.github.gorbin.asne.linkedin.LinkedInSocialNetwork;
 import com.github.gorbin.asne.twitter.TwitterSocialNetwork;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.example.w028006g.regnlogin.MainActivity1.SOCIAL_NETWORK_TAG;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -56,7 +57,7 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
     private SessionManager session;
     private SQLiteHandler db;
 
-    public int networkId = 0;
+    private int networkId = 0;
 
     public static SocialNetworkManager mSocialNetworkManager;
     /**
@@ -218,12 +219,14 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
             switch (socialNetwork.getID()){
                 case FacebookSocialNetwork.ID:
                     facebook.setText("Continue With");
+                    networkId = FacebookSocialNetwork.ID;
                     break;
 //                case GooglePlusSocialNetwork.ID:
 //                    google.setText("Continue With");
 //                    break;
                 case TwitterSocialNetwork.ID:
                     google.setText("Continue With");
+                    networkId = TwitterSocialNetwork.ID;
                     break;
             }
         }
@@ -283,6 +286,10 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
     private void startProfile(int networkId){
         Intent maps = new Intent(getContext(), MainActivity.class);
         session.setLogin(true);
+        SharedPreferences prefs = AppController.getInstance().getSharedPreferences("MYPREFS", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("SocialNet", networkId).apply();
+        editor.commit();
         startActivity(maps);
     }
     /**
@@ -370,8 +377,8 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
     }
 
     private void showDialog() {
-        if (!pDialog.isShowing())
-            pDialog.show();
+        //if (!pDialog.isShowing())
+            //pDialog.show();
     }
 
     private void hideDialog() {

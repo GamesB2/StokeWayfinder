@@ -93,11 +93,10 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps_new);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-//        SupportMapFragment mapFragment = ((SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map));
-//        mapFragment.getMapsync(this);
-
+//
+//         Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = ((SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map));
+        mapFragment.getMapAsync(this);
         //Landmarks, Attractions, and Events Stored in POI Array
         poiArrayList = DatabaseRetrieval.poiArrayList;
         //Lat and Long from FireMSGService brought in here

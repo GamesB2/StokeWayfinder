@@ -1,9 +1,11 @@
 package com.example.w028006g.regnlogin;
 
 import com.example.w028006g.regnlogin.activity.LoginActivity;
+import com.example.w028006g.regnlogin.app.AppController;
 import com.example.w028006g.regnlogin.helper.DownloadImageTask;
 import com.example.w028006g.regnlogin.helper.SQLiteHandler;
 import com.example.w028006g.regnlogin.helper.SessionManager;
+import com.github.gorbin.asne.core.SocialNetwork;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 
@@ -15,6 +17,7 @@ import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
@@ -42,9 +45,9 @@ public class MainActivity extends AppCompatActivity {
     private Button btnLogout;
     private Button btnMaps;
     private ImageView imgUser;
+    private int networkId;
 
-
-
+    private SocialNetwork socialNetwork;
     private SQLiteHandler db;
     private SessionManager session;
     public static Person userDetails;
@@ -98,6 +101,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 logoutUser();
+                if (networkId == -1){
+
+                } else {
+                    socialNetwork.logout();
+                }
+
             }
         });
 
@@ -105,12 +114,28 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),MapsActivityNew.class);
+                Intent intent = new Intent(getApplicationContext(), MapsActivityNew.class);
                 startActivity(intent);
             }
         });
 
         checkIntent(getIntent());
+
+        SharedPreferences prefs = AppController.getInstance().getSharedPreferences("MYPREFS", Context.MODE_PRIVATE);
+        networkId = prefs.getInt("SocialNet", -1);
+
+        if (networkId == -1) {
+
+        } else {
+            if (networkId != 0) {
+                socialNetwork = LoginActivity.mSocialNetworkManager.getSocialNetwork(networkId);
+                //socialNetwork.setOnRequestCurrentPersonCompleteListener(this);
+                socialNetwork.requestCurrentPerson();
+            } else {
+
+            }
+        }
+
 
     }
     @Override
