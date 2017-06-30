@@ -1,4 +1,4 @@
-package com.example.w028006g.regnlogin;
+package com.example.w028006g.regnlogin.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
+import com.example.w028006g.regnlogin.R;
 
 /**
  * Created by User on 4/15/2017.

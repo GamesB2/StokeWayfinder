@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.w028006g.regnlogin.activity.MainActivity;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 import com.example.w028006g.regnlogin.helper.Ticket;
 
@@ -72,7 +73,7 @@ public class Tickets_View extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 BackgroundTask backgroundTask=new BackgroundTask(Tickets_View.this);
-                backgroundTask.execute(method,MainActivity.userDetails.getEmail(), String.valueOf(t.getId()));
+                backgroundTask.execute(method, MainActivity.userDetails.getEmail(), String.valueOf(t.getId()));
                 Toast.makeText(getApplicationContext(),
                         "You Sucessfully Purchased a Ticket for: " + t.getName(),
                         Toast.LENGTH_LONG).show();

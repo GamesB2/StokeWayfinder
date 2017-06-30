@@ -1,4 +1,4 @@
-package com.example.w028006g.regnlogin;
+package com.example.w028006g.regnlogin.activity;
 
 import android.Manifest;
 import android.content.Context;
@@ -24,12 +24,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.support.design.widget.BottomNavigationView;
-import android.widget.Toast;
 
-import com.example.w028006g.regnlogin.activity.FilterActivity;
-import com.example.w028006g.regnlogin.activity.RegisterActivity;
+import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
+import com.example.w028006g.regnlogin.GeolocationService;
+import com.example.w028006g.regnlogin.MarkerManager;
+import com.example.w028006g.regnlogin.MultiMedia;
+import com.example.w028006g.regnlogin.R;
+import com.example.w028006g.regnlogin.SimpleGeofence;
+import com.example.w028006g.regnlogin.SimpleGeofenceStore;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
-import com.example.w028006g.regnlogin.helper.Events;
 import com.example.w028006g.regnlogin.helper.POI;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -95,6 +98,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     final int EVENTS=21;
 
     private static final String NOTIFICATION_MSG = "NOTIFICATION MSG";
+    public Button btnQR;
     public Button btnFilter;
 
     static public boolean geofencesAlreadyRegistered = false;
@@ -115,15 +119,14 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         poiArrayList = DatabaseRetrieval.poiArrayList;
         //Lat and Long from FireMSGService brought in here
         Bundle FireNotification = getIntent().getExtras();
-        if (FireNotification != null)
-        {
+        if (FireNotification != null) {
             lat = FireNotification.getString("Latitude");
             lon = FireNotification.getString("Longitude");
-
         }
 
         //Menu bar at the bottom
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView_Bar);
+
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
         Menu menu = bottomNavigationView.getMenu();
         MenuItem menuItem = menu.getItem(0);
@@ -134,8 +137,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item)
             {
-                switch (item.getItemId())
-                {
+                switch (item.getItemId()) {
                     case R.id.ic_map:
 
                         break;
@@ -161,19 +163,39 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         //Starts Geolocation Service
         startService(new Intent(this, GeolocationService.class));
 
-        btnFilter = (Button)findViewById(R.id.button2);
-        btnFilter.setOnClickListener(new View.OnClickListener() {
+        btnQR = (Button) findViewById(R.id.QRbutton);
+        btnQR.setOnClickListener(new View.OnClickListener()
+        {
 
-        public void onClick(View view) {
-            Intent i = new Intent(MapsActivityNew.this,
-                    FilterActivity.class);
-            startActivity(i);
+            public void onClick(View view)
+            {
+                Intent i = new Intent(MapsActivityNew.this,
+                        qrActivity.class);
+                startActivity(i);
+            }
+        });
 
-        }
-    });
+        btnFilter = (Button) findViewById(R.id.FilterButton);
+        btnFilter.setOnClickListener(new View.OnClickListener()
+        {
 
-
+            public void onClick(View view)
+            {
+                Intent i = new Intent(MapsActivityNew.this,
+                        FilterActivity.class);
+                startActivity(i);
+            }
+        });
     }
+
+
+    public void onClick(View view)
+    {
+        Intent i = new Intent(MapsActivityNew.this,
+                FilterActivity.class);
+        startActivity(i);
+    }
+
 
     //Displays the circle around the geofence - wont need this for final just so we can see where they are
     protected void displayGeofences() {
@@ -376,9 +398,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         //Checks that something has been passed to lat and lon before trying to execute
         if (lat != null && lon != null)
         {
-
             centerOn(lat, lon);
-
         }
 
         //Executes popMap to populate the markers on the map

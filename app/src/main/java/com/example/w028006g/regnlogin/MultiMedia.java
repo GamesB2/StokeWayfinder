@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.w028006g.regnlogin.activity.MainActivity;
 import com.example.w028006g.regnlogin.app.AppConfig;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 import com.example.w028006g.regnlogin.helper.Post;
@@ -78,7 +79,7 @@ public class MultiMedia extends YouTubeBaseActivity implements
 
             public void onClick(View view) {
                 BackgroundTaskPosts backgroundTask=new BackgroundTaskPosts(MultiMedia.this);
-                backgroundTask.execute(method,MainActivity.userDetails.getEmail(), p.getId());
+                backgroundTask.execute(method, MainActivity.userDetails.getEmail(), p.getId());
                 Toast.makeText(getApplicationContext(),
                         "You Sucessfully Added This Post To Your Collection:\n" + p.getName(),
                         Toast.LENGTH_LONG).show();

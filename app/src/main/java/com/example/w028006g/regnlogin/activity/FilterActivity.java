@@ -1,11 +1,9 @@
 package com.example.w028006g.regnlogin.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -13,17 +11,12 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.w028006g.regnlogin.GeolocationService;
-import com.example.w028006g.regnlogin.MapsActivityNew;
 import com.example.w028006g.regnlogin.MarkerManager;
 import com.example.w028006g.regnlogin.R;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
-import static com.example.w028006g.regnlogin.R.id.radiusID;
 import static com.example.w028006g.regnlogin.R.id.seekBar;
 import static com.example.w028006g.regnlogin.R.id.textView;
 import static com.example.w028006g.regnlogin.R.id.textView2;
@@ -82,7 +75,7 @@ public class FilterActivity extends AppCompatActivity
         tv1 = (TextView)findViewById(textView);
         tv2 = (TextView)findViewById(textView2);
         nRadius = MarkerManager.getMaxRange();
-        if(nRadius == MAX)
+        if(!MarkerManager.getRangeFilter())
         {
             swRadius.setChecked(true);
 
@@ -153,16 +146,17 @@ public class FilterActivity extends AppCompatActivity
                 {
                     slider.setProgress(MAX);
                     slider.setEnabled(false);
+                    MarkerManager.setRangeFilter(false);
 
                     radius.setText(String.valueOf(MAX));
                     radius.setEnabled(false);
-
 
                     tv1.setAlpha((float)0.5);
                     tv2.setAlpha((float)0.5);
                 }
                 else if(!swRadius.isChecked())
                 {
+                    MarkerManager.setRangeFilter(true);
                     slider.setEnabled(true);
 
                     radius.setText(String.valueOf(MAX));
@@ -245,7 +239,6 @@ public class FilterActivity extends AppCompatActivity
     @Override
     public void onBackPressed()
     {
-        MarkerManager.setMaxRange(slider.getProgress());
         for (int i = 0; i < checkBoxes.size(); i++)
         {
             if(checkBoxes.get(i).isChecked())
@@ -257,6 +250,7 @@ public class FilterActivity extends AppCompatActivity
                 MarkerManager.filterOut(i);
             }
         }
+        MarkerManager.setMaxRange(nRadius);
         this.finish();
     }
 }

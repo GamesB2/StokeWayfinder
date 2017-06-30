@@ -1,42 +1,24 @@
-package com.example.w028006g.regnlogin;
+package com.example.w028006g.regnlogin.activity;
 
-import com.example.w028006g.regnlogin.activity.LoginActivity;
-import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
+import com.example.w028006g.regnlogin.ClickActionHelper;
+import com.example.w028006g.regnlogin.GeolocationService;
+import com.example.w028006g.regnlogin.Person;
+import com.example.w028006g.regnlogin.R;
+import com.example.w028006g.regnlogin.helper.DatabaseRetrievalNow;
 import com.example.w028006g.regnlogin.helper.DownloadImageTask;
-import com.example.w028006g.regnlogin.helper.Events;
 import com.example.w028006g.regnlogin.helper.SQLiteHandler;
 import com.example.w028006g.regnlogin.helper.SessionManager;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.Exchanger;
 
-import android.app.Activity;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
-import android.transition.Fade;
-import android.transition.TransitionManager;
-import android.util.Log;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import static android.transition.Fade.IN;
-import static com.example.w028006g.regnlogin.R.id.imageView;
-import static com.example.w028006g.regnlogin.R.id.img_userprofile;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -63,6 +45,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent intent = new Intent(MainActivity.this, GeolocationService.class);
+        startService(intent);
+        Intent intent1 = new Intent(MainActivity.this, DatabaseRetrievalNow.class);
+        startService(intent1);
 
         userDetails = new Person();
 
