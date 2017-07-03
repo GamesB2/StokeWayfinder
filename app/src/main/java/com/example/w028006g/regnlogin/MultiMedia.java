@@ -50,8 +50,10 @@ public class MultiMedia extends YouTubeBaseActivity implements
 
         Intent mIntent1 = getIntent();
         final int intValue = mIntent1.getIntExtra("id", 0);
+        Intent qrIntent = getIntent();
+        final int qrValue = qrIntent.getIntExtra("locCode", 0);
 
-        if( intValue > 0)
+        if(intValue > 0)
         {
             for(int i =0;i< DatabaseRetrieval.postsAl.size();i++)
             {
@@ -60,11 +62,10 @@ public class MultiMedia extends YouTubeBaseActivity implements
                     p = DatabaseRetrieval.postsAl.get(i);
                 }
             }
-
         }
         else
         {
-            p = DatabaseRetrieval.postsAl.get(2);
+            p = DatabaseRetrieval.postsAl.get(qrValue);
         }
 
         txtSummary.setText(p.getSummary());
@@ -125,7 +126,7 @@ public class MultiMedia extends YouTubeBaseActivity implements
             player.loadVideo(p.getVideo());
 
             // Hiding player controls
-            player.setPlayerStyle(PlayerStyle.CHROMELESS);
+            player.setPlayerStyle(PlayerStyle.DEFAULT);
         }
     }
 

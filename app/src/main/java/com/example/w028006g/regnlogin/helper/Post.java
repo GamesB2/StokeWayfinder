@@ -1,22 +1,33 @@
 package com.example.w028006g.regnlogin.helper;
 
+import java.sql.Time;
+
 /**
  * Created by w028006g on 27/06/2017.
  */
 
-public class Post {
+public class Post
+{
+    protected String id="";
+    protected String name="";
+    protected String website="";
+    protected String lat="";
+    protected String lng="";
+    protected String txt="";
+    protected String video="";
+    protected String summary="";
+    protected String qr="";
 
-    String id="";
-    String name="";
-    String website="";
-    String lat="";
-    String lng="";
-    String txt="";
-    String video="";
-    String summary="";
-    String qr="";
+    public Post(String id, String name, String lat, String lng)
+    {
+        this.id = id;
+        this.name = name;
+        this.lat = lat;
+        this.lng = lng;
+    }
 
-    public Post(String id, String name, String website, String lat, String lng, String txt, String video, String summary, String qr) {
+    public Post(String id, String name, String website, String lat, String lng, String txt, String video, String summary, String qr)
+    {
         this.id = id;
         this.name = name;
         this.website = website;
@@ -27,7 +38,6 @@ public class Post {
         this.summary = summary;
         this.qr = qr;
     }
-
 
     public String getId() {
         return id;

@@ -28,6 +28,7 @@ public class DatabaseRetrieval  extends Service {
     public static ArrayList<Ticket> ticketsAl = new ArrayList<>();
     //public static ArrayList<Events> eventsAl = new ArrayList(); //Main events list.
     public static ArrayList<Post> postsAl = new ArrayList();
+    public static ArrayList<Post> prevPost = new ArrayList<>();
 
     public static ArrayList<Event> eventsAl = new ArrayList(); //Main events list.
 
