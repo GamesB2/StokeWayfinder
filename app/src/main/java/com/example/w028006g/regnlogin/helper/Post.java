@@ -1,6 +1,9 @@
 package com.example.w028006g.regnlogin.helper;
 
 import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by w028006g on 27/06/2017.
@@ -8,15 +11,20 @@ import java.sql.Time;
 
 public class Post
 {
-    protected String id="";
-    protected String name="";
-    protected String website="";
-    protected String lat="";
-    protected String lng="";
-    protected String txt="";
-    protected String video="";
-    protected String summary="";
-    protected String qr="";
+    private String id="";
+    private String name="";
+    private String website="";
+    private String lat="";
+    private String lng="";
+    private String txt="";
+    private String video="";
+    private String summary="";
+    private String qr="";
+    private boolean bScanned = false;
+    private Date datFirst = null;
+    private Date datLatest = null;
+    private int nScanCount;
+    private SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss");
 
     public Post(String id, String name, String lat, String lng)
     {
@@ -115,10 +123,34 @@ public class Post
         this.qr = qr;
     }
 
-
-    public void Post() {
-
+    public void setScanned()
+    {
+        Calendar calendar = Calendar.getInstance();
+        if(bScanned)
+        {
+            nScanCount++;
+            datLatest = calendar.getTime();
+        }
+        else
+        {
+            nScanCount = 1;
+            datFirst = calendar.getTime();
+            bScanned = true;
+        }
     }
 
+    public String getFirstScanTime()
+    {
+        return time.format(datFirst);
+    }
 
+    public String getLatestScanTime()
+    {
+        return time.format(datLatest);
+    }
+
+    public int getScanCount()
+    {
+        return nScanCount;
+    }
 }

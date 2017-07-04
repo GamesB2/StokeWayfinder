@@ -42,4 +42,14 @@
         android:layout_alignParentTop="true"
         android:text="Recent Scans"/>
 
+    <TextView
+        android:id="@+id/emptyText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="false"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"
+        android:text="You haven't scanned any points today."
+        android:textSize="18sp"/>
+
 </RelativeLayout>

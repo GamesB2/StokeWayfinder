@@ -10,20 +10,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.w028006g.regnlogin.History;
 import com.example.w028006g.regnlogin.MultiMedia;
 import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 import com.example.w028006g.regnlogin.helper.MyRecyclerViewAdapterPosts;
 import com.example.w028006g.regnlogin.helper.Post;
-import com.example.w028006g.regnlogin.helper.ScannedPost;
 import com.google.zxing.client.android.BeepManager;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.journeyapps.barcodescanner.CaptureManager;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -32,6 +26,7 @@ public class qrActivity extends AppCompatActivity implements View.OnClickListene
 
     //View Objects
     private Button buttonScan;
+    private TextView emptyText;
 
     //qr code scanner object
     private IntentIntegrator qrScan;
@@ -49,19 +44,30 @@ public class qrActivity extends AppCompatActivity implements View.OnClickListene
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qr);
+
         for(int i = 0; i < DatabaseRetrieval.prevPost.size(); i++)
         {
             alPrevScan.add(DatabaseRetrieval.prevPost.get(i));
         }
-        mRecyclerView = (RecyclerView) findViewById(R.id.rvQR);
-        mLayoutManager = new LinearLayoutManager(qrActivity.this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new MyRecyclerViewAdapterPosts(qrActivity.this, alPrevScan);
-        mRecyclerView.setAdapter(mAdapter);
+
+        if(alPrevScan.size()==0)
+        {
+            emptyText = (TextView) findViewById(R.id.emptyText);
+            emptyText.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            mRecyclerView = (RecyclerView) findViewById(R.id.rvQR);
+            mLayoutManager = new LinearLayoutManager(qrActivity.this);
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            mAdapter = new MyRecyclerViewAdapterPosts(qrActivity.this, alPrevScan);
+            mRecyclerView.setAdapter(mAdapter);
+        }
 
 
         //View objects
         buttonScan = (Button) findViewById(R.id.buttonScan);
+
 
         //intializing scan object
         qrScan = new IntentIntegrator(this);
@@ -100,7 +106,7 @@ public class qrActivity extends AppCompatActivity implements View.OnClickListene
                     Intent info = new Intent(qrActivity.this,MultiMedia.class);
                     info.putExtra("locCode", nResult);
                     Post found = FindPost(nResult);
-                    if(checkNew(found.getIdI()))
+                    if(found.getScanCount() != 0)
                     {
                         Toast.makeText(this,"You've already scanned " + found.getName() ,Toast.LENGTH_LONG).show();
                     }
@@ -133,22 +139,9 @@ public class qrActivity extends AppCompatActivity implements View.OnClickListene
 
     public void RecordPost(Post post)
     {
-        post = new ScannedPost(post);
+        post.setScanned();
         alPrevScan.add(post);
         DatabaseRetrieval.prevPost.add(0, post);
-    }
-
-    public boolean checkNew(int nPostId)
-    {
-        for(int i = 0; i<postArrayList.size(); i++)
-        {
-            Post pTemp = postArrayList.get(i);
-            if(pTemp.getIdI()==nPostId)
-            {
-                return false;
-            }
-        }
-        return true;
     }
 
     public Post FindPost(int nPostId)
