@@ -47,6 +47,8 @@ public class LoginActivity extends Activity {
         btnLinkToRegister = (Button) findViewById(R.id.btnLinkToRegisterScreen);
         btnLinkToReset = (Button) findViewById(R.id.btnLinkToReset);
 
+
+
         //Start Service
         // use this to start and trigger a service
         Intent i= new Intent(LoginActivity.this, DatabaseRetrieval.class);
@@ -82,7 +84,9 @@ public class LoginActivity extends Activity {
                 // Check for empty data in the form
                 if (!email.isEmpty() && !password.isEmpty()) {
                     // login user
+                    System.out.println(inputEmail + "\t" + inputPassword);
                     checkLogin(email, password);
+
                 } else {
                     // Prompt user to enter credentials
                     Toast.makeText(getApplicationContext(),
@@ -130,6 +134,7 @@ public class LoginActivity extends Activity {
         StringRequest strReq = new StringRequest(Method.POST,
                 AppConfig.URL_LOGIN, new Response.Listener<String>() {
 
+
             @Override
             public void onResponse(String response) {
                 Log.d(TAG, "Login Response: " + response.toString());
@@ -152,10 +157,9 @@ public class LoginActivity extends Activity {
                         String name = user.getString("name");
                         String email = user.getString("email");
                         String created_at = user.getString("created_at");
-                        String tickets = user.getString("tickets");
 
                         // Inserting row in users table
-                        db.addUser(name, email, uid, created_at, tickets);
+                        db.addUser(name, email, uid, created_at);
 
                         // Launch main activity
                         Intent intent = new Intent(LoginActivity.this,
@@ -166,7 +170,7 @@ public class LoginActivity extends Activity {
                         // Error in login. Get the error message
                         String errorMsg = jObj.getString("error_msg");
                         Toast.makeText(getApplicationContext(),
-                                errorMsg, Toast.LENGTH_LONG).show();
+                                errorMsg + " error message ", Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
                     // JSON error
@@ -200,6 +204,7 @@ public class LoginActivity extends Activity {
 
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+        System.out.println(strReq + "\t " + tag_string_req);
     }
 
     private void showDialog() {

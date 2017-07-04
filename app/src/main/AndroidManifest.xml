@@ -151,6 +151,7 @@
         <activity android:name=".activity.Profile"/>
         <activity android:name=".activity.Adventures"/>
         <activity android:name=".activity.Tickets"/>
+        <activity android:name=".My_Points"></activity>
         <activity
             android:name=".activity.FilterActivity"
             android:label="activity_filter"
