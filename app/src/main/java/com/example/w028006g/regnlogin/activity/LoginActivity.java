@@ -95,6 +95,7 @@ public class LoginActivity extends Activity {
                             .show();
                 }
             }
+
         });
 
         // Link to Register Screen
@@ -174,10 +175,9 @@ public class LoginActivity extends Activity {
                         String name = user.getString("name");
                         String email = user.getString("email");
                         String created_at = user.getString("created_at");
-                        String tickets = user.getString("tickets");
 
                         // Inserting row in users table
-                        db.addUser(name, email, uid, created_at, tickets);
+                        db.addUser(name, email, uid, created_at);
 
                         // Launch main activity
                         Intent intent = new Intent(LoginActivity.this,
@@ -189,7 +189,7 @@ public class LoginActivity extends Activity {
                         // Error in login. Get the error message
                         String errorMsg = jObj.getString("error_msg");
                         Toast.makeText(getApplicationContext(),
-                                errorMsg, Toast.LENGTH_LONG).show();
+                                errorMsg + " error message ", Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e)
                 {
@@ -202,8 +202,7 @@ public class LoginActivity extends Activity {
         }, new Response.ErrorListener()
         {
             @Override
-            public void onErrorResponse(VolleyError error)
-            {
+            public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "Login Error: " + error.getMessage());
                 Toast.makeText(getApplicationContext(),
                         error.getMessage(), Toast.LENGTH_LONG).show();
@@ -212,8 +211,7 @@ public class LoginActivity extends Activity {
         }) {
 
             @Override
-            protected Map<String, String> getParams()
-            {
+            protected Map<String, String> getParams() {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("email", email);
@@ -228,26 +226,22 @@ public class LoginActivity extends Activity {
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
-    private void showDialog()
-    {
+    private void showDialog() {
         if (!pDialog.isShowing())
             pDialog.show();
     }
 
-    private void hideDialog()
-    {
+    private void hideDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();
     }
 
-    public void startService(View view)
-    {
+    public void startService(View view) {
         startService(new Intent(getBaseContext(), DatabaseRetrieval.class));
     }
 
     // Method to stop the service
-    public void stopService(View view)
-    {
+    public void stopService(View view) {
         stopService(new Intent(getBaseContext(), DatabaseRetrieval.class));
     }
 }

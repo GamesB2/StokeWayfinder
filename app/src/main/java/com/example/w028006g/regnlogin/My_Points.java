@@ -1,19 +1,20 @@
 package com.example.w028006g.regnlogin;
 
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import com.example.w028006g.regnlogin.activity.MainActivity;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 import com.example.w028006g.regnlogin.helper.MyRecyclerViewAdapter;
-import com.example.w028006g.regnlogin.helper.MyRecyclerViewAdapterPosts;
-import com.example.w028006g.regnlogin.helper.Post;
 import com.example.w028006g.regnlogin.helper.Ticket;
 
 import org.json.JSONArray;
@@ -42,15 +43,15 @@ import static com.example.w028006g.regnlogin.app.AppConfig.READ_TIMEOUT;
  * Created by User on 4/15/2017.
  */
 
-public class Tickets_My extends AppCompatActivity {
+public class My_Points extends AppCompatActivity {
 
     private CardView btnCard1;
     public ArrayList<Ticket> t = DatabaseRetrieval.ticketsAl;
     private RecyclerView mRecyclerView;
     private MyRecyclerViewAdapter adapter;
     private Person p;
-    private String tickets="";
-    private ArrayList<Ticket> tickList = new ArrayList<>();
+    private String points="";
+    private ArrayList<Ticket> pointsList = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,16 +59,7 @@ public class Tickets_My extends AppCompatActivity {
         setContentView(R.layout.tickets);
 
 
-        new Tickets_My.AsyncLogin().execute(MainActivity.userDetails.getEmail());
-
-
-
-
-
-
-
-
-
+        new My_Points.AsyncLogin().execute(MainActivity.userDetails.getEmail());
 
 
 
@@ -155,7 +147,7 @@ public class Tickets_My extends AppCompatActivity {
             try {
 
                 // Enter URL address where your php file resides
-                url = new URL("https://concussive-shirt.000webhostapp.com/get_details_user_tickets.php");
+                url = new URL("https://concussive-shirt.000webhostapp.com/get_details_user_points.php");
 
             } catch (MalformedURLException e) {
                 // TODO Auto-generated catch block
@@ -241,40 +233,36 @@ public class Tickets_My extends AppCompatActivity {
 
                 // Check for error node in json
                 if (!error) {
-                    JSONArray contacts = jObj.getJSONArray("tickets");
+                    JSONArray contacts = jObj.getJSONArray("points");
                     for (int i = 0; i < contacts.length(); i++) {
                         JSONObject c = contacts.getJSONObject(i);
-                        tickets = c.getString("tickets");
+                        points = c.getString("points");
                     }
 
-                    tickets = tickets.substring(1);
-                    String[] ticketParts = tickets.split(",");
-                    ArrayList<Integer> ticket = new ArrayList<>();
 
                     //Now Sort
 
-                    Set<String> mySet = new HashSet<String>(Arrays.asList(ticketParts));
-                    for (String s : mySet) {
-                        ticket.add(Integer.parseInt(s));
-                    }
+                    System.out.println(points);
 
-                    for (int i = 0; i < ticket.size(); i++) {
-                        for (int j = 0; j < DatabaseRetrieval.ticketsAl.size(); j++) {
-                            Integer check = ticket.get(i);
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(My_Points.this);
+                    alertDialogBuilder.setMessage("You Have: " + points + " in your account! :-)\nUse these points?");
+                            alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
-                            if (check == DatabaseRetrieval.ticketsAl.get(j).getId()) {
-                                //if(!post.contains(postsParts[i]))
-                                //{
-                                tickList.add(DatabaseRetrieval.ticketsAl.get(j));
-                                //}
-                            }
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Toast.makeText(My_Points.this,"You clicked yes",Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+
+                    alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
                         }
-                    }
+                    });
 
-                    mRecyclerView = (RecyclerView) findViewById(R.id.rv);
-                    mRecyclerView.setLayoutManager(new LinearLayoutManager(Tickets_My.this));
-                    adapter = new MyRecyclerViewAdapter(Tickets_My.this, tickList);
-                    mRecyclerView.setAdapter(adapter);
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+
 
 
                     // Launch main activity
