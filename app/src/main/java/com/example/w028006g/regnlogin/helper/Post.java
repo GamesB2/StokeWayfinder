@@ -9,14 +9,8 @@ import java.util.Date;
  * Created by w028006g on 27/06/2017.
  */
 
-public class Post
+public class Post extends POI
 {
-    private String id="";
-    private String name="";
-    private String website="";
-    private String lat="";
-    private String lng="";
-    private String txt="";
     private String video="";
     private String summary="";
     private String qr="";
@@ -26,77 +20,11 @@ public class Post
     private int nScanCount;
     private SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss");
 
-    public Post(String id, String name, String lat, String lng)
+    public Post(String id, String lat, String lng)
     {
-        this.id = id;
-        this.name = name;
-        this.lat = lat;
-        this.lng = lng;
-    }
-
-    public Post(String id, String name, String website, String lat, String lng, String txt, String video, String summary, String qr)
-    {
-        this.id = id;
-        this.name = name;
-        this.website = website;
-        this.lat = lat;
-        this.lng = lng;
-        this.txt = txt;
-        this.video = video;
-        this.summary = summary;
-        this.qr = qr;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public Integer getIdI() {
-        return Integer.parseInt(id);
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getWebsite() {
-        return website;
-    }
-
-    public void setWebsite(String website) {
-        this.website = website;
-    }
-
-    public String getLat() {
-        return lat;
-    }
-
-    public void setLat(String lat) {
-        this.lat = lat;
-    }
-
-    public String getLng() {
-        return lng;
-    }
-
-    public void setLng(String lng) {
-        this.lng = lng;
-    }
-
-    public String getTxt() {
-        return txt;
-    }
-
-    public void setTxt(String txt) {
-        this.txt = txt;
+        super.setID(id);
+        super.setLat(lat);
+        super.setLong(lng);
     }
 
     public String getVideo() {
@@ -135,6 +63,7 @@ public class Post
         {
             nScanCount = 1;
             datFirst = calendar.getTime();
+            datLatest= datFirst;
             bScanned = true;
         }
     }

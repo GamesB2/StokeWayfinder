@@ -51,6 +51,14 @@
             android:text="Landmarks"
             android:buttonTint="@color/bg_register"/>
 
+        <CheckBox
+            android:id="@+id/totems"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/bg_register"
+            android:checked="true"
+            android:text="Totems"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -249,14 +257,6 @@
             android:layout_height="wrap_content"
             android:checked="true"
             android:text="Hobbies"
-            android:buttonTint="@color/bg_register"/>
-
-        <CheckBox
-            android:id="@+id/checkBox54"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="CheckBox"
             android:buttonTint="@color/bg_register"/>
 
         <CheckBox

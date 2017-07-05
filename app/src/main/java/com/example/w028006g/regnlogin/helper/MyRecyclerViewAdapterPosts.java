@@ -45,7 +45,7 @@ public class MyRecyclerViewAdapterPosts extends RecyclerView.Adapter<MyRecyclerV
     public void onBindViewHolder(final CustomViewHolder customViewHolder, int i) {
         final Post feedItem = feedItemList.get(i);
 
-        ints.add(feedItemList.get(i).getIdI());
+        ints.add(feedItemList.get(i).getId());
 
 
 /*        if (!TextUtils.isEmpty(feedItem.getThumbnail())) {
@@ -56,9 +56,9 @@ public class MyRecyclerViewAdapterPosts extends RecyclerView.Adapter<MyRecyclerV
         }*/
 
         //Setting text view title
-        customViewHolder.textViewE.setText((feedItem.getName()));
+        customViewHolder.textViewE.setText((feedItem.getAddressInfo().getFeatureName()));
         customViewHolder.textViewD.setText((feedItem.getSummary()));
-        //customViewHolder.textViewP.setText((feedItem.getPriceS()));
+        customViewHolder.textViewP.setText((feedItem.getLatestScanTime()));
 
 
         View.OnClickListener listener = new View.OnClickListener() {
@@ -103,6 +103,7 @@ public class MyRecyclerViewAdapterPosts extends RecyclerView.Adapter<MyRecyclerV
             this.imageView = (ImageView) view.findViewById(R.id.img_vid);
             this.textViewE = (TextView) view.findViewById(R.id.title);
             this.textViewD = (TextView) view.findViewById(R.id.histDesc);
+            this.textViewP = (TextView) view.findViewById(R.id.lastScan);
             //myInt = feedItemList.get(view.findViewById(getAdapterPosition()));
 
             //this.textViewD = (TextView) view.findViewById(R.id.tDesc);

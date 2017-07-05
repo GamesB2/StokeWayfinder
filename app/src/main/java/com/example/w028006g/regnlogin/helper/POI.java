@@ -10,9 +10,21 @@ import java.util.Locale;
 
 public abstract class POI
 {
-    Address aAddressInfo = new Address(Locale.getDefault());
-    String sDescription;
-    double dPrice = 0;
+    protected int id;
+    protected Address aAddressInfo = new Address(Locale.getDefault());
+    protected String sDescription;
+    protected double dPrice = 0;
+
+    public boolean setID(String sID)
+    {
+        id = Integer.parseInt(sID);
+        return true;
+    }
+
+    public int getId()
+    {
+        return id;
+    }
 
     public Address getAddressInfo()
     {

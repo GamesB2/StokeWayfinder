@@ -190,7 +190,7 @@ public class History extends AppCompatActivity {
                     {
                         Integer check = post.get(i);
 
-                        if(check == DatabaseRetrieval.postsAl.get(j).getIdI())
+                        if(check == DatabaseRetrieval.postsAl.get(j).getId())
                         {
                             //if(!post.contains(postsParts[i]))
                             //{

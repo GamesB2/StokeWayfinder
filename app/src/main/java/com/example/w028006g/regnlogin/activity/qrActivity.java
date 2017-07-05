@@ -32,7 +32,7 @@ public class qrActivity extends AppCompatActivity implements View.OnClickListene
     private IntentIntegrator qrScan;
     private BeepManager beepManager;
     private String sResult;
-    private final String URL = "www.examplesite.com";
+    private final String URL = "http://www.examplesite.com";
     private ArrayList<Post> alPrevScan = new ArrayList<>();
     private ArrayList<Post> postArrayList = DatabaseRetrieval.postsAl;
     private RecyclerView mRecyclerView;
@@ -108,7 +108,7 @@ public class qrActivity extends AppCompatActivity implements View.OnClickListene
                     Post found = FindPost(nResult);
                     if(found.getScanCount() != 0)
                     {
-                        Toast.makeText(this,"You've already scanned " + found.getName() ,Toast.LENGTH_LONG).show();
+                        Toast.makeText(this,"You've already scanned " + found.getAddressInfo().getFeatureName() ,Toast.LENGTH_LONG).show();
                     }
                     RecordPost(found);
                     startActivity(info);
@@ -148,7 +148,7 @@ public class qrActivity extends AppCompatActivity implements View.OnClickListene
     {
         for(int i = 0; i < postArrayList.size(); i++)
         {
-            if(nPostId == postArrayList.get(i).getIdI())
+            if(nPostId == postArrayList.get(i).getId())
             {
                 return postArrayList.get(i);
             }

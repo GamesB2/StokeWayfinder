@@ -61,6 +61,13 @@
                         android:text="DESC."
                         android:textAlignment="textEnd"
                         android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/lastScan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:text="time"/>
                 </LinearLayout>
             </LinearLayout>
 

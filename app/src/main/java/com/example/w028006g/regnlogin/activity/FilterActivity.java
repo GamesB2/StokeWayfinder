@@ -64,7 +64,8 @@ public class FilterActivity extends AppCompatActivity
                 R.id.hobbies,
                 R.id.attractions,
                 R.id.landmarks,
-                R.id.events};
+                R.id.events,
+                R.id.totems};
 
         boolean[] filter = MarkerManager.getFilter();
         btnClearFilter = (Button)findViewById(R.id.clearFilter);

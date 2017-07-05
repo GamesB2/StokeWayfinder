@@ -58,7 +58,7 @@ public class MultiMedia extends YouTubeBaseActivity implements
         {
             for(int i =0;i< DatabaseRetrieval.postsAl.size();i++)
             {
-                if(DatabaseRetrieval.postsAl.get(i).getIdI() == intValue)
+                if(DatabaseRetrieval.postsAl.get(i).getId() == intValue)
                 {
                     p = DatabaseRetrieval.postsAl.get(i);
                 }
@@ -66,11 +66,12 @@ public class MultiMedia extends YouTubeBaseActivity implements
         }
         else
         {
-            p = DatabaseRetrieval.postsAl.get(qrValue);
+
+            p = DatabaseRetrieval.postsAl.get(qrValue-1);
         }
       
         txtSummary.setText(p.getSummary());
-        txtName.setText(p.getName());
+        txtName.setText(p.getAddressInfo().getFeatureName());
 
 
         // Initializing video player with developer key
@@ -82,10 +83,10 @@ public class MultiMedia extends YouTubeBaseActivity implements
             public void onClick(View view) {
                 BackgroundTaskPosts backgroundTask=new BackgroundTaskPosts(MultiMedia.this);
 
-                backgroundTask.execute(method, MainActivity.userDetails.getEmail(), p.getId());
+                backgroundTask.execute(method, MainActivity.userDetails.getEmail(), String.valueOf(p.getId()));
 
                 Toast.makeText(getApplicationContext(),
-                        "You Sucessfully Added This Post To Your Collection:\n" + p.getName(),
+                        "You Sucessfully Added This Post To Your Collection:\n" + p.getAddressInfo().getFeatureName(),
                         Toast.LENGTH_LONG).show();
                 finish();
             }
@@ -98,7 +99,7 @@ public class MultiMedia extends YouTubeBaseActivity implements
                     txtMoreInfo.setText("see more...");
                     open = false;
                 }else {
-                    txtMoreInfo.setText(p.getTxt());
+                    txtMoreInfo.setText(p.getDescription());
                     open = true;
                 }
             }

@@ -9,6 +9,7 @@ import com.example.w028006g.regnlogin.helper.Attraction;
 import com.example.w028006g.regnlogin.helper.Event;
 import com.example.w028006g.regnlogin.helper.Landmark;
 import com.example.w028006g.regnlogin.helper.POI;
+import com.example.w028006g.regnlogin.helper.Post;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -55,6 +56,7 @@ public class MarkerManager
     final static int ATTRACTIONS=19;
     final static int LANDMARKS=20;
     final static int EVENTS=21;
+    final static int TOTEM=22;
 
     public MarkerManager(GoogleMap map, ArrayList<POI> arrayList)
     {
@@ -100,6 +102,11 @@ public class MarkerManager
         if(!filter[EVENTS])
         {
             popMapEvents();
+        }
+
+        if(!filter[TOTEM])
+        {
+            popMapTotem();
         }
     }
     //Populates the map with Attractions markers from the POI Array
@@ -307,9 +314,11 @@ public class MarkerManager
                     }
                 }else if (!rangeFilter)
                 {
-                    switch (((Attraction) item).getIcon()) {
+                    switch (((Attraction) item).getIcon())
+                    {
                         case MUSIC:
-                            if (!filter[MUSIC]) {
+                            if (!filter[MUSIC])
+                            {
                                 temp = mMap.addMarker(new MarkerOptions()
                                         .position(dest)
                                         .title(add.getFeatureName())
@@ -317,7 +326,8 @@ public class MarkerManager
                             }
                             break;
                         case BUSINESS:
-                            if (!filter[BUSINESS]) {
+                            if (!filter[BUSINESS])
+                            {
                                 temp = mMap.addMarker(new MarkerOptions()
                                         .position(dest)
                                         .title(add.getFeatureName())
@@ -325,7 +335,8 @@ public class MarkerManager
                             }
                             break;
                         case FOOD_AND_DRINK:
-                            if (!filter[FOOD_AND_DRINK]) {
+                            if (!filter[FOOD_AND_DRINK])
+                            {
                                 temp = mMap.addMarker(new MarkerOptions()
                                         .position(dest)
                                         .title(add.getFeatureName())
@@ -333,7 +344,8 @@ public class MarkerManager
                             }
                             break;
                         case COMMUNITY:
-                            if (!filter[COMMUNITY]) {
+                            if (!filter[COMMUNITY])
+                            {
                                 temp = mMap.addMarker(new MarkerOptions()
                                         .position(dest)
                                         .title(add.getFeatureName())
@@ -341,7 +353,8 @@ public class MarkerManager
                             }
                             break;
                         case ARTS:
-                            if (!filter[ARTS]) {
+                            if (!filter[ARTS])
+                            {
                                 temp = mMap.addMarker(new MarkerOptions()
                                         .position(dest)
                                         .title(add.getFeatureName())
@@ -349,7 +362,8 @@ public class MarkerManager
                             }
                             break;
                         case FILM_AND_MEDIA:
-                            if (!filter[FILM_AND_MEDIA]) {
+                            if (!filter[FILM_AND_MEDIA])
+                            {
                                 temp = mMap.addMarker(new MarkerOptions()
                                         .position(dest)
                                         .title(add.getFeatureName())
@@ -357,7 +371,8 @@ public class MarkerManager
                             }
                             break;
                         case SPORTS:
-                            if (!filter[SPORTS]) {
+                            if (!filter[SPORTS])
+                            {
                                 temp = mMap.addMarker(new MarkerOptions()
                                         .position(dest)
                                         .title(add.getFeatureName())
@@ -365,7 +380,8 @@ public class MarkerManager
                             }
                             break;
                         case HEALTH_AND_FITNESS:
-                            if (!filter[HEALTH_AND_FITNESS]) {
+                            if (!filter[HEALTH_AND_FITNESS])
+                            {
                                 temp = mMap.addMarker(new MarkerOptions()
                                         .position(dest)
                                         .title(add.getFeatureName())
@@ -373,7 +389,8 @@ public class MarkerManager
                             }
                             break;
                         case SCIENCE_AND_TECH:
-                            if (!filter[SCIENCE_AND_TECH]) {
+                            if (!filter[SCIENCE_AND_TECH])
+                            {
                                 temp = mMap.addMarker(new MarkerOptions()
                                         .position(dest)
                                         .title(add.getFeatureName())
@@ -381,7 +398,8 @@ public class MarkerManager
                             }
                             break;
                         case TRAVEL_AND_OUTDOOR:
-                            if (!filter[TRAVEL_AND_OUTDOOR]) {
+                            if (!filter[TRAVEL_AND_OUTDOOR])
+                            {
                                 temp = mMap.addMarker(new MarkerOptions()
                                         .position(dest)
                                         .title(add.getFeatureName())
@@ -389,7 +407,8 @@ public class MarkerManager
                             }
                             break;
                         case CHARITY:
-                            if (!filter[CHARITY]) {
+                            if (!filter[CHARITY])
+                            {
                                 temp = mMap.addMarker(new MarkerOptions()
                                         .position(dest)
                                         .title(add.getFeatureName())
@@ -397,7 +416,8 @@ public class MarkerManager
                             }
                             break;
                         case SPIRITUALITY:
-                            if (!filter[SPIRITUALITY]) {
+                            if (!filter[SPIRITUALITY])
+                            {
                                 temp = mMap.addMarker(new MarkerOptions()
                                         .position(dest)
                                         .title(add.getFeatureName())
@@ -405,7 +425,8 @@ public class MarkerManager
                             }
                             break;
                         case FAMILY_AND_EDUCATION:
-                            if (!filter[FAMILY_AND_EDUCATION]) {
+                            if (!filter[FAMILY_AND_EDUCATION])
+                            {
                                 temp = mMap.addMarker(new MarkerOptions()
                                         .position(dest)
                                         .title(add.getFeatureName())
@@ -413,7 +434,8 @@ public class MarkerManager
                             }
                             break;
                         case HOLIDAY:
-                            if (!filter[HOLIDAY]) {
+                            if (!filter[HOLIDAY])
+                            {
                                 temp = mMap.addMarker(new MarkerOptions()
                                         .position(dest)
                                         .title(add.getFeatureName())
@@ -421,7 +443,8 @@ public class MarkerManager
                             }
                             break;
                         case GOVERNMENT:
-                            if (!filter[GOVERNMENT]) {
+                            if (!filter[GOVERNMENT])
+                            {
                                 temp = mMap.addMarker(new MarkerOptions()
                                         .position(dest)
                                         .title(add.getFeatureName())
@@ -429,7 +452,8 @@ public class MarkerManager
                             }
                             break;
                         case FASHION:
-                            if (!filter[FASHION]) {
+                            if (!filter[FASHION])
+                            {
                                 temp = mMap.addMarker(new MarkerOptions()
                                         .position(dest)
                                         .title(add.getFeatureName())
@@ -437,7 +461,8 @@ public class MarkerManager
                             }
                             break;
                         case HOME_AND_LIFESTYLE:
-                            if (!filter[HOME_AND_LIFESTYLE]) {
+                            if (!filter[HOME_AND_LIFESTYLE])
+                            {
                                 temp = mMap.addMarker(new MarkerOptions()
                                         .position(dest)
                                         .title(add.getFeatureName())
@@ -445,7 +470,8 @@ public class MarkerManager
                             }
                             break;
                         case AUTO_BOAT_AND_AIR:
-                            if (!filter[AUTO_BOAT_AND_AIR]) {
+                            if (!filter[AUTO_BOAT_AND_AIR])
+                            {
                                 temp = mMap.addMarker(new MarkerOptions()
                                         .position(dest)
                                         .title(add.getFeatureName())
@@ -453,7 +479,8 @@ public class MarkerManager
                             }
                             break;
                         case HOBBIES:
-                            if (!filter[HOBBIES]) {
+                            if (!filter[HOBBIES])
+                            {
                                 temp = mMap.addMarker(new MarkerOptions()
                                         .position(dest)
                                         .title(add.getFeatureName())
@@ -465,8 +492,6 @@ public class MarkerManager
                                     .position(dest)
                                     .title(add.getFeatureName())
                                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-
-
                             break;
                     }
                 }
@@ -546,6 +571,43 @@ public class MarkerManager
                             .position(dest)
                             .title(add.getFeatureName())
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                    markerArrayList.add(temp);
+                }
+            }
+        }
+    }
+
+    public static void popMapTotem()
+    {
+        Marker temp = null;
+        for (int i = 0; i < poiArrayList.size(); i++)
+        {
+            POI item = poiArrayList.get(i);
+            if(item instanceof Post)
+            {
+                Address add = item.getAddressInfo();
+                LatLng dest = new LatLng(add.getLatitude(), add.getLongitude());
+
+                Location destLoc = new Location("");
+                destLoc.setLatitude(dest.latitude);
+                destLoc.setLongitude(dest.longitude);
+
+                float distance = location.distanceTo(destLoc);
+
+                if (distance <= maxRange && rangeFilter)
+                {
+                    temp = mMap.addMarker(new MarkerOptions()
+                            .position(dest)
+                            .title(add.getFeatureName())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                    markerArrayList.add(temp);
+                }
+                else if (!rangeFilter)
+                {
+                    temp = mMap.addMarker(new MarkerOptions()
+                            .position(dest)
+                            .title(add.getFeatureName())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
                     markerArrayList.add(temp);
                 }
             }
