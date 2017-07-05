@@ -203,6 +203,7 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
     {
         //LatLng userLatLng = new LatLng(userLocation.getLatitude(),userLocation.getLongitude());
         //return userLatLng;
+		LatLng userLatLng = new LatLng(53.02,-2.32);
         return userLatLng;
     }
 

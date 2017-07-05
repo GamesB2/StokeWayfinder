@@ -106,7 +106,7 @@ public class Ticket {
             p = "FREEE!";
         }else
         {
-            p = String.valueOf(price);
+            p = "£" + String.valueOf(price);
         }
         return p;
     }

@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.w028006g.regnlogin.MapsActivityNew;
+import com.example.w028006g.regnlogin.activity.MapsActivityNew;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -50,11 +50,13 @@ public class DatabaseRetrieval  extends Service {
     public static ArrayList<Ticket> ticketsAl = new ArrayList<>();
     //public static ArrayList<Events> eventsAl = new ArrayList(); //Main events list.
     public static ArrayList<Post> postsAl = new ArrayList();
+    public static ArrayList<Post> prevPost = new ArrayList<>();
+
     public static ArrayList<Event> eventsAl = new ArrayList(); //Main events list.
 
     public static Attraction att;
     public static Landmark lndmk;
-    public static Events event;
+    public static Event event;
     public static Ticket ticket;
     public static Post post;
 
@@ -203,6 +205,7 @@ public class DatabaseRetrieval  extends Service {
 
                     att = new Attraction(name, lat, lng);
 
+                    att.setID(id);
                     att.setDesc(desc);
                     att.setPrice(price);
                     att.setAddressLine(address);
@@ -249,9 +252,16 @@ public class DatabaseRetrieval  extends Service {
                         String summary = c.getString("summary");
                         String qr = c.getString("qr");
 
-                        post = new Post(id,name,website,lat,lng,txt,video,summary,qr);
+                        post = new Post(id,lat,lng);
+                        post.setName(name);
+                        post.setWeb(website);
+                        post.setDesc(txt);
+                        post.setVideo(video);
+                        post.setSummary(summary);
+                        post.setQr(qr);
 
                         postsAl.add(post);
+                        poiArrayList.add(post);
 
                         Log.e(TAG, "Posts Added OK!: ");
 
@@ -298,12 +308,12 @@ public class DatabaseRetrieval  extends Service {
                         String lng = c.getString("lng");
 
                         event = new Event(name,lat,lng);
+                        event.setID(id);
                         event.setDesc(desc);
                         event.setWeb(website);
                         event.setPrice(price);
                         event.setPostCode(pcode);
                         event.setAddressLine(add);
-                        event.setId(id);
                         event.setStartDate(dateStart,time);
                         event.setEndDate(dateEnd);
                         event.setIcon(cat);
@@ -353,7 +363,7 @@ public class DatabaseRetrieval  extends Service {
 
 
                         lndmk = new Landmark(name, lat, lng);
-
+                        lndmk.setID(id);
                         lndmk.setDesc(desc);
                         lndmk.setPrice(price);
                         lndmk.setAddressLine(address);

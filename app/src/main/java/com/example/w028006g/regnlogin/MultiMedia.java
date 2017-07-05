@@ -51,25 +51,27 @@ public class MultiMedia extends YouTubeBaseActivity implements
 
         Intent mIntent1 = getIntent();
         final int intValue = mIntent1.getIntExtra("id", 0);
+        Intent qrIntent = getIntent();
+        final int qrValue = qrIntent.getIntExtra("locCode", 0);
 
-        if( intValue > 0)
+        if(intValue > 0)
         {
             for(int i =0;i< DatabaseRetrieval.postsAl.size();i++)
             {
-                if(DatabaseRetrieval.postsAl.get(i).getIdI() == intValue)
+                if(DatabaseRetrieval.postsAl.get(i).getId() == intValue)
                 {
                     p = DatabaseRetrieval.postsAl.get(i);
                 }
             }
-
         }
         else
         {
-            p = DatabaseRetrieval.postsAl.get(2);
+
+            p = DatabaseRetrieval.postsAl.get(qrValue-1);
         }
       
         txtSummary.setText(p.getSummary());
-        txtName.setText(p.getName());
+        txtName.setText(p.getAddressInfo().getFeatureName());
 
 
         // Initializing video player with developer key
@@ -81,10 +83,10 @@ public class MultiMedia extends YouTubeBaseActivity implements
             public void onClick(View view) {
                 BackgroundTaskPosts backgroundTask=new BackgroundTaskPosts(MultiMedia.this);
 
-                backgroundTask.execute(method, MainActivity.userDetails.getEmail(), p.getId());
+                backgroundTask.execute(method, MainActivity.userDetails.getEmail(), String.valueOf(p.getId()));
 
                 Toast.makeText(getApplicationContext(),
-                        "You Sucessfully Added This Post To Your Collection:\n" + p.getName(),
+                        "You Sucessfully Added This Post To Your Collection:\n" + p.getAddressInfo().getFeatureName(),
                         Toast.LENGTH_LONG).show();
                 finish();
             }
@@ -97,7 +99,7 @@ public class MultiMedia extends YouTubeBaseActivity implements
                     txtMoreInfo.setText("see more...");
                     open = false;
                 }else {
-                    txtMoreInfo.setText(p.getTxt());
+                    txtMoreInfo.setText(p.getDescription());
                     open = true;
                 }
             }
@@ -128,7 +130,7 @@ public class MultiMedia extends YouTubeBaseActivity implements
             player.loadVideo(p.getVideo());
 
             // Hiding player controls
-            player.setPlayerStyle(PlayerStyle.CHROMELESS);
+            player.setPlayerStyle(PlayerStyle.DEFAULT);
         }
     }
 

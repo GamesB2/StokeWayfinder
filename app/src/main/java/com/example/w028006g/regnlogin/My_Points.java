@@ -1,20 +1,20 @@
 package com.example.w028006g.regnlogin;
 
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-
+import android.widget.Toast;
 
 import com.example.w028006g.regnlogin.activity.MainActivity;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
-import com.example.w028006g.regnlogin.helper.DatabaseRetrievalNow;
 import com.example.w028006g.regnlogin.helper.MyRecyclerViewAdapter;
-import com.example.w028006g.regnlogin.helper.MyRecyclerViewAdapterPosts;
-import com.example.w028006g.regnlogin.helper.Post;
 import com.example.w028006g.regnlogin.helper.Ticket;
 
 import org.json.JSONArray;
@@ -40,27 +40,93 @@ import static com.example.w028006g.regnlogin.app.AppConfig.CONNECTION_TIMEOUT;
 import static com.example.w028006g.regnlogin.app.AppConfig.READ_TIMEOUT;
 
 /**
- * Created by w028006g on 28/06/2017.
+ * Created by User on 4/15/2017.
  */
 
-public class History extends AppCompatActivity {
-    private RecyclerView mRecyclerView;
-    private MyRecyclerViewAdapterPosts adapter;
-    private ArrayList<Post> postist = new ArrayList<>();
+public class My_Points extends AppCompatActivity {
 
-    private String posts="";
+    private CardView btnCard1;
+    public ArrayList<Ticket> t = DatabaseRetrieval.ticketsAl;
+    private RecyclerView mRecyclerView;
+    private MyRecyclerViewAdapter adapter;
+    private Person p;
+    private String points="";
+    private ArrayList<Ticket> pointsList = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.history);
+        setContentView(R.layout.tickets);
 
-        new AsyncLogin().execute(MainActivity.userDetails.getEmail());
+
+        new My_Points.AsyncLogin().execute(MainActivity.userDetails.getEmail());
+
+
+
+
+/*        p = MainActivity.userDetails;
+
+
+        String tickets = p.getTickets();
+        tickets = tickets.substring(1);
+        String[] ticketParts = tickets.split(",");
+        ArrayList<Ticket> ticketList = new ArrayList<>();
+        for(int i=0;i<ticketParts.length;i++)
+        {
+            for (int j=0;j<DatabaseRetrieval.ticketsAl.size();j++)
+            {
+                Integer check = Integer.parseInt(ticketParts[i]);
+
+                if(check == DatabaseRetrieval.ticketsAl.get(j).getId())
+                {
+                    ticketList.add(DatabaseRetrieval.ticketsAl.get(j));
+                }
+            }
+        }*/
+
+
+
+
+/*        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.ic_map:
+                        Intent intent0 = new Intent(Tickets.this, MapsActivityNew.class);
+                        startActivity(intent0);
+
+                        break;
+
+                    case R.id.ic_Profile:
+                        Intent intent1 = new Intent(Tickets.this, Profile.class);
+                        startActivity(intent1);
+                        startActivity(intent1,
+                                ActivityOptions.makeSceneTransitionAnimation(Tickets.this).toBundle());
+                        break;
+
+                    case R.id.ic_Adventures:
+                        Intent intent2 = new Intent(Tickets.this, Adventures.class);
+                        startActivity(intent2);
+                        break;
+
+                    case R.id.ic_Tickets:
+
+                        break;
+                }
+                return false;
+
+            }
+        });*/
+
+
 
     }
 
-    private class AsyncLogin extends AsyncTask<String, String, String>
-    {
+
+
+
+
+    private class AsyncLogin extends AsyncTask<String, String, String> {
         //ProgressDialog pdLoading = new ProgressDialog(DatabaseQ.this);
         HttpURLConnection conn;
         URL url = null;
@@ -75,12 +141,13 @@ public class History extends AppCompatActivity {
             //pdLoading.show();
 
         }
+
         @Override
         protected String doInBackground(String... params) {
             try {
 
                 // Enter URL address where your php file resides
-                url = new URL("https://concussive-shirt.000webhostapp.com/get_details_user_posts.php");
+                url = new URL("https://concussive-shirt.000webhostapp.com/get_details_user_points.php");
 
             } catch (MalformedURLException e) {
                 // TODO Auto-generated catch block
@@ -89,7 +156,7 @@ public class History extends AppCompatActivity {
             }
             try {
                 // Setup HttpURLConnection class to send and receive data from php and mysql
-                conn = (HttpURLConnection)url.openConnection();
+                conn = (HttpURLConnection) url.openConnection();
                 conn.setReadTimeout(READ_TIMEOUT);
                 conn.setConnectTimeout(CONNECTION_TIMEOUT);
                 conn.setRequestMethod("POST");
@@ -138,11 +205,11 @@ public class History extends AppCompatActivity {
                     }
 
                     // Pass data to onPostExecute method
-                    return(result.toString());
+                    return (result.toString());
 
-                }else{
+                } else {
 
-                    return("unsuccessful");
+                    return ("unsuccessful");
                 }
 
             } catch (IOException e) {
@@ -158,54 +225,45 @@ public class History extends AppCompatActivity {
         protected void onPostExecute(String response) {
             //this method will be running on UI thread
             // pdLoading.dismiss();
-            System.out.println(response);
 
             try {
                 JSONObject jObj = new JSONObject(response);
-                boolean error = jObj.getInt("success")==1 ? false : true;
+                boolean error = jObj.getInt("success") == 1 ? false : true;
+                System.out.println(response);
 
                 // Check for error node in json
                 if (!error) {
-                    JSONArray contacts = jObj.getJSONArray("posts");
+                    JSONArray contacts = jObj.getJSONArray("points");
                     for (int i = 0; i < contacts.length(); i++) {
                         JSONObject c = contacts.getJSONObject(i);
-                        posts = c.getString("posts");
+                        points = c.getString("points");
                     }
 
-                    posts = posts.substring(1);
-                    String[] postsParts = posts.split(",");
-                    ArrayList<Integer> post = new ArrayList<>();
 
                     //Now Sort
 
-                    Set<String> mySet = new HashSet<String>(Arrays.asList(postsParts));
-                    for(String s : mySet)
-                    {
-                        post.add(Integer.parseInt(s));
-                    }
+                    System.out.println(points);
 
-                    for(int i = 0; i< post.size(); i++)
-                    {
-                    for (int j = 0; j< DatabaseRetrieval.postsAl.size(); j++)
-                    {
-                        Integer check = post.get(i);
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(My_Points.this);
+                    alertDialogBuilder.setMessage("You Have: " + points + " in your account! :-)\nUse these points?");
+                            alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
-                        if(check == DatabaseRetrieval.postsAl.get(j).getId())
-                        {
-                            //if(!post.contains(postsParts[i]))
-                            //{
-                                postist.add(DatabaseRetrieval.postsAl.get(j));
-                            //}
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Toast.makeText(My_Points.this,"You clicked yes",Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+
+                    alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
                         }
-                    }
-                }
+                    });
 
-                    mRecyclerView = (RecyclerView) findViewById(R.id.rvH);
-                    mRecyclerView.setLayoutManager(new LinearLayoutManager(History.this));
-                    adapter = new MyRecyclerViewAdapterPosts(History.this, postist);
-                    mRecyclerView.setAdapter(adapter);
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
 
-                    System.out.println(posts);
+
 
                     // Launch main activity
 
@@ -222,8 +280,8 @@ public class History extends AppCompatActivity {
             }
 
 
-
         }
-
     }
+
+
 }

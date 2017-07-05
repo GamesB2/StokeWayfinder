@@ -9,7 +9,6 @@ import java.util.Calendar;
 
 public class Event extends POI
 {
-    private String id;
     protected Calendar startCalendar;
     protected Calendar endCalendar;
     private String sConName;
@@ -23,16 +22,6 @@ public class Event extends POI
         super.setLong(sLong);
         startCalendar = Calendar.getInstance();
         endCalendar = Calendar.getInstance();
-    }
-
-    public void setId(String sID)
-    {
-        id = sID;
-    }
-
-    public String getId()
-    {
-        return id;
     }
 
     public void setStartDate(String date, String time)

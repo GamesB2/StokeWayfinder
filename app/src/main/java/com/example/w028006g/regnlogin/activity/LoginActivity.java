@@ -30,6 +30,7 @@ public class LoginActivity extends Activity {
     private Button btnLogin;
     private Button btnLinkToRegister;
     private Button btnLinkToReset;
+    private Button btnSkip;
     private EditText inputEmail;
     private EditText inputPassword;
     private ProgressDialog pDialog;
@@ -46,6 +47,7 @@ public class LoginActivity extends Activity {
         btnLogin = (Button) findViewById(R.id.btnLogin);
         btnLinkToRegister = (Button) findViewById(R.id.btnLinkToRegisterScreen);
         btnLinkToReset = (Button) findViewById(R.id.btnLinkToReset);
+        btnSkip = (Button) findViewById(R.id.btnSkip);
 
         //Start Service
         // use this to start and trigger a service
@@ -67,23 +69,26 @@ public class LoginActivity extends Activity {
         // Check if user is already logged in or not
         if (session.isLoggedIn()) {
             // User is already logged in. Take him to main activity
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            Intent intent = new Intent(LoginActivity.this, StartScreen.class);
             startActivity(intent);
             finish();
         }
 
         // Login button Click Event
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View view) {
+        btnLogin.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
                 String email = inputEmail.getText().toString().trim();
                 String password = inputPassword.getText().toString().trim();
 
                 // Check for empty data in the form
-                if (!email.isEmpty() && !password.isEmpty()) {
+                if (!email.isEmpty() && !password.isEmpty())
+                {
                     // login user
                     checkLogin(email, password);
-                } else {
+                } else
+                {
                     // Prompt user to enter credentials
                     Toast.makeText(getApplicationContext(),
                             "Please enter your credentials!", Toast.LENGTH_LONG)
@@ -94,9 +99,10 @@ public class LoginActivity extends Activity {
         });
 
         // Link to Register Screen
-        btnLinkToRegister.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View view) {
+        btnLinkToRegister.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
                 Intent i = new Intent(getApplicationContext(),
                         RegisterActivity.class);
                 startActivity(i);
@@ -105,12 +111,24 @@ public class LoginActivity extends Activity {
         });
 
         // Link to Reset Screen
-        btnLinkToReset.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View view) {
+        btnLinkToReset.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
                 Intent ii = new Intent(getApplicationContext(),
                         ResetActivity.class);
                 startActivity(ii);
+                finish();
+            }
+        });
+
+        btnSkip.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(getApplicationContext(),MapsActivityNew.class);
+                startActivity(intent);
                 finish();
             }
         });
@@ -120,7 +138,8 @@ public class LoginActivity extends Activity {
     /**
      * function to verify login details in mysql db
      * */
-    private void checkLogin(final String email, final String password) {
+    private void checkLogin(final String email, final String password)
+    {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
 
@@ -128,19 +147,23 @@ public class LoginActivity extends Activity {
         showDialog();
 
         StringRequest strReq = new StringRequest(Method.POST,
-                AppConfig.URL_LOGIN, new Response.Listener<String>() {
+                AppConfig.URL_LOGIN, new Response.Listener<String>()
+        {
 
             @Override
-            public void onResponse(String response) {
+            public void onResponse(String response)
+            {
                 Log.d(TAG, "Login Response: " + response.toString());
                 hideDialog();
 
-                try {
+                try
+                {
                     JSONObject jObj = new JSONObject(response);
                     boolean error = jObj.getBoolean("error");
 
                     // Check for error node in json
-                    if (!error) {
+                    if (!error)
+                    {
                         // user successfully logged in
                         // Create login session
                         session.setLogin(true);
@@ -152,31 +175,32 @@ public class LoginActivity extends Activity {
                         String name = user.getString("name");
                         String email = user.getString("email");
                         String created_at = user.getString("created_at");
-                        String tickets = user.getString("tickets");
 
                         // Inserting row in users table
-                        db.addUser(name, email, uid, created_at, tickets);
+                        db.addUser(name, email, uid, created_at);
 
                         // Launch main activity
                         Intent intent = new Intent(LoginActivity.this,
                                 MainActivity.class);
                         startActivity(intent);
                         finish();
-                    } else {
+                    } else
+                    {
                         // Error in login. Get the error message
                         String errorMsg = jObj.getString("error_msg");
                         Toast.makeText(getApplicationContext(),
-                                errorMsg, Toast.LENGTH_LONG).show();
+                                errorMsg + " error message ", Toast.LENGTH_LONG).show();
                     }
-                } catch (JSONException e) {
+                } catch (JSONException e)
+                {
                     // JSON error
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
 
             }
-        }, new Response.ErrorListener() {
-
+        }, new Response.ErrorListener()
+        {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "Login Error: " + error.getMessage());

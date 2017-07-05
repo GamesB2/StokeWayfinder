@@ -15,4 +15,8 @@ public class AppConfig {
     public static final String YOUTUBE_VIDEO_CODE = "exM-5Lr4YAo";
 
     public static String URL_GET_POSTS = "https://concussive-shirt.000webhostapp.com/get_details_user_posts.php";
+
+    public static final int CONNECTION_TIMEOUT=10000;
+
+    public static final int READ_TIMEOUT=15000;
 }

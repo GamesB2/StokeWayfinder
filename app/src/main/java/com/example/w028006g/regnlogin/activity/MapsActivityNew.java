@@ -1,4 +1,4 @@
-package com.example.w028006g.regnlogin;
+package com.example.w028006g.regnlogin.activity;
 
 import android.Manifest;
 import android.content.Context;
@@ -24,7 +24,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.support.design.widget.BottomNavigationView;
-import android.widget.Toast;
 
 import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
 import com.example.w028006g.regnlogin.GeolocationService;
@@ -34,7 +33,6 @@ import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.SimpleGeofence;
 import com.example.w028006g.regnlogin.SimpleGeofenceStore;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
-import com.example.w028006g.regnlogin.helper.Events;
 import com.example.w028006g.regnlogin.helper.POI;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -57,7 +55,6 @@ import java.util.Map;
 
 public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCallback
 {
-
     //Assigns the String "TAG" the name of the class for error reports
     private static final String TAG = MapsActivityNew.class.getSimpleName();
     private LatLngBounds Demo = new LatLngBounds(new LatLng(49.495091,-10.722460), new LatLng(59.497134,1.843598));
@@ -72,7 +69,6 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     public String lat;
     public String lon;
     private GoogleMap mMap;
-
 
     //List of constants declared to sort the markers
     final int MUSIC= 0;
@@ -112,7 +108,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         setContentView(R.layout.activity_maps_new);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        // Obtain the SupportMapFragment and get notified when the maps is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
@@ -312,8 +308,6 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         String location = locationSearch.getText().toString();
         List<Address> addressList = null;
 
-        //
-
         if (!location.equals("")) {
             Geocoder geocoder = new Geocoder(this);
             try {
@@ -344,10 +338,8 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
             mm.popMap();
         }
         pauseState = true;
-
         startService(new Intent(this, DatabaseRetrieval.class));
         super.onResume();
-
     }
 
     @Override
@@ -368,7 +360,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         //Calls function to display geofence circle
         displayGeofences();
 
-        //To set the map style and json file
+        //To set the maps style and json file
         try
         {
             boolean success = mMap.setMapStyle
@@ -385,12 +377,11 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         }
 
         //Location LatLng defined here
-        LatLng sydney = new LatLng(-34, 151);
         LatLng stoke = new LatLng(53.0027, -2.1794);
-        LatLng center = new LatLng(0, 0);
+        //LatLng center = new LatLng(0, 0);
 
         //Permanent Markers added and camera zoom on initial startup
-        mMap.addMarker(new MarkerOptions().position(stoke).title("Marker in Sydney").snippet("Test Snippet inserting text").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        //mMap.addMarker(new MarkerOptions().position(stoke).title("Marker in Stoke").snippet("Test Snippet inserting text").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(stoke));
         mMap.moveCamera(CameraUpdateFactory.zoomTo(10));
 
@@ -400,12 +391,10 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         //Checks that something has been passed to lat and lon before trying to execute
         if (lat != null && lon != null)
         {
-
             centerOn(lat, lon);
-
         }
 
-        //Executes popMap to populate the markers on the map
+        //Executes popMap to populate the markers on the maps
         mm = new MarkerManager(mMap,poiArrayList);
         mm.popMap();
     }

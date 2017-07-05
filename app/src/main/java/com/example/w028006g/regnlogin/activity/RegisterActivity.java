@@ -221,7 +221,7 @@ public class RegisterActivity extends AppCompatActivity {
                         String tickets="";
 
                         // Inserting row in users table
-                        db.addUser(name, email, uid, created_at, tickets);
+                        db.addUser(name, email, uid, created_at);
 
                         //Upload Image to web Server
                         unique_id = uid;

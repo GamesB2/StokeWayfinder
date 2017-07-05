@@ -13,34 +13,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="1"
+        android:layout_below="@+id/textView3"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/buttonScan">
 
-        <TextView
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvQR"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Name" />
-
-        <TextView
-            android:id="@+id/textViewName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="xyz"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Address" />
-
-        <TextView
-            android:id="@+id/textViewAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="xyz"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
-
-
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"/>
     </LinearLayout>
 
     <Button
@@ -49,5 +33,23 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:text="Scan QR Code" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="Recent Scans"/>
+
+    <TextView
+        android:id="@+id/emptyText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="false"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"
+        android:text="You haven't scanned any points today."
+        android:textSize="18sp"/>
 
 </RelativeLayout>

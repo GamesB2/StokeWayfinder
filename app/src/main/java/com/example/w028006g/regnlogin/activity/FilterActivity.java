@@ -64,7 +64,8 @@ public class FilterActivity extends AppCompatActivity
                 R.id.hobbies,
                 R.id.attractions,
                 R.id.landmarks,
-                R.id.events};
+                R.id.events,
+                R.id.totems};
 
         boolean[] filter = MarkerManager.getFilter();
         btnClearFilter = (Button)findViewById(R.id.clearFilter);
@@ -127,7 +128,7 @@ public class FilterActivity extends AppCompatActivity
         {
             public void onClick(View view)
             {
-                for (int i = checkBoxes.size()-3; i < checkBoxes.size(); i++)
+                for (int i = 0; i < checkBoxes.size(); i++)
                 {
                     checkBoxes.get(i).setChecked(false);
                 }

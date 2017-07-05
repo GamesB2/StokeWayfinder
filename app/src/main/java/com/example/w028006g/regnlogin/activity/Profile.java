@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
 import com.example.w028006g.regnlogin.History;
+import com.example.w028006g.regnlogin.My_Points;
 import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.Tickets_My;
 import com.example.w028006g.regnlogin.helper.DownloadImageTask;
@@ -30,6 +31,7 @@ public class Profile extends AppCompatActivity {
     private TextView txtEmail;
     private Button btnView;
     private Button btnHistory;
+    private Button btnPoints;
 
 
     private Scene scene1, scene2;
@@ -48,6 +50,7 @@ public class Profile extends AppCompatActivity {
         txtEmail = (TextView) findViewById(R.id.txtUserEmail);
         btnView = (Button) findViewById(R.id.btnTickets);
         btnHistory = (Button) findViewById(R.id.btnHistory);
+        btnPoints = (Button) findViewById(R.id.btnPoints);
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView_Bar);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
@@ -86,10 +89,10 @@ public class Profile extends AppCompatActivity {
 
         //Download user image
         new DownloadImageTask((ImageView) findViewById(R.id.profilePic))
-                .execute("https://concussive-shirt.000webhostapp.com/uploads/" + MainActivity.userDetails.getU_id() + ".png" );
+                .execute("https://concussive-shirt.000webhostapp.com/uploads/" + StartScreen.userDetails.getU_id() + ".png" );
         // Displaying the user details on the screen
-        txtName.setText(MainActivity.userDetails.getName());
-        txtEmail.setText(MainActivity.userDetails.getEmail());
+        txtName.setText(StartScreen.userDetails.getName());
+        txtEmail.setText(StartScreen.userDetails.getEmail());
 
         btnView.setOnClickListener(new View.OnClickListener() {
 
@@ -106,6 +109,15 @@ public class Profile extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent4 = new Intent(Profile.this, History.class);
                 startActivity(intent4);
+            }
+        });
+
+        btnPoints.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent5 = new Intent(Profile.this, My_Points.class);
+                startActivity(intent5);
             }
         });
 

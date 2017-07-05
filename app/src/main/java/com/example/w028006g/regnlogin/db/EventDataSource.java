@@ -35,26 +35,12 @@ public class EventDataSource {
 		dbHelper.close();
 	}
 
-	public void create(String type, String date, String placeName) {
+	public void create(String type, String date, String placeName)
+	{
 		ContentValues values = new ContentValues();
 		values.put(SqliteHelper.COLUMN_EVENT_TYPE, type);
 		values.put(SqliteHelper.COLUMN_EVENT_DATE, date);
 		values.put(SqliteHelper.COLUMN_PLACE_NAME, placeName);
 		database.insert(SqliteHelper.TABLE_EVENTS, null, values);
-	}
-
-	public ArrayList<Event> getEvents() {
-		ArrayList<Event> list = new ArrayList<Event>();
-		String orderBy = SqliteHelper.COLUMN_EVENT_DATE + " DESC";
-		Cursor cursor = database.query(SqliteHelper.TABLE_EVENTS, allColumns,
-				null, null, null, null, orderBy);
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			list.add(Event.fromCursor(cursor));
-			cursor.moveToNext();
-		}
-		// make sure to close the cursor
-		cursor.close();
-		return list;
 	}
 }
