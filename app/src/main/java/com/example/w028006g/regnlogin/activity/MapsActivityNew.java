@@ -112,7 +112,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         setContentView(R.layout.activity_maps_new);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        // Obtain the SupportMapFragment and get notified when the maps is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
@@ -368,7 +368,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         //Calls function to display geofence circle
         displayGeofences();
 
-        //To set the map style and json file
+        //To set the maps style and json file
         try
         {
             boolean success = mMap.setMapStyle
@@ -405,7 +405,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
 
         }
 
-        //Executes popMap to populate the markers on the map
+        //Executes popMap to populate the markers on the maps
         mm = new MarkerManager(mMap,poiArrayList);
         mm.popMap();
     }

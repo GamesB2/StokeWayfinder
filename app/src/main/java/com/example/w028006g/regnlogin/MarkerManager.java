@@ -80,7 +80,7 @@ public class MarkerManager
         filter[CONSTANT] = false;
     }
 
-    //Populates the map with ALL markers and icons from the POI Array
+    //Populates the maps with ALL markers and icons from the POI Array
     public static void popMap()
     {
         location = new Location("");
@@ -102,7 +102,7 @@ public class MarkerManager
             popMapEvents();
         }
     }
-    //Populates the map with Attractions markers from the POI Array
+    //Populates the maps with Attractions markers from the POI Array
     public static void popMapAtt()
     {
         Marker temp = null;
@@ -475,7 +475,7 @@ public class MarkerManager
         }
     }
 
-    //Populates the map with Landmarks markers from the POI Array
+    //Populates the maps with Landmarks markers from the POI Array
     public static void popMapLnd()
     {
         Marker temp = null;
@@ -514,7 +514,7 @@ public class MarkerManager
         }
     }
 
-    //Populates the map with Events markers from the POI Array
+    //Populates the maps with Events markers from the POI Array
     public static void popMapEvents()
     {
         Marker temp = null;

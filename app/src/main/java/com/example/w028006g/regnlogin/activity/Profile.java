@@ -89,10 +89,10 @@ public class Profile extends AppCompatActivity {
 
         //Download user image
         new DownloadImageTask((ImageView) findViewById(R.id.profilePic))
-                .execute("https://concussive-shirt.000webhostapp.com/uploads/" + MainActivity.userDetails.getU_id() + ".png" );
+                .execute("https://concussive-shirt.000webhostapp.com/uploads/" + StartScreen.userDetails.getU_id() + ".png" );
         // Displaying the user details on the screen
-        txtName.setText(MainActivity.userDetails.getName());
-        txtEmail.setText(MainActivity.userDetails.getEmail());
+        txtName.setText(StartScreen.userDetails.getName());
+        txtEmail.setText(StartScreen.userDetails.getEmail());
 
         btnView.setOnClickListener(new View.OnClickListener() {
 
