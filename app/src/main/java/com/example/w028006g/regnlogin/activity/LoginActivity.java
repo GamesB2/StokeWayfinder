@@ -2,10 +2,14 @@ package com.example.w028006g.regnlogin.activity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.support.v4.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,14 +25,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import com.example.w028006g.regnlogin.MainActivity;
+
+import com.example.w028006g.regnlogin.activity.MainActivity;
 import com.example.w028006g.regnlogin.MainActivity1;
+
 import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.app.AppConfig;
 import com.example.w028006g.regnlogin.app.AppController;
@@ -51,6 +57,7 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
     private Button btnLogin;
     private Button btnLinkToRegister;
     private Button btnLinkToReset;
+    private Button btnSkip;
     private EditText inputEmail;
     private EditText inputPassword;
     private ProgressDialog pDialog;
@@ -84,12 +91,17 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         View rootView = inflater.inflate(R.layout.activity_login, container, false);
         inputEmail = (EditText) rootView.findViewById(R.id.email);
         inputPassword = (EditText) rootView.findViewById(R.id.password);
         btnLogin = (Button) rootView.findViewById(R.id.btnLogin);
         btnLinkToRegister = (Button) rootView.findViewById(R.id.btnLinkToRegisterScreen);
         btnLinkToReset = (Button) rootView.findViewById(R.id.btnLinkToReset);
+        btnSkip = (Button) rootView.findViewById(R.id.btnSkip);
+
+
+
 
         //Start Service
         // use this to start and trigger a service
@@ -111,23 +123,28 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
         // Check if user is already logged in or not
         if (session.isLoggedIn()) {
             // User is already logged in. Take him to main activity
+
             Intent intent = new Intent(getActivity().getApplicationContext(), MainActivity.class);
+
             startActivity(intent);
             getActivity().finish();
         }
 
         // Login button Click Event
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View view) {
+        btnLogin.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
                 String email = inputEmail.getText().toString().trim();
                 String password = inputPassword.getText().toString().trim();
 
                 // Check for empty data in the form
-                if (!email.isEmpty() && !password.isEmpty()) {
+                if (!email.isEmpty() && !password.isEmpty())
+                {
                     // login user
                     checkLogin(email, password);
-                } else {
+                } else
+                {
                     // Prompt user to enter credentials
                     Toast.makeText(getApplicationContext(),
                             "Please enter your credentials!", Toast.LENGTH_LONG)
@@ -138,9 +155,10 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
         });
 
         // Link to Register Screen
-        btnLinkToRegister.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View view) {
+        btnLinkToRegister.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
                 Intent i = new Intent(getApplicationContext(),
                         RegisterActivity.class);
                 startActivity(i);
@@ -149,12 +167,24 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
         });
 
         // Link to Reset Screen
-        btnLinkToReset.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View view) {
+        btnLinkToReset.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
                 Intent ii = new Intent(getApplicationContext(),
                         ResetActivity.class);
                 startActivity(ii);
+                getActivity().finish();
+            }
+        });
+
+        btnSkip.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(getApplicationContext(),MapsActivityNew.class);
+                startActivity(intent);
                 getActivity().finish();
             }
         });
@@ -268,6 +298,8 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
             } else {
                 startProfile(socialNetwork.getID());
             }
+
+
         }
     };
 
@@ -281,6 +313,7 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
     public void onError(int networkId, String requestID, String errorMessage, Object data) {
         MainActivity1.hideProgress();
         Toast.makeText(getActivity(), "ERROR: " + errorMessage, Toast.LENGTH_LONG).show();
+
     }
 
     private void startProfile(int networkId){
@@ -295,7 +328,8 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
     /**
      * function to verify login details in mysql db
      * */
-    private void checkLogin(final String email, final String password) {
+    private void checkLogin(final String email, final String password)
+    {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
 
@@ -303,19 +337,23 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
         showDialog();
 
         StringRequest strReq = new StringRequest(Method.POST,
-                AppConfig.URL_LOGIN, new Response.Listener<String>() {
+                AppConfig.URL_LOGIN, new Response.Listener<String>()
+        {
 
             @Override
-            public void onResponse(String response) {
+            public void onResponse(String response)
+            {
                 Log.d(TAG, "Login Response: " + response.toString());
                 hideDialog();
 
-                try {
+                try
+                {
                     JSONObject jObj = new JSONObject(response);
                     boolean error = jObj.getBoolean("error");
 
                     // Check for error node in json
-                    if (!error) {
+                    if (!error)
+                    {
                         // user successfully logged in
                         // Create login session
                         session.setLogin(true);
@@ -326,8 +364,7 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
                         JSONObject user = jObj.getJSONObject("user");
                         String name = user.getString("name");
                         String email = user.getString("email");
-                        String created_at = user
-                                .getString("created_at");
+                        String created_at = user.getString("created_at");
 
                         // Inserting row in users table
                         db.addUser(name, email, uid, created_at);
@@ -335,22 +372,26 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
                         // Launch main activity
                         Intent intent = new Intent(getActivity().getApplicationContext(), MainActivity.class);
                         startActivity(intent);
+
                         getActivity().finish();
+
                     } else {
+
                         // Error in login. Get the error message
                         String errorMsg = jObj.getString("error_msg");
                         Toast.makeText(getApplicationContext(),
-                                errorMsg, Toast.LENGTH_LONG).show();
+                                errorMsg + " error message ", Toast.LENGTH_LONG).show();
                     }
-                } catch (JSONException e) {
+                } catch (JSONException e)
+                {
                     // JSON error
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
 
             }
-        }, new Response.ErrorListener() {
-
+        }, new Response.ErrorListener()
+        {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "Login Error: " + error.getMessage());

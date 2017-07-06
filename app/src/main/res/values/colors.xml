@@ -5,7 +5,7 @@
     <color name="colorAccent">#eceef1</color>
     <color name="bg_login">#b71c1c</color>
     <color name="bg_register">#b71c1c</color>
-    <color name="bg_main">#428bca</color>
+    <color name="bg_main">#1f7abe</color>
     <color name="white">#ffffff</color>
     <color name="colorWhite">#ffffff</color>
     <color name="input_login">#222222</color>
@@ -26,4 +26,6 @@
     <color name="twitter">#55ACEE</color>
     <color name="linkedin">#287bbc</color>
     <color name="googleplus">#D34836</color>
+    <color name="filterPrimary">#ef5350</color>
+
 </resources>

@@ -1,5 +1,6 @@
-package com.example.w028006g.regnlogin;
+package com.example.w028006g.regnlogin.activity;
 
+import com.example.w028006g.regnlogin.MainActivity1;
 import com.example.w028006g.regnlogin.activity.LoginActivity;
 import com.example.w028006g.regnlogin.app.AppController;
 import com.example.w028006g.regnlogin.helper.DownloadImageTask;
@@ -8,35 +9,39 @@ import com.example.w028006g.regnlogin.helper.SessionManager;
 import com.github.gorbin.asne.core.SocialNetwork;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import com.example.w028006g.regnlogin.ClickActionHelper;
+import com.example.w028006g.regnlogin.GeolocationService;
+import com.example.w028006g.regnlogin.Person;
+import com.example.w028006g.regnlogin.R;
+import com.example.w028006g.regnlogin.helper.DatabaseRetrievalNow;
+import com.example.w028006g.regnlogin.helper.DownloadImageTask;
+import com.example.w028006g.regnlogin.helper.SQLiteHandler;
+import com.example.w028006g.regnlogin.helper.SessionManager;
 
-import java.net.URL;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
-import java.util.concurrent.Exchanger;
 
-import android.app.Activity;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
+
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
-import android.transition.Fade;
-import android.transition.TransitionManager;
-import android.util.Log;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import static android.transition.Fade.IN;
-import static com.example.w028006g.regnlogin.R.id.imageView;
-import static com.example.w028006g.regnlogin.R.id.img_userprofile;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -55,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     String name;
     String email;
     String u_id;
+    String tickets;
 
     int numMessages = 0;
 
@@ -62,6 +68,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent intent = new Intent(MainActivity.this, GeolocationService.class);
+        startService(intent);
+        Intent intent1 = new Intent(MainActivity.this, DatabaseRetrievalNow.class);
+        startService(intent1);
+
 
         userDetails = new Person();
 
@@ -86,14 +98,33 @@ public class MainActivity extends AppCompatActivity {
         name = user.get("name");
         email = user.get("email");
         u_id = user.get("uid");
+        tickets = user.get("tickets");
         userDetails.setName(name);
         userDetails.setEmail(email);
         userDetails.setU_id(u_id);
+        userDetails.setTickets(tickets);
 
 
         // Displaying the user details on the screen
         txtName.setText(name);
         txtEmail.setText(email);
+
+
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "com.example.w028006g.regnlogin",
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+
+        } catch (NoSuchAlgorithmException e) {
+
+        }
+
 
         // Logout button click event
         btnLogout.setOnClickListener(new View.OnClickListener() {
@@ -135,7 +166,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
-
 
     }
     @Override

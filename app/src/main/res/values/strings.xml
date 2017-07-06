@@ -12,6 +12,7 @@
     <string name="name">Fullname</string>
     <string name="title_activity_maps_new">Map</string>
     <string name="title_activity_menu">MenuActivity</string>
+    <string name="error_player">There was an error initializing the YouTubePlayer (%1$s)</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -79,7 +80,7 @@
         <item>3</item>
     </string-array>
 
-    <string-array name="multi_select_list_preference_default_value" />
+    <string-array name="multi_select_list_preference_default_value"/>
 
     <string name="pref_title_system_sync_settings">System sync settings</string>
 
@@ -92,10 +93,31 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+
     <string name="facebook_app_id">759833020854274</string>
     <string name="twitter_consumer_key">85xmxRcs0PsA9F6PvXXRdRwMk</string>
     <string name="twitter_consumer_secret">NA7BYXJ3BlTNGosLeort55x3kUeuUyuLL6EuegopTzqfP6ZkOH</string>
     <string name="linkedin_consumer_key">7523ssry5qk7rl</string>
     <string name="linkedin_consumer_secret">sFyJf0ZW1lp31aGU</string>
+
+
+    <string name="ev1">Wonderland, Regent Theatre - 10 July</string>
+    <string name="ev2">Totally Tina, Victoria Hall - 7 July</string>
+    <string name="ev3">The Manalishi, The Sugarmill - 8 July</string>
+    <string name="ev4">Breakfast @ The Brewery, Titanic Brewery - 5 July</string>
+    <string name="ev5">Phil Hammond, Festival Drayton Centre - 8 July</string>
+
+    <string name="at1">Gladstone Pottery Museum (Longton)</string>
+    <string name="at2">Trentham Gardens (Trentham)</string>
+    <string name="at3">Trentham Monkey Forest</string>
+    <string name="at4">World of Wedgwood (Barlaston)</string>
+    <string name="at5">Trentham Shopping Village</string>
+
+    <string name="l1">Britannia Stadium</string>
+    <string name="l2">Stoke-on-Trent Railway Station</string>
+    <string name="l3">Ford Green Hall</string>
+    <string name="l4">Ford Green Hall</string>
+    <string name="l5">Brown Edge Village Hall</string>
+
 </resources>
 

@@ -1,8 +1,10 @@
 package com.example.w028006g.regnlogin;
 
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,16 +13,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+
+import android.support.annotation.Nullable;
+
 import android.support.v7.app.AppCompatActivity;
 import android.transition.Explode;
-import android.transition.Fade;
-import android.transition.Slide;
 import android.transition.Transition;
-import android.transition.TransitionInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -41,6 +42,17 @@ import java.util.List;
 import static com.example.w028006g.regnlogin.R.id.container;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.w028006g.regnlogin.activity.MainActivity;
+import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
+import com.example.w028006g.regnlogin.helper.Ticket;
+
+import java.util.ArrayList;
+
+
 /**
  * Created by User on 4/15/2017.
  */
@@ -53,12 +65,22 @@ public class Tickets_View extends AppCompatActivity {
     private SocialNetwork socialNetwork;
     public int NetID;
     private int networkId;
+    private ArrayList<Ticket> feedItemList = DatabaseRetrieval.ticketsAl;
+    private Context mContext;
+    private Button btnBuy;
+    private Ticket t;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         getWindow().requestFeature(android.view.Window.FEATURE_CONTENT_TRANSITIONS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ticket_view);
+
+        Intent mIntent = getIntent();
+        final int intValue = mIntent.getIntExtra("id", 0);
+
+        t = feedItemList.get(intValue);
 
         Transition ts = new Explode();  //Slide(); //Explode();
         ts.setDuration(300);
@@ -70,8 +92,8 @@ public class Tickets_View extends AppCompatActivity {
         TextView event_location;
         TextView event_organiser;
         TextView summary;
-
-        FacebookSdk.sdkInitialize(getApplicationContext());
+        ImageView img;
+        final String method="register";
 
         title = (TextView) findViewById(R.id.title);
         event_time = (TextView) findViewById(R.id.title);
@@ -96,7 +118,32 @@ public class Tickets_View extends AppCompatActivity {
             }
         }
 
+        title  = (TextView)findViewById(R.id.title);
+        event_time  = (TextView)findViewById(R.id.title);
+        event_location  = (TextView)findViewById(R.id.title);
+        event_organiser  = (TextView)findViewById(R.id.title);
+        summary  = (TextView)findViewById(R.id.title);
+        img  = (ImageView)findViewById(R.id.ticketView_id);
+        btnBuy  = (Button)findViewById(R.id.btnBuy);
 
+        title.setText(t.getName());
+        event_time.setText(t.geteDate());
+        summary.setText(t.getDesc());
+        event_organiser.setText(t.getOrgan());
+        event_location.setText(t.getPriceS());
+
+        btnBuy.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                BackgroundTask backgroundTask=new BackgroundTask(Tickets_View.this);
+                backgroundTask.execute(method, MainActivity.userDetails.getEmail(), String.valueOf(t.getId()));
+                Toast.makeText(getApplicationContext(),
+                        "You Sucessfully Purchased a Ticket for: " + t.getName(),
+                        Toast.LENGTH_LONG).show();
+                finish();
+            }
+        });
 
         FBLikeView fbLikeView = (FBLikeView) this.findViewById(R.id.fbLikeView);
         fbLikeView.getLikeView().setObjectIdAndType(
@@ -109,6 +156,7 @@ public class Tickets_View extends AppCompatActivity {
             AlertDialog.Builder ad = alertDialogInit("Please login via Facebook or Twitter", link);
             ad.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
+
 
                 }
             });
@@ -144,7 +192,6 @@ public class Tickets_View extends AppCompatActivity {
         });
 
     }
-
 
 
 
@@ -207,4 +254,5 @@ public class Tickets_View extends AppCompatActivity {
                 ad.setCancelable(true);
                 return ad;
         }
+
 }

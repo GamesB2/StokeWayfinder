@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.w028006g.regnlogin.MapsActivityNew"
+    tools:context="com.example.w028006g.regnlogin.activity.MapsActivityNew"
     android:id="@+id/profile">
 
     <android.support.design.widget.AppBarLayout
@@ -61,6 +61,24 @@
                     android:text="\@TylerEdwards"
                     android:textStyle="bold"
                     android:textColor="@color/white"/>
+
+                <Button
+                    android:id="@+id/btnTickets"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="My Tickets" />
+
+                <Button
+                    android:id="@+id/btnHistory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="History" />
+
+                <Button
+                    android:id="@+id/btnPoints"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="My Points" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"

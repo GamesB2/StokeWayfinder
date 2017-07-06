@@ -1,4 +1,4 @@
-package com.example.w028006g.regnlogin;
+package com.example.w028006g.regnlogin.activity;
 
 import android.Manifest;
 import android.content.Context;
@@ -22,9 +22,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.support.design.widget.BottomNavigationView;
 
+import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
+import com.example.w028006g.regnlogin.GeolocationService;
+import com.example.w028006g.regnlogin.MarkerManager;
+import com.example.w028006g.regnlogin.MultiMedia;
+import com.example.w028006g.regnlogin.R;
+import com.example.w028006g.regnlogin.SimpleGeofence;
+import com.example.w028006g.regnlogin.SimpleGeofenceStore;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 import com.example.w028006g.regnlogin.helper.POI;
 import com.github.gorbin.asne.twitter.TwitterSocialNetwork;
@@ -46,14 +54,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCallback
 {
-
     //Assigns the String "TAG" the name of the class for error reports
     private static final String TAG = MapsActivityNew.class.getSimpleName();
     private LatLngBounds Demo = new LatLngBounds(new LatLng(49.495091,-10.722460), new LatLng(59.497134,1.843598));
     private static ArrayList<POI> poiArrayList = new ArrayList<>();
     LocationManager locationManager;
+    private boolean pauseState = false;
+    private MarkerManager mm;
 
     //Constant used as a request code for the location permissions
     final int MY_PERMISSIONS_REQUEST_LOCATION = 14;
@@ -83,7 +93,13 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     final int AUTO_BOAT_AND_AIR=17;
     final int HOBBIES=18;
 
+    final int ATTRACTIONS=19;
+    final int LANDMARKS=20;
+    final int EVENTS=21;
+
     private static final String NOTIFICATION_MSG = "NOTIFICATION MSG";
+    public Button btnQR;
+    public Button btnFilter;
 
     static public boolean geofencesAlreadyRegistered = false;
 
@@ -93,16 +109,17 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps_new);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
 //
 //         Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = ((SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map));
         mapFragment.getMapAsync(this);
+
         //Landmarks, Attractions, and Events Stored in POI Array
         poiArrayList = DatabaseRetrieval.poiArrayList;
         //Lat and Long from FireMSGService brought in here
         Bundle FireNotification = getIntent().getExtras();
-        if (FireNotification != null)
-        {
+        if (FireNotification != null) {
             lat = FireNotification.getString("Latitude");
             lon = FireNotification.getString("Longitude");
 
@@ -120,8 +137,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item)
             {
-                switch (item.getItemId())
-                {
+                switch (item.getItemId()) {
                     case R.id.ic_map:
 
                         break;
@@ -132,7 +148,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
                         break;
 
                     case R.id.ic_Adventures:
-                        Intent intent2 = new Intent(MapsActivityNew.this, Adventures.class);
+                        Intent intent2 = new Intent(MapsActivityNew.this, MultiMedia.class);
                         startActivity(intent2);
                         break;
 
@@ -144,9 +160,44 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
                 return false;
             }
         });
-            //Starts Geolocation Service
-            startService(new Intent(this, GeolocationService.class));
-        }
+
+        //Starts Geolocation Service
+        startService(new Intent(this, GeolocationService.class));
+
+        btnQR = (Button) findViewById(R.id.QRbutton);
+        btnQR.setOnClickListener(new View.OnClickListener()
+        {
+
+            public void onClick(View view)
+            {
+                Intent i = new Intent(MapsActivityNew.this,
+                        qrActivity.class);
+                startActivity(i);
+            }
+        });
+
+        btnFilter = (Button) findViewById(R.id.FilterButton);
+        btnFilter.setOnClickListener(new View.OnClickListener()
+        {
+
+            public void onClick(View view)
+            {
+                Intent i = new Intent(MapsActivityNew.this,
+                        FilterActivity.class);
+                startActivity(i);
+            }
+        });
+    }
+
+
+
+    public void onClick(View view)
+    {
+        Intent i = new Intent(MapsActivityNew.this,
+                FilterActivity.class);
+        startActivity(i);
+    }
+
 
     //Displays the circle around the geofence - wont need this for final just so we can see where they are
     protected void displayGeofences() {
@@ -165,7 +216,8 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
 
     //Called to check if location is enabled on the device.
     //DOES NOT check to see if permission has been granted
-    private boolean checkLocation() {
+    private boolean checkLocation()
+    {
         if (!isLocationEnabled())
             showOffAlert();
         return isLocationEnabled();
@@ -260,8 +312,6 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         String location = locationSearch.getText().toString();
         List<Address> addressList = null;
 
-        //
-
         if (!location.equals("")) {
             Geocoder geocoder = new Geocoder(this);
             try {
@@ -283,6 +333,25 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
 
     }
 
+    @Override
+    protected void onResume()
+    {
+        if (pauseState)
+        {
+            mMap.clear();
+            mm.popMap();
+        }
+        pauseState = true;
+        startService(new Intent(this, DatabaseRetrieval.class));
+        super.onResume();
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        stopService(new Intent(this, DatabaseRetrieval.class));
+        super.onDestroy();
+    }
 
     @Override
     public void onMapReady(GoogleMap googleMap)
@@ -295,7 +364,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         //Calls function to display geofence circle
         displayGeofences();
 
-        //To set the map style and json file
+        //To set the maps style and json file
         try
         {
             boolean success = mMap.setMapStyle
@@ -312,31 +381,27 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         }
 
         //Location LatLng defined here
-        LatLng sydney = new LatLng(-34, 151);
         LatLng stoke = new LatLng(53.0027, -2.1794);
-        LatLng center = new LatLng(0, 0);
+        //LatLng center = new LatLng(0, 0);
 
         //Permanent Markers added and camera zoom on initial startup
-        mMap.addMarker(new MarkerOptions().position(stoke).title("Marker in Sydney").snippet("Test Snippet inserting text").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        //mMap.addMarker(new MarkerOptions().position(stoke).title("Marker in Stoke").snippet("Test Snippet inserting text").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(stoke));
         mMap.moveCamera(CameraUpdateFactory.zoomTo(10));
 
-
+        checkLocation();
         checkLocationPermission();
 
         //Checks that something has been passed to lat and lon before trying to execute
         if (lat != null && lon != null)
         {
-
             centerOn(lat, lon);
-
         }
 
-        //Executes popMap to populate the markers on the map
-        MarkerManager mm = new MarkerManager(mMap,poiArrayList);
+        //Executes popMap to populate the markers on the maps
+        mm = new MarkerManager(mMap,poiArrayList);
         mm.popMap();
     }
-
 
 }
 

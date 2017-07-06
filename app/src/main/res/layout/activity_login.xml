@@ -9,6 +9,7 @@
     android:padding="10dp"
     android:weightSum="1">
 
+
     <ImageView
         android:layout_width="158dp"
         android:layout_height="146dp"
@@ -21,6 +22,7 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
+
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@color/bg_login"
@@ -29,6 +31,7 @@
         android:paddingRight="20dp"
         android:paddingTop="70dp"
         android:weightSum="1">
+
 
         <EditText
             android:id="@+id/email"
@@ -43,7 +46,7 @@
             android:padding="10dp"
             android:singleLine="true"
             android:textColor="@color/input_login"
-            android:textColorHint="@color/input_login_hint" />
+            android:textColorHint="@color/input_login_hint"/>
 
         <EditText
             android:id="@+id/password"
@@ -58,7 +61,7 @@
             android:padding="10dp"
             android:singleLine="true"
             android:textColor="@color/input_login"
-            android:textColorHint="@color/input_login_hint" />
+            android:textColorHint="@color/input_login_hint"/>
 
         <GridLayout
             android:layout_width="288dp"
@@ -104,9 +107,10 @@
             android:layout_marginTop="15dip"
             android:background="@color/btn_login_bg"
             android:text="@string/btn_login"
-            android:textColor="@color/btn_text_login" />
+            android:textColor="@color/btn_text_login"/>
 
         <!-- Link to Login Screen -->
+
         <TextView
             android:id="@+id/loginvia"
             android:layout_width="wrap_content"
@@ -121,11 +125,24 @@
             android:textColor="@color/white"
             android:textColorHint="@color/input_login_hint" />
 
-        <GridLayout
+    </LinearLayout>
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:rowCount="4">
+
+
+
+        <Button
+            android:id="@+id/btnSkip"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:rowCount="4">
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="20dp"
+            android:text="Skip"/>
+
+
 
             <Button
                 android:id="@+id/twitter"
@@ -163,4 +180,3 @@
                 android:textColor="@color/white" />
         </GridLayout>
     </LinearLayout>
-</LinearLayout>
