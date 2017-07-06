@@ -49,12 +49,6 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/QRbutton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="QR Scanner" />
-
-        <Button
             android:id="@+id/FilterButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

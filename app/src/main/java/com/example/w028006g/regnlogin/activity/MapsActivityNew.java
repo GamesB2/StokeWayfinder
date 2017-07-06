@@ -28,7 +28,6 @@ import android.support.design.widget.BottomNavigationView;
 import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
 import com.example.w028006g.regnlogin.GeolocationService;
 import com.example.w028006g.regnlogin.MarkerManager;
-import com.example.w028006g.regnlogin.MultiMedia;
 import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.SimpleGeofence;
 import com.example.w028006g.regnlogin.SimpleGeofenceStore;
@@ -120,14 +119,13 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         if (FireNotification != null) {
             lat = FireNotification.getString("Latitude");
             lon = FireNotification.getString("Longitude");
-
         }
 
         //Menu bar at the bottom
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView_Bar);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
         Menu menu = bottomNavigationView.getMenu();
-        MenuItem menuItem = menu.getItem(0);
+        MenuItem menuItem = menu.getItem(1);
         menuItem.setChecked(true);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener()
@@ -137,22 +135,28 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
             {
                 switch (item.getItemId()) {
                     case R.id.ic_map:
-
+                        Intent intent = new Intent(getApplicationContext(), MapsActivityNew.class);
+                        startActivity(intent);
                         break;
 
                     case R.id.ic_Profile:
-                        Intent intent1 = new Intent(MapsActivityNew.this, Profile.class);
+                        Intent intent1 = new Intent(getApplicationContext(), Profile.class);
                         startActivity(intent1);
                         break;
 
-                    case R.id.ic_Adventures:
-                        Intent intent2 = new Intent(MapsActivityNew.this, MultiMedia.class);
+                    case R.id.ic_qr:
+                        Intent intent2 = new Intent(getApplicationContext(), qrActivity.class);
                         startActivity(intent2);
                         break;
 
-                    case R.id.ic_Tickets:
-                        Intent intent3 = new Intent(MapsActivityNew.this, Tickets.class);
+                    case R.id.ic_shop:
+                        Intent intent3 = new Intent(getApplicationContext(), Tickets.class);
                         startActivity(intent3);
+                        break;
+
+                    case R.id.ic_Rec:
+                        Intent intent4 = new Intent(getApplicationContext(), StartScreen.class);
+                        startActivity(intent4);
                         break;
                 }
                 return false;
@@ -161,17 +165,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         //Starts Geolocation Service
         startService(new Intent(this, GeolocationService.class));
 
-        btnQR = (Button) findViewById(R.id.QRbutton);
-        btnQR.setOnClickListener(new View.OnClickListener()
-        {
 
-            public void onClick(View view)
-            {
-                Intent i = new Intent(MapsActivityNew.this,
-                        qrActivity.class);
-                startActivity(i);
-            }
-        });
 
         btnFilter = (Button) findViewById(R.id.FilterButton);
         btnFilter.setOnClickListener(new View.OnClickListener()

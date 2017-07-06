@@ -70,12 +70,14 @@ public class Post extends POI
 
     public String getFirstScanTime()
     {
-        return time.format(datFirst);
+        String n="";
+        return n; //time.format(datFirst);
     }
 
     public String getLatestScanTime()
     {
-        return time.format(datLatest);
+        String n="";
+        return n;//time.format(datLatest);
     }
 
     public int getScanCount()

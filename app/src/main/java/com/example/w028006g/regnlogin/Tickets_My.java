@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.example.w028006g.regnlogin.activity.MainActivity;
+import com.example.w028006g.regnlogin.activity.StartScreen;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 import com.example.w028006g.regnlogin.helper.MyRecyclerViewAdapter;
 import com.example.w028006g.regnlogin.helper.MyRecyclerViewAdapterPosts;
@@ -58,7 +59,7 @@ public class Tickets_My extends AppCompatActivity {
         setContentView(R.layout.tickets);
 
 
-        new Tickets_My.AsyncLogin().execute(MainActivity.userDetails.getEmail());
+        new Tickets_My.AsyncLogin().execute(StartScreen.userDetails.getEmail());
 
 
 

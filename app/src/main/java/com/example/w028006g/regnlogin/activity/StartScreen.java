@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
 import com.example.w028006g.regnlogin.ClickActionHelper;
 import com.example.w028006g.regnlogin.GeolocationService;
-import com.example.w028006g.regnlogin.MultiMedia;
 import com.example.w028006g.regnlogin.Person;
 import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrievalNow;
@@ -117,23 +116,28 @@ public class StartScreen extends AppCompatActivity {
             {
                 switch (item.getItemId()) {
                     case R.id.ic_map:
-                        Intent maps = new Intent(StartScreen.this, MapsActivityNew.class);
-                        startActivity(maps);
+                        Intent intent = new Intent(getApplicationContext(), MapsActivityNew.class);
+                        startActivity(intent);
                         break;
 
                     case R.id.ic_Profile:
-                        Intent intent1 = new Intent(StartScreen.this, Profile.class);
+                        Intent intent1 = new Intent(getApplicationContext(), Profile.class);
                         startActivity(intent1);
                         break;
 
-                    case R.id.ic_Adventures:
-                        Intent intent2 = new Intent(StartScreen.this, MultiMedia.class);
+                    case R.id.ic_qr:
+                        Intent intent2 = new Intent(getApplicationContext(), qrActivity.class);
                         startActivity(intent2);
                         break;
 
-                    case R.id.ic_Tickets:
-                        Intent intent3 = new Intent(StartScreen.this, Tickets.class);
+                    case R.id.ic_shop:
+                        Intent intent3 = new Intent(getApplicationContext(), Tickets.class);
                         startActivity(intent3);
+                        break;
+
+                    case R.id.ic_Rec:
+                        Intent intent4 = new Intent(getApplicationContext(), StartScreen.class);
+                        startActivity(intent4);
                         break;
                 }
                 return false;

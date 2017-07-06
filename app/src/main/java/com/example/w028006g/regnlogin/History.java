@@ -47,7 +47,6 @@ public class History extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private MyRecyclerViewAdapterPosts adapter;
     private ArrayList<Post> postist = new ArrayList<>();
-
     private String posts="";
 
     @Override

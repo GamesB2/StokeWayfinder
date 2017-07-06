@@ -94,11 +94,14 @@
 
         <Button
             android:id="@+id/btnSkip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginTop="20dp"
-            android:text="Skip"/>
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginTop="15dp"
+            android:background="@null"
+            android:text="Skip for now! Sign up later..."
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="15dp"/>
 
     </LinearLayout>
 
