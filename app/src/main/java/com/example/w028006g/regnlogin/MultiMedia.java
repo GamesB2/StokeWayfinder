@@ -67,11 +67,13 @@ public class MultiMedia extends YouTubeBaseActivity implements
         else
         {
 
-            p = DatabaseRetrieval.postsAl.get(qrValue-1);
+//            p = DatabaseRetrieval.postsAl.get(qrValue-1);
         }
-      
-        txtSummary.setText(p.getSummary());
-        txtName.setText(p.getAddressInfo().getFeatureName());
+
+        if (p!= null) {
+            txtSummary.setText(p.getSummary());
+            txtName.setText(p.getAddressInfo().getFeatureName());
+        }
 
 
         // Initializing video player with developer key
@@ -126,8 +128,10 @@ public class MultiMedia extends YouTubeBaseActivity implements
 
             // loadVideo() will auto play video
             // Use cueVideo() method, if you don't want to play it automatically
-            //player.loadVideo(AppConfig.YOUTUBE_VIDEO_CODE);
-            player.loadVideo(p.getVideo());
+            //player.loadVideo(AppConfig.YOUTUBE_VIDEO_CODE)
+            if(p!= null) {
+                player.loadVideo(p.getVideo());
+            }
 
             // Hiding player controls
             player.setPlayerStyle(PlayerStyle.DEFAULT);

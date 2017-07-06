@@ -20,5 +20,12 @@
     <color name="btn_text_login">#f14545</color>
     <color name="btn_bg_login">#fff</color>
     <color name="colorGrey">#ffffffff </color>
+    <color name="grey_light">#FFCCCCCC</color>
+    <color name="dark">#4b4b4b</color>
+    <color name="facebook">#3b5998</color>
+    <color name="twitter">#55ACEE</color>
+    <color name="linkedin">#287bbc</color>
+    <color name="googleplus">#D34836</color>
     <color name="filterPrimary">#ef5350</color>
+
 </resources>

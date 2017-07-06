@@ -1,5 +1,14 @@
 package com.example.w028006g.regnlogin.activity;
 
+import com.example.w028006g.regnlogin.MainActivity1;
+import com.example.w028006g.regnlogin.activity.LoginActivity;
+import com.example.w028006g.regnlogin.app.AppController;
+import com.example.w028006g.regnlogin.helper.DownloadImageTask;
+import com.example.w028006g.regnlogin.helper.SQLiteHandler;
+import com.example.w028006g.regnlogin.helper.SessionManager;
+import com.github.gorbin.asne.core.SocialNetwork;
+import com.google.firebase.iid.FirebaseInstanceId;
+
 import com.example.w028006g.regnlogin.ClickActionHelper;
 import com.example.w028006g.regnlogin.GeolocationService;
 import com.example.w028006g.regnlogin.Person;
@@ -10,11 +19,25 @@ import com.example.w028006g.regnlogin.helper.SQLiteHandler;
 import com.example.w028006g.regnlogin.helper.SessionManager;
 
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
+import android.content.Context;
 import android.content.Intent;
+
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
+
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -27,9 +50,9 @@ public class MainActivity extends AppCompatActivity {
     private Button btnLogout;
     private Button btnMaps;
     private ImageView imgUser;
+    private int networkId;
 
-
-
+    private SocialNetwork socialNetwork;
     private SQLiteHandler db;
     private SessionManager session;
     public static Person userDetails;
@@ -50,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         startService(intent);
         Intent intent1 = new Intent(MainActivity.this, DatabaseRetrievalNow.class);
         startService(intent1);
+
 
         userDetails = new Person();
 
@@ -85,12 +109,35 @@ public class MainActivity extends AppCompatActivity {
         txtName.setText(name);
         txtEmail.setText(email);
 
+
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "com.example.w028006g.regnlogin",
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+
+        } catch (NoSuchAlgorithmException e) {
+
+        }
+
+
         // Logout button click event
         btnLogout.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 logoutUser();
+                if (networkId == -1){
+
+                } else {
+                    socialNetwork.logout();
+                }
+
             }
         });
 
@@ -98,13 +145,27 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),MapsActivityNew.class);
+                Intent intent = new Intent(getApplicationContext(), MapsActivityNew.class);
                 startActivity(intent);
             }
         });
 
         checkIntent(getIntent());
 
+        SharedPreferences prefs = AppController.getInstance().getSharedPreferences("MYPREFS", Context.MODE_PRIVATE);
+        networkId = prefs.getInt("SocialNet", -1);
+
+        if (networkId == -1) {
+
+        } else {
+            if (networkId != 0) {
+                socialNetwork = LoginActivity.mSocialNetworkManager.getSocialNetwork(networkId);
+                //socialNetwork.setOnRequestCurrentPersonCompleteListener(this);
+                socialNetwork.requestCurrentPerson();
+            } else {
+
+            }
+        }
 
     }
     @Override
@@ -132,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
         db.deleteUsers();
 
         // Launching the login activity
-        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        Intent intent = new Intent(MainActivity.this, MainActivity1.class);
         startActivity(intent);
         finish();
     }

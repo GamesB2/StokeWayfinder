@@ -1,11 +1,19 @@
 package com.example.w028006g.regnlogin.activity;
 
-import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
+import android.support.v4.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -15,8 +23,17 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+
+import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import com.example.w028006g.regnlogin.activity.MainActivity;
+import com.example.w028006g.regnlogin.MainActivity1;
 
 import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.app.AppConfig;
@@ -24,8 +41,18 @@ import com.example.w028006g.regnlogin.app.AppController;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 import com.example.w028006g.regnlogin.helper.SQLiteHandler;
 import com.example.w028006g.regnlogin.helper.SessionManager;
+import com.github.gorbin.asne.core.SocialNetwork;
+import com.github.gorbin.asne.core.SocialNetworkManager;
+import com.github.gorbin.asne.core.listener.OnLoginCompleteListener;
+import com.github.gorbin.asne.facebook.FacebookSocialNetwork;
+import com.github.gorbin.asne.linkedin.LinkedInSocialNetwork;
+import com.github.gorbin.asne.twitter.TwitterSocialNetwork;
 
-public class LoginActivity extends Activity {
+import static android.content.Context.MODE_PRIVATE;
+import static com.example.w028006g.regnlogin.MainActivity1.SOCIAL_NETWORK_TAG;
+import static com.facebook.FacebookSdk.getApplicationContext;
+
+public class LoginActivity extends Fragment implements SocialNetworkManager.OnInitializationCompleteListener, OnLoginCompleteListener {
     private static final String TAG = RegisterActivity.class.getSimpleName();
     private Button btnLogin;
     private Button btnLinkToRegister;
@@ -37,41 +64,70 @@ public class LoginActivity extends Activity {
     private SessionManager session;
     private SQLiteHandler db;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+    private int networkId = 0;
 
-        inputEmail = (EditText) findViewById(R.id.email);
-        inputPassword = (EditText) findViewById(R.id.password);
-        btnLogin = (Button) findViewById(R.id.btnLogin);
-        btnLinkToRegister = (Button) findViewById(R.id.btnLinkToRegisterScreen);
-        btnLinkToReset = (Button) findViewById(R.id.btnLinkToReset);
-        btnSkip = (Button) findViewById(R.id.btnSkip);
+    public static SocialNetworkManager mSocialNetworkManager;
+    /**
+     * SocialNetwork Ids in ASNE:
+     * 1 - Twitter
+     * 2 - LinkedIn
+     * 3 - Google Plus
+     * 4 - Facebook
+     * 5 - Vkontakte
+     * 6 - Odnoklassniki
+     * 7 - Instagram
+     */
+    private Button facebook;
+    private Button google;
+    private Button twitter;
+    private Button linkedin;
+    private Button googleplus;
+
+
+    public LoginActivity() {
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        View rootView = inflater.inflate(R.layout.activity_login, container, false);
+        inputEmail = (EditText) rootView.findViewById(R.id.email);
+        inputPassword = (EditText) rootView.findViewById(R.id.password);
+        btnLogin = (Button) rootView.findViewById(R.id.btnLogin);
+        btnLinkToRegister = (Button) rootView.findViewById(R.id.btnLinkToRegisterScreen);
+        btnLinkToReset = (Button) rootView.findViewById(R.id.btnLinkToReset);
+        btnSkip = (Button) rootView.findViewById(R.id.btnSkip);
+
+
+
 
         //Start Service
         // use this to start and trigger a service
-        Intent i= new Intent(LoginActivity.this, DatabaseRetrieval.class);
+        Intent i = new Intent(getActivity().getApplicationContext(), DatabaseRetrieval.class);
         // potentially add data to the intent
         i.putExtra("KEY1", "Value to be used by the service");
-        LoginActivity.this.startService(i);
+        getActivity().getApplicationContext().startService(i);
 
         // Progress dialog
-        pDialog = new ProgressDialog(this);
+        pDialog = new ProgressDialog(getActivity().getApplicationContext());
         pDialog.setCancelable(false);
 
         // SQLite database handler
-        db = new SQLiteHandler(getApplicationContext());
+        db = new SQLiteHandler(getActivity().getApplicationContext());
 
         // Session manager
-        session = new SessionManager(getApplicationContext());
+        session = new SessionManager(getActivity().getApplicationContext());
 
         // Check if user is already logged in or not
         if (session.isLoggedIn()) {
             // User is already logged in. Take him to main activity
-            Intent intent = new Intent(LoginActivity.this, StartScreen.class);
+
+            Intent intent = new Intent(getActivity().getApplicationContext(), MainActivity.class);
+
             startActivity(intent);
-            finish();
+            getActivity().finish();
         }
 
         // Login button Click Event
@@ -106,7 +162,7 @@ public class LoginActivity extends Activity {
                 Intent i = new Intent(getApplicationContext(),
                         RegisterActivity.class);
                 startActivity(i);
-                finish();
+                getActivity().finish();
             }
         });
 
@@ -118,7 +174,7 @@ public class LoginActivity extends Activity {
                 Intent ii = new Intent(getApplicationContext(),
                         ResetActivity.class);
                 startActivity(ii);
-                finish();
+                getActivity().finish();
             }
         });
 
@@ -129,12 +185,146 @@ public class LoginActivity extends Activity {
             {
                 Intent intent = new Intent(getApplicationContext(),MapsActivityNew.class);
                 startActivity(intent);
-                finish();
+                getActivity().finish();
             }
         });
+        // init buttons and set Listener
+        facebook = (Button) rootView.findViewById(R.id.facebook);
+        facebook.setOnClickListener(loginClick);
+        google = (Button) rootView.findViewById(R.id.twitter);
+        google.setOnClickListener(loginClick);
+
+
+
+        //Get Keys for initiate SocialNetworks
+        String TWITTER_CONSUMER_KEY = getActivity().getString(R.string.twitter_consumer_key);
+        String TWITTER_CONSUMER_SECRET = getActivity().getString(R.string.twitter_consumer_secret);
+        String TWITTER_CALLBACK_URL = "oauth://ASNE";
+//        String LINKEDIN_CONSUMER_KEY = getActivity().getString(R.string.linkedin_consumer_key);
+//        String LINKEDIN_CONSUMER_SECRET = getActivity().getString(R.string.linkedin_consumer_secret);
+//        String LINKEDIN_CALLBACK_URL = "https://asneTutorial";
+
+        //Chose permissions
+        ArrayList<String> fbScope = new ArrayList<String>();
+        fbScope.addAll(Arrays.asList("public_profile, email, user_friends"));
+        String linkedInScope = "r_basicprofile+r_fullprofile+rw_nus+r_network+w_messages+r_emailaddress+r_contactinfo";
+
+        //Use manager to manage SocialNetworks
+        mSocialNetworkManager = (SocialNetworkManager) getFragmentManager().findFragmentByTag(SOCIAL_NETWORK_TAG);
+
+        //Check if manager exist
+        if (mSocialNetworkManager == null) {
+            mSocialNetworkManager = new SocialNetworkManager();
+
+            //Init and add to manager FacebookSocialNetwork
+            FacebookSocialNetwork fbNetwork = new FacebookSocialNetwork(this, fbScope);
+            mSocialNetworkManager.addSocialNetwork(fbNetwork);
+
+            //Init and add to manager TwitterSocialNetwork
+            TwitterSocialNetwork twNetwork = new TwitterSocialNetwork(this, TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_CALLBACK_URL);
+            mSocialNetworkManager.addSocialNetwork(twNetwork);
+
+            //Init and add to manager LinkedInSocialNetwork
+//            GooglePlusSocialNetwork gpNetwork = new GooglePlusSocialNetwork(this);
+//            mSocialNetworkManager.addSocialNetwork(gpNetwork);
+
+            //Initiate every network from mSocialNetworkManager
+            getFragmentManager().beginTransaction().add(mSocialNetworkManager, SOCIAL_NETWORK_TAG).commit();
+            mSocialNetworkManager.setOnInitializationCompleteListener(this);
+        } else {
+            //if manager exist - get and setup login only for initialized SocialNetworks
+            if(!mSocialNetworkManager.getInitializedSocialNetworks().isEmpty()) {
+                List<SocialNetwork> socialNetworks = mSocialNetworkManager.getInitializedSocialNetworks();
+                for (SocialNetwork socialNetwork : socialNetworks) {
+                    socialNetwork.setOnLoginCompleteListener(this);
+                    initSocialNetwork(socialNetwork);
+                }
+            }
+        }
+        return rootView;
+    }
+
+    private void initSocialNetwork(SocialNetwork socialNetwork){
+        if(socialNetwork.isConnected()){
+            switch (socialNetwork.getID()){
+                case FacebookSocialNetwork.ID:
+                    facebook.setText("Continue With");
+                    networkId = FacebookSocialNetwork.ID;
+                    break;
+//                case GooglePlusSocialNetwork.ID:
+//                    google.setText("Continue With");
+//                    break;
+                case TwitterSocialNetwork.ID:
+                    google.setText("Continue With");
+                    networkId = TwitterSocialNetwork.ID;
+                    break;
+            }
+        }
+    }
+    @Override
+    public void onSocialNetworkManagerInitialized() {
+        //when init SocialNetworks - get and setup login only for initialized SocialNetworks
+        for (SocialNetwork socialNetwork : mSocialNetworkManager.getInitializedSocialNetworks()) {
+            socialNetwork.setOnLoginCompleteListener(this);
+            initSocialNetwork(socialNetwork);
+        }
+    }
+
+    //Login listener
+
+    private View.OnClickListener loginClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+
+            switch (view.getId()){
+                case R.id.facebook:
+                    networkId = FacebookSocialNetwork.ID;
+                    break;
+//                case R.id.google:
+//                    networkId = GooglePlusSocialNetwork.ID;
+//                    break;
+                case R.id.twitter:
+                    networkId = TwitterSocialNetwork.ID;
+                    break;
+            }
+            SocialNetwork socialNetwork = mSocialNetworkManager.getSocialNetwork(networkId);
+            if(!socialNetwork.isConnected()) {
+                if(networkId != 0) {
+                    socialNetwork.requestLogin();
+                    MainActivity1.showProgress("Loading social person");
+                } else {
+                    Toast.makeText(getActivity(), "Wrong networkId", Toast.LENGTH_LONG).show();
+                }
+            } else {
+                startProfile(socialNetwork.getID());
+            }
+
+
+        }
+    };
+
+    @Override
+    public void onLoginSuccess(int networkId) {
+        MainActivity1.hideProgress();
+        startProfile(networkId);
+    }
+
+    @Override
+    public void onError(int networkId, String requestID, String errorMessage, Object data) {
+        MainActivity1.hideProgress();
+        Toast.makeText(getActivity(), "ERROR: " + errorMessage, Toast.LENGTH_LONG).show();
 
     }
 
+    private void startProfile(int networkId){
+        Intent maps = new Intent(getContext(), MainActivity.class);
+        session.setLogin(true);
+        SharedPreferences prefs = AppController.getInstance().getSharedPreferences("MYPREFS", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("SocialNet", networkId).apply();
+        editor.commit();
+        startActivity(maps);
+    }
     /**
      * function to verify login details in mysql db
      * */
@@ -180,12 +370,13 @@ public class LoginActivity extends Activity {
                         db.addUser(name, email, uid, created_at);
 
                         // Launch main activity
-                        Intent intent = new Intent(LoginActivity.this,
-                                MainActivity.class);
+                        Intent intent = new Intent(getActivity().getApplicationContext(), MainActivity.class);
                         startActivity(intent);
-                        finish();
-                    } else
-                    {
+
+                        getActivity().finish();
+
+                    } else {
+
                         // Error in login. Get the error message
                         String errorMsg = jObj.getString("error_msg");
                         Toast.makeText(getApplicationContext(),
@@ -227,8 +418,8 @@ public class LoginActivity extends Activity {
     }
 
     private void showDialog() {
-        if (!pDialog.isShowing())
-            pDialog.show();
+        //if (!pDialog.isShowing())
+            //pDialog.show();
     }
 
     private void hideDialog() {
@@ -237,11 +428,12 @@ public class LoginActivity extends Activity {
     }
 
     public void startService(View view) {
-        startService(new Intent(getBaseContext(), DatabaseRetrieval.class));
+        getActivity().startService(new Intent(getContext(), DatabaseRetrieval.class));
+
     }
 
     // Method to stop the service
     public void stopService(View view) {
-        stopService(new Intent(getBaseContext(), DatabaseRetrieval.class));
+        getActivity().stopService(new Intent(getActivity(), DatabaseRetrieval.class));
     }
 }

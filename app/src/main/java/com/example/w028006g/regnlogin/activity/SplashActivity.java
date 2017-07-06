@@ -4,7 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.example.w028006g.regnlogin.activity.LoginActivity;
+import com.example.w028006g.regnlogin.MainActivity1;
+
 
 /**
  * Created by a025178g on 08/06/2017.
@@ -20,7 +21,7 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 try {
                     sleep(2000);
-                    Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+                    Intent intent = new Intent(getApplicationContext(),MainActivity1.class);
                     startActivity(intent);
                     finish();
                 } catch (InterruptedException e) {
@@ -29,6 +30,7 @@ public class SplashActivity extends AppCompatActivity {
             }
         };
         myThread.start();
+//---------------------------------------------------
 
     }
 }

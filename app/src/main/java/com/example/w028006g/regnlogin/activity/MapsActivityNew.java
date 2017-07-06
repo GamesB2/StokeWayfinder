@@ -14,6 +14,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -34,6 +35,7 @@ import com.example.w028006g.regnlogin.SimpleGeofence;
 import com.example.w028006g.regnlogin.SimpleGeofenceStore;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 import com.example.w028006g.regnlogin.helper.POI;
+import com.github.gorbin.asne.twitter.TwitterSocialNetwork;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -108,10 +110,10 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         setContentView(R.layout.activity_maps_new);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        // Obtain the SupportMapFragment and get notified when the maps is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+//
+//         Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = ((SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map));
         mapFragment.getMapAsync(this);
-
 
         //Landmarks, Attractions, and Events Stored in POI Array
         poiArrayList = DatabaseRetrieval.poiArrayList;
@@ -158,6 +160,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
                 return false;
             }
         });
+
         //Starts Geolocation Service
         startService(new Intent(this, GeolocationService.class));
 
@@ -185,6 +188,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
             }
         });
     }
+
 
 
     public void onClick(View view)
