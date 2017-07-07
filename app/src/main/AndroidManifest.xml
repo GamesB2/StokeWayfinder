@@ -162,7 +162,6 @@
         <activity android:name=".MultiMedia"></activity>
         <activity android:name=".History"></activity>
         <activity android:name=".activity.Profile"/>
-        <activity android:name=".activity.Adventures"/>
         <activity android:name=".activity.Tickets"/>
         <activity android:name=".My_Points"></activity>
         <activity android:name=".activity.StartScreen"></activity>

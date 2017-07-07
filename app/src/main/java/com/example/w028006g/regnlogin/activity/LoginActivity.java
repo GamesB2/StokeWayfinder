@@ -370,7 +370,9 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
                         db.addUser(name, email, uid, created_at);
 
                         // Launch main activity
+
                         Intent intent = new Intent(getActivity().getApplicationContext(), MainActivity.class);
+
                         startActivity(intent);
 
                         getActivity().finish();
@@ -425,6 +427,7 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
     private void hideDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();
+        
     }
 
     public void startService(View view) {
