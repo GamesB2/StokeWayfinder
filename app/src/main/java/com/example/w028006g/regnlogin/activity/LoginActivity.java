@@ -234,6 +234,7 @@ public class LoginActivity extends Activity {
     private void hideDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();
+        
     }
 
     public void startService(View view) {
