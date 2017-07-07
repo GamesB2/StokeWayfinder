@@ -192,7 +192,7 @@ public class Profile extends AppCompatActivity {
             }
         });
 
-        new Profile.AsyncLogin().execute(StartScreen.userDetails.getEmail());
+        new Profile.AsyncLogin().execute(MainActivity.userDetails.getEmail());
     }
 
 
