@@ -72,6 +72,19 @@ public class MainActivity1 extends AppCompatActivity implements FragmentManager.
         return super.onOptionsItemSelected(item);
     }
 
+
+    public void newFragment(Fragment fragment)
+    {
+        FragmentManager manager = getSupportFragmentManager();
+        if (manager != null){
+            FragmentTransaction transaction = manager.beginTransaction();
+            if (transaction != null) {
+                transaction.replace(R.id.container, fragment);
+                transaction.commit();
+            }
+        }
+    }
+
     public static void showProgress(String message) {
         pd = new ProgressDialog(context);
         pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);

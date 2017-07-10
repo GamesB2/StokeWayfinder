@@ -165,6 +165,7 @@
         <activity android:name=".activity.Tickets"/>
         <activity android:name=".My_Points"></activity>
         <activity android:name=".activity.StartScreen"></activity>
+        <activity android:name=".activity.LoginActivity"></activity>
         <activity
             android:name=".activity.FilterActivity"
             android:label="activity_filter"
