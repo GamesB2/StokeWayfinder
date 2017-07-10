@@ -42,6 +42,7 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.example.w028006g.regnlogin.MainActivity1;
 import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.app.AppConfig;
 import com.example.w028006g.regnlogin.app.AppController;
@@ -147,7 +148,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(),
-                        LoginActivity.class);
+                        MainActivity1.class);
                 startActivity(i);
                 finish();
             }
@@ -232,7 +233,7 @@ public class RegisterActivity extends AppCompatActivity {
                         // Launch login activity
                         Intent intent = new Intent(
                                 RegisterActivity.this,
-                                LoginActivity.class);
+                                MainActivity1.class);
                         startActivity(intent);
                         finish();
                     } else {

@@ -59,7 +59,7 @@ public class Tickets_My extends AppCompatActivity {
         setContentView(R.layout.tickets);
 
 
-        new Tickets_My.AsyncLogin().execute(StartScreen.userDetails.getEmail());
+        new Tickets_My.AsyncLogin().execute(MainActivity.userDetails.getEmail());
 
 
 
