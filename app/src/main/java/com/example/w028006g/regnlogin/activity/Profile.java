@@ -89,6 +89,8 @@ public class Profile extends AppCompatActivity {
     //flag to swap between scenes
     private boolean start;
 
+    private ArrayList<Integer> post = new ArrayList<>();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         getWindow().requestFeature(android.view.Window.FEATURE_CONTENT_TRANSITIONS);
@@ -322,43 +324,40 @@ public class Profile extends AppCompatActivity {
                         posts = c.getString("posts");
                     }
 
-                    posts = posts.substring(1);
-                    String[] postsParts = posts.split(",");
-                    ArrayList<Integer> post = new ArrayList<>();
+                    if (!posts.equalsIgnoreCase("")) {
+                        posts = posts.substring(1);
+                        String[] postsParts = posts.split(",");
 
-                    //Now Sort
 
-                    Set<String> mySet = new HashSet<String>(Arrays.asList(postsParts));
-                    for(String s : mySet)
-                    {
-                        post.add(Integer.parseInt(s));
-                    }
+                        //Now Sort
 
-                    for(int i = 0; i< post.size(); i++)
-                    {
-                        for (int j = 0; j< DatabaseRetrieval.postsAl.size(); j++)
-                        {
-                            Integer check = post.get(i);
+                        Set<String> mySet = new HashSet<String>(Arrays.asList(postsParts));
+                        for (String s : mySet) {
+                            post.add(Integer.parseInt(s));
+                        }
 
-                            if(check == DatabaseRetrieval.postsAl.get(j).getId())
-                            {
-                                //if(!post.contains(postsParts[i]))
-                                //{
-                                postist.add(DatabaseRetrieval.postsAl.get(j));
-                                //}
+                        for (int i = 0; i < post.size(); i++) {
+                            for (int j = 0; j < DatabaseRetrieval.postsAl.size(); j++) {
+                                Integer check = post.get(i);
+
+                                if (check == DatabaseRetrieval.postsAl.get(j).getId()) {
+                                    //if(!post.contains(postsParts[i]))
+                                    //{
+                                    postist.add(DatabaseRetrieval.postsAl.get(j));
+                                    //}
+                                }
                             }
                         }
+
+                        mRecyclerView = (RecyclerView) findViewById(R.id.rvH);
+                        mRecyclerView.setLayoutManager(new LinearLayoutManager(Profile.this));
+                        adapter = new MyRecyclerViewAdapterPosts(Profile.this, postist);
+                        mRecyclerView.setAdapter(adapter);
+
+                        System.out.println(posts);
+
+                        // Launch main activity
                     }
-
-                    mRecyclerView = (RecyclerView) findViewById(R.id.rvH);
-                    mRecyclerView.setLayoutManager(new LinearLayoutManager(Profile.this));
-                    adapter = new MyRecyclerViewAdapterPosts(Profile.this, postist);
-                    mRecyclerView.setAdapter(adapter);
-
-                    System.out.println(posts);
-
-                    // Launch main activity
-
                 } else {
                     // Error in login. Get the error message
                     String errorMsg = jObj.getString("error_msg");
