@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
+import com.example.w028006g.regnlogin.JonnysLab.NewBeep;
 import com.example.w028006g.regnlogin.MultiMedia;
 import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
@@ -36,6 +37,7 @@ public class qrActivity extends AppCompatActivity implements View.OnClickListene
     //qr code scanner object
     private IntentIntegrator qrScan;
     private BeepManager beepManager;
+    private NewBeep nb;
     private String sResult;
     private final String URL = "http://www.examplesite.com";
     private ArrayList<Post> alPrevScan = new ArrayList<>();
