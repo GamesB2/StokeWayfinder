@@ -59,6 +59,7 @@ public class DatabaseRetrieval  extends Service {
     public static Event event;
     public static Ticket ticket;
     public static Post post;
+    public static int ncount = 0;
 
 
     //Event Stuff
@@ -122,12 +123,14 @@ public class DatabaseRetrieval  extends Service {
     }
 
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        // Let it continue running until it is stopped.
-        Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
-        return START_STICKY;
-    }
+//    @Override
+//    public int onStartCommand(Intent intent, int flags, int startId)
+//    {
+//        // Let it continue running until it is stopped.
+//        ncount++;
+//        Toast.makeText(this, "Service Started" + ncount, Toast.LENGTH_LONG).show();
+//        return START_STICKY;
+//    }
 
     @Override
     public void onDestroy() {

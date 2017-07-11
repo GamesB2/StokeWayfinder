@@ -14,7 +14,6 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +24,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.support.design.widget.BottomNavigationView;
+import android.widget.ImageButton;
 
 import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
 import com.example.w028006g.regnlogin.GeolocationService;
@@ -34,7 +34,11 @@ import com.example.w028006g.regnlogin.SimpleGeofence;
 import com.example.w028006g.regnlogin.SimpleGeofenceStore;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 import com.example.w028006g.regnlogin.helper.POI;
-import com.github.gorbin.asne.twitter.TwitterSocialNetwork;
+import com.example.w028006g.regnlogin.helper.UserPin;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -59,6 +63,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     //Assigns the String "TAG" the name of the class for error reports
     private static final String TAG = MapsActivityNew.class.getSimpleName();
     private LatLngBounds Demo = new LatLngBounds(new LatLng(49.495091,-10.722460), new LatLng(59.497134,1.843598));
+    private LatLngBounds StokeBounds = new LatLngBounds(new LatLng(52.722390, -2.654259), new LatLng(53.252159, -1.687220));
     private static ArrayList<POI> poiArrayList = new ArrayList<>();
     LocationManager locationManager;
     private boolean pauseState = false;
@@ -97,8 +102,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     final int EVENTS=21;
 
     private static final String NOTIFICATION_MSG = "NOTIFICATION MSG";
-    public Button btnQR;
-    public Button btnFilter;
+    public ImageButton btnFilter;
 
     static public boolean geofencesAlreadyRegistered = false;
 
@@ -168,9 +172,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         //Starts Geolocation Service
         startService(new Intent(this, GeolocationService.class));
 
-
-
-        btnFilter = (Button) findViewById(R.id.FilterButton);
+        btnFilter = (ImageButton) findViewById(R.id.FilterButton);
         btnFilter.setOnClickListener(new View.OnClickListener()
         {
 
@@ -181,9 +183,30 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
                 startActivity(i);
             }
         });
+
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+
+        autocompleteFragment.setBoundsBias(StokeBounds);
+
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                LatLng latlng = place.getLatLng();
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
+                UserPin userPin = new UserPin(place);
+                poiArrayList.add(userPin);
+                Log.i(TAG, "Place: " + place.getName());
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                Log.i(TAG, "An error occurred: " + status);
+            }
+        });
     }
-
-
 
     public void onClick(View view)
     {
@@ -301,31 +324,30 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
 
 
     //Search implementation, pins a marker on the location of the user
-    public void onMapSearch(View view) {
-        EditText locationSearch = (EditText) findViewById(R.id.gSearch);
-        String location = locationSearch.getText().toString();
-        List<Address> addressList = null;
-
-        if (!location.equals("")) {
-            Geocoder geocoder = new Geocoder(this);
-            try {
-                addressList = geocoder.getFromLocationName(location, 1);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Address address = addressList.get(0);
-
-            //Marker mSearch = new Marker();
-            //mSearch.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.searchbutton));
-
-            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-            Marker mSearch = (mMap.addMarker(new MarkerOptions().position(latLng).title("Search query").icon(BitmapDescriptorFactory.fromResource(R.drawable.searchbutton))));
-            mSearch.setDraggable(true);
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        }
-
-    }
+//    public void onMapSearch(View view) {
+//        EditText locationSearch = (EditText) findViewById(R.id.place_autocomplete_fragment);
+//        String location = locationSearch.getText().toString();
+//        List<Address> addressList = null;
+//
+//        if (!location.equals("")) {
+//            Geocoder geocoder = new Geocoder(this);
+//            try {
+//                addressList = geocoder.getFromLocationName(location, 1);
+//
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            Address address = addressList.get(0);
+//
+//            //Marker mSearch = new Marker();
+//            //mSearch.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.searchbutton));
+//
+//            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+//            Marker mSearch = (mMap.addMarker(new MarkerOptions().position(latLng).title("Search query").icon(BitmapDescriptorFactory.fromResource(R.drawable.searchbutton))));
+//            mSearch.setDraggable(true);
+//            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+//        }
+//}
 
     @Override
     protected void onResume()

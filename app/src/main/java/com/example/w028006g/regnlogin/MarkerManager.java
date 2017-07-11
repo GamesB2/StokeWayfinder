@@ -10,6 +10,7 @@ import com.example.w028006g.regnlogin.helper.Event;
 import com.example.w028006g.regnlogin.helper.Landmark;
 import com.example.w028006g.regnlogin.helper.POI;
 import com.example.w028006g.regnlogin.helper.Post;
+import com.example.w028006g.regnlogin.helper.UserPin;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -57,6 +58,7 @@ public class MarkerManager
     final static int LANDMARKS=20;
     final static int EVENTS=21;
     final static int TOTEM=22;
+    final static int USERPINS = 23;
 
     public MarkerManager(GoogleMap map, ArrayList<POI> arrayList)
     {
@@ -88,6 +90,11 @@ public class MarkerManager
         location = new Location("");
         location.setLatitude(userLatLng.latitude);
         location.setLongitude(userLatLng.longitude);
+
+        if (!filter[USERPINS])
+        {
+            popMapPins();
+        }
 
         if(!filter[ATTRACTIONS])
         {
@@ -610,6 +617,26 @@ public class MarkerManager
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
                     markerArrayList.add(temp);
                 }
+            }
+        }
+    }
+
+    public static void popMapPins()
+    {
+        Marker temp = null;
+        for (int i = 0; i < poiArrayList.size(); i++)
+        {
+            POI item = poiArrayList.get(i);
+            if(item instanceof UserPin)
+            {
+                Address add = item.getAddressInfo();
+                LatLng dest = new LatLng(add.getLatitude(), add.getLongitude());
+
+                temp = mMap.addMarker(new MarkerOptions()
+                        .position(dest)
+                        .title(add.getFeatureName())
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                markerArrayList.add(temp);
             }
         }
     }
