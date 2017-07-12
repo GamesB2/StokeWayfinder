@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.LocationManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -21,20 +19,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.support.design.widget.BottomNavigationView;
 import android.widget.ImageButton;
 
 import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
 import com.example.w028006g.regnlogin.GeolocationService;
-import com.example.w028006g.regnlogin.MarkerManager;
+import com.example.w028006g.regnlogin.helper.MarkerClasses.MarkerManager;
 import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.SimpleGeofence;
 import com.example.w028006g.regnlogin.SimpleGeofenceStore;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
-import com.example.w028006g.regnlogin.helper.POI;
-import com.example.w028006g.regnlogin.helper.UserPin;
+import com.example.w028006g.regnlogin.helper.MarkerClasses.POI;
+import com.example.w028006g.regnlogin.helper.MarkerClasses.UserPin;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
@@ -51,14 +47,12 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
-public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCallback
+public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener
 {
     //Assigns the String "TAG" the name of the class for error reports
     private static final String TAG = MapsActivityNew.class.getSimpleName();
@@ -372,10 +366,10 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     @Override
     public void onMapReady(GoogleMap googleMap)
     {
-
         mMap = googleMap;
         mMap.setLatLngBoundsForCameraTarget(Demo);
         mMap.setMinZoomPreference(5);
+
 
         //Calls function to display geofence circle
         displayGeofences();
@@ -419,6 +413,12 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         mm.popMap();
     }
 
+    @Override
+    public boolean onMarkerClick(Marker marker)
+    {
+
+        return false;
+    }
 }
 
 

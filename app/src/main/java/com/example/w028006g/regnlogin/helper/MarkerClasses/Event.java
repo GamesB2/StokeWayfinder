@@ -1,5 +1,7 @@
-package com.example.w028006g.regnlogin.helper;
+package com.example.w028006g.regnlogin.helper.MarkerClasses;
 
+
+import com.example.w028006g.regnlogin.helper.MarkerClasses.POI;
 
 import java.util.Calendar;
 
@@ -7,13 +9,12 @@ import java.util.Calendar;
  * Created by a025178g on 15/06/2017.
  */
 
-public class Event extends POI
+public class Event extends IconManager
 {
     protected Calendar startCalendar;
     protected Calendar endCalendar;
     private String sConName;
     private String sConNum;
-    private String sIcon;
 
     public Event(String sName,String sLat, String sLong)
     {
@@ -56,16 +57,6 @@ public class Event extends POI
         int nDay = Integer.parseInt(sDay);
 
         endCalendar.set(nYear,nMonth,nDay);
-    }
-
-    public void setIcon (String Icon)
-    {
-        sIcon = Icon;
-    }
-
-    public String getIcon()
-    {
-        return sIcon;
     }
 
     public void setConName(String name)

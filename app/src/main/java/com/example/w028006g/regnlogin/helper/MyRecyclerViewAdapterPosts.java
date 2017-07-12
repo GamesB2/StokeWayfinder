@@ -3,7 +3,6 @@ package com.example.w028006g.regnlogin.helper;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +11,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.example.w028006g.regnlogin.History;
 import com.example.w028006g.regnlogin.MultiMedia;
 import com.example.w028006g.regnlogin.R;
-import com.example.w028006g.regnlogin.Tickets_View;
-import com.squareup.picasso.Picasso;
+import com.example.w028006g.regnlogin.helper.MarkerClasses.Post;
 
 import java.util.ArrayList;
 

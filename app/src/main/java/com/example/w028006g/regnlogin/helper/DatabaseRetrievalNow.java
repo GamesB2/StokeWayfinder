@@ -1,13 +1,7 @@
 package com.example.w028006g.regnlogin.helper;
 
 import android.app.ProgressDialog;
-import android.app.Service;
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -15,14 +9,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
 import com.example.w028006g.regnlogin.activity.MainActivity;
-import com.example.w028006g.regnlogin.activity.MapsActivityNew;
 
-import com.example.w028006g.regnlogin.activity.LoginActivity;
 import com.example.w028006g.regnlogin.app.AppConfig;
 import com.example.w028006g.regnlogin.app.AppController;
-import com.google.gson.Gson;
+import com.example.w028006g.regnlogin.helper.MarkerClasses.Post;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
