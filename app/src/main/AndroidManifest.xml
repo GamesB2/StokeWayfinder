@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.w028006g.regnlogin">
+
+
+    <!--
+           The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+           Google Maps Android API v2, but you must specify either coarse or fine
+           location permissions for the 'MyLocation' functionality.
+    -->
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
+    -->
+    <!--<meta-data-->
+        <!--android:name="com.google.android.geo.API_KEY"-->
+        <!--android:value="AIzaSyDhzP3Rhgkqr1dOLurL8VnaNVw3aqhmQ7c" />-->
+
+    <uses-sdk
+        tools:node="merge"
+        android:minSdkVersion="23"
+        android:targetSdkVersion="25"/>
+    <application
+        android:name=".app.AppController"
+        android:allowBackup="true"
+        android:icon="@drawable/lock"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".activity.SplashActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".helper.DatabaseRetrieval"
+            android:exported="false"/>
+        <activity
+            android:name=".MainActivity1"
+            android:label="@string/app_name"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".activity.RegisterActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.MainActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".activity.SignInActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".activity.ResetActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTop" />
+
+
+        <activity
+            android:name=".activity.MapsActivityNew"/>
+
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+        -->
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <service
+            android:name=".GeolocationService"
+            android:icon="@drawable/ic_action_location"
+            android:label="@string/app_name">
+        </service>
+        <!-- <activity -->
+        <!-- android:name=".activity.MenuActivity" -->
+        <!-- android:label="@string/title_activity_menu" -->
+        <!-- android:parentActivityName=".activity.MapsActivityNew" -->
+        <!-- android:theme="@style/AppTheme.NoActionBar"> -->
+        <!-- <meta-data -->
+        <!-- android:name="android.support.PARENT_ACTIVITY" -->
+        <!-- android:value="com.example.w028006g.regnlogin.activity.MapsActivityNew" /> -->
+        <!-- </activity> -->
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".activity.MapsActivityNew">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.w028006g.regnlogin.activity.MapsActivityNew" />
+        </activity>
+        <service android:name="com.example.w028006g.regnlogin.FireMsgService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name="com.example.w028006g.regnlogin.FireIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".GeolocationService"
+            android:icon="@drawable/ic_action_location"
+            android:label="@string/app_name" >
+        </service>
+        <service
+            android:name=".GeofenceReceiver"
+            android:exported="false" >
+        </service>
+
+        <receiver
+            android:name=".GeofenceReceiver"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.example.w028006g.regnlogin.ACTION_RECEIVE_GEOFENCE" />
+            </intent-filter>
+        </receiver>
+
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <provider android:authorities="com.facebook.app.FacebookContentProvider759833020854274"
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true"/>
+
+
+
+        <activity android:name=".Tickets_View"></activity>
+        <activity android:name=".Tickets_My"></activity>
+        <activity android:name=".MultiMedia"></activity>
+        <activity android:name=".History"></activity>
+        <activity android:name=".activity.Profile"/>
+        <activity android:name=".activity.Tickets"/>
+        <activity android:name=".My_Points"></activity>
+
+        <activity
+            android:name=".activity.FilterActivity"
+            android:label="activity_filter"
+            android:parentActivityName=".activity.MapsActivityNew"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".activity.qrActivity"
+            android:screenOrientation="fullSensor"
+            tools:replace="screenOrientation"/>
+        <activity android:name=".activity.testActivity">
+        </activity>
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+    </application>
+
+</manifest>

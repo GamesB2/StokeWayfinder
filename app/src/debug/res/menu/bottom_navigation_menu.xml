@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+      >
+
+    <item
+        android:id="@+id/ic_Rec"
+        android:icon="@drawable/recbar"
+        android:title="Recommended" />
+
+    <item
+        android:id="@+id/ic_map"
+        android:icon="@drawable/map"
+        android:title="Map" />
+
+    <item
+        android:id="@+id/ic_Profile"
+        android:checkable="true"
+        android:icon="@drawable/profile"
+        android:title="Profile"
+        android:visible="true" />
+    <item
+            android:id="@+id/ic_qr"
+            android:icon="@drawable/qrbar"
+            android:title="Q.R. Scanner" />
+        <item
+            android:id="@+id/ic_shop"
+            android:icon="@drawable/shopbar"
+            android:title="Shop" />
+
+</menu>
