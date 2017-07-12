@@ -1,4 +1,6 @@
-package com.example.w028006g.regnlogin.helper;
+package com.example.w028006g.regnlogin.helper.MarkerClasses;
+
+import com.example.w028006g.regnlogin.helper.MarkerClasses.POI;
 
 /**
  * Created by a025178g on 15/06/2017.

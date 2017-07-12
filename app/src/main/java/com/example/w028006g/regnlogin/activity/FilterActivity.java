@@ -12,7 +12,7 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.example.w028006g.regnlogin.MarkerManager;
+import com.example.w028006g.regnlogin.helper.MarkerClasses.MarkerManager;
 import com.example.w028006g.regnlogin.R;
 
 import java.util.ArrayList;

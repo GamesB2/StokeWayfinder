@@ -1,6 +1,7 @@
-package com.example.w028006g.regnlogin.helper;
+package com.example.w028006g.regnlogin.helper.MarkerClasses;
 
-import java.sql.Time;
+import com.example.w028006g.regnlogin.helper.MarkerClasses.POI;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
