@@ -50,7 +50,7 @@ public class MultiMedia extends YouTubeBaseActivity implements
 
 
         Intent mIntent1 = getIntent();
-        final int intValue = mIntent1.getIntExtra("id", 0);
+        final int intValue = mIntent1.getIntExtra("locCode", 0);
         Intent qrIntent = getIntent();
         final int qrValue = qrIntent.getIntExtra("locCode", 0);
 

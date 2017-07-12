@@ -2,6 +2,7 @@ package com.example.w028006g.regnlogin;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -62,6 +63,9 @@ public class BackgroundTaskPosts extends AsyncTask<String,Void,String> {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
+            }catch (Exception e )
+            {
+                Log.d("doInBackground", e.getMessage());
             }
         }
         return text;
