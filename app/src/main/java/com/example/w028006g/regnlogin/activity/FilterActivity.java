@@ -12,7 +12,11 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
+
 import com.example.w028006g.regnlogin.MarkerManager;
+
+import com.example.w028006g.regnlogin.helper.MarkerClasses.MarkerManager;
+
 import com.example.w028006g.regnlogin.R;
 
 import java.util.ArrayList;
@@ -65,7 +69,9 @@ public class FilterActivity extends AppCompatActivity
                 R.id.attractions,
                 R.id.landmarks,
                 R.id.events,
-                R.id.totems};
+                R.id.totems,
+                R.id.userpins};
+
 
         boolean[] filter = MarkerManager.getFilter();
         btnClearFilter = (Button)findViewById(R.id.clearFilter);

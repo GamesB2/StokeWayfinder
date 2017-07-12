@@ -2,17 +2,27 @@ package com.example.w028006g.regnlogin.activity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
+
 import android.support.v4.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+
+import android.util.Base64;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+
 import android.widget.ImageView;
+
 import android.widget.Toast;
 import com.android.volley.Request.Method;
 import com.android.volley.Response;
@@ -22,14 +32,23 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+
+import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+
+import com.example.w028006g.regnlogin.activity.MainActivity;
 
 import com.example.w028006g.regnlogin.MainActivity1;
 
@@ -37,18 +56,28 @@ import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.app.AppConfig;
 import com.example.w028006g.regnlogin.app.AppController;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
+
 import com.example.w028006g.regnlogin.helper.DownloadImageTask;
+
 import com.example.w028006g.regnlogin.helper.SQLiteHandler;
 import com.example.w028006g.regnlogin.helper.SessionManager;
 import com.github.gorbin.asne.core.SocialNetwork;
 import com.github.gorbin.asne.core.SocialNetworkManager;
 import com.github.gorbin.asne.core.listener.OnLoginCompleteListener;
+
 import com.github.gorbin.asne.core.listener.OnRequestSocialPersonCompleteListener;
 import com.github.gorbin.asne.core.persons.SocialPerson;
 import com.github.gorbin.asne.facebook.FacebookSocialNetwork;
 import com.github.gorbin.asne.twitter.TwitterSocialNetwork;
 import com.scottyab.aescrypt.AESCrypt;
 
+
+
+import com.github.gorbin.asne.facebook.FacebookSocialNetwork;
+import com.github.gorbin.asne.linkedin.LinkedInSocialNetwork;
+import com.github.gorbin.asne.twitter.TwitterSocialNetwork;
+
+import static android.content.Context.MODE_PRIVATE;
 
 import static com.example.w028006g.regnlogin.MainActivity1.SOCIAL_NETWORK_TAG;
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -64,6 +93,7 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
     private ProgressDialog pDialog;
     private SessionManager session;
     private SQLiteHandler db;
+
 
     private int networkId;
 
@@ -84,6 +114,7 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
     private Button linkedin;
     private Button googleplus;
     private SocialNetwork socialNetwork;
+
 
 
     public LoginActivity() {
@@ -226,7 +257,7 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
             TwitterSocialNetwork twNetwork = new TwitterSocialNetwork(this, TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_CALLBACK_URL);
             mSocialNetworkManager.addSocialNetwork(twNetwork);
 
-//            //Init and add to manager LinkedInSocialNetwork
+
 //            GooglePlusSocialNetwork gpNetwork = new GooglePlusSocialNetwork(this);
 //            mSocialNetworkManager.addSocialNetwork(gpNetwork);
 
@@ -254,12 +285,14 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
                     networkId = FacebookSocialNetwork.ID;
                     break;
 //                case GooglePlusSocialNetwork.ID:
+
 //                    googleplus.setText("Continue With");
 //                    break;
 //                case TwitterSocialNetwork.ID:
 //                    google.setText("Continue With");
 //                    networkId = GooglePlusSocialNetwork.ID;
 //                    break;
+
             }
         }
     }
@@ -282,6 +315,7 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
                 case R.id.facebook:
                     networkId = FacebookSocialNetwork.ID;
                     break;
+
                 case R.id.googleplus:
                     networkId = 3;
                     break;
@@ -307,6 +341,7 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
                     startProfile(socialNetwork.getID());
                 }
             }
+
 
         }
     };
@@ -356,6 +391,7 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
         });
 
         socialNetwork.requestCurrentPerson();
+
         startActivity(maps);
     }
     /**

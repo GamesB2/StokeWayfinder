@@ -23,7 +23,9 @@
                 android:layout_height="300dp"
                 android:layout_alignBottom="@+id/linearLayout"
                 android:scaleType="centerCrop"
+
                 android:src="@color/bg_login" />
+
 
             <android.support.v7.widget.Toolbar
                 android:layout_width="match_parent"
@@ -84,6 +86,7 @@
                     android:text="My Purchases"
                     android:layout_marginTop="30dip"
                     android:background="#0d80d9"
+
                     android:textColor="@color/white"
                     android:textSize="15dp" />
 
@@ -93,6 +96,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:background="#0d80d9"
+
                     android:text="@string/btn_logout"
                     android:textAllCaps="false"
                     android:textColor="@color/white"

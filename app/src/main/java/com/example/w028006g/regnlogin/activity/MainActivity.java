@@ -1,6 +1,6 @@
 package com.example.w028006g.regnlogin.activity;
-
 import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
+
 import com.example.w028006g.regnlogin.MainActivity1;
 import com.example.w028006g.regnlogin.activity.LoginActivity;
 import com.example.w028006g.regnlogin.app.AppController;
@@ -43,6 +43,10 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
+import android.util.Log;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -73,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recommend);
+
 
         Intent intent = new Intent(MainActivity.this, GeolocationService.class);
         startService(intent);
@@ -115,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
 //        txtEmail.setText(email);
 
 
+
         try {
             PackageInfo info = getPackageManager().getPackageInfo(
                     "com.example.w028006g.regnlogin",
@@ -132,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Logout button click event
+
 //        btnLogout.setOnClickListener(new View.OnClickListener() {
 //
 //            @Override
@@ -201,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -209,6 +217,7 @@ public class MainActivity extends AppCompatActivity {
 
         new DownloadImageTask((ImageView) findViewById(R.id.img_userprofile))
                 .execute("https://concussive-shirt.000webhostapp.com/uploads/" + u_id + ".png");
+
     }
 
     public void checkIntent(Intent intent) {
@@ -228,6 +237,7 @@ public class MainActivity extends AppCompatActivity {
             session.setLogin(false);
             db.deleteUsers();
         }
+
 
         // Launching the login activity
         Intent intent = new Intent(MainActivity.this, MainActivity1.class);

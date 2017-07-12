@@ -59,6 +59,15 @@
             android:checked="true"
             android:text="Totems"/>
 
+
+        <CheckBox
+            android:id="@+id/userpins"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/bg_register"
+            android:checked="true"
+            android:text="Your Pins"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -259,6 +268,7 @@
             android:text="Hobbies"
             android:buttonTint="@color/bg_register"/>
 
+
         <CheckBox
             android:id="@+id/checkBox55"
             android:layout_width="match_parent"
@@ -266,9 +276,6 @@
             android:checked="true"
             android:text="CheckBox"
             android:buttonTint="@color/bg_register"/>
-
-
-
 
 
     </LinearLayout>

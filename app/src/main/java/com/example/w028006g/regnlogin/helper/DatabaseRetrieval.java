@@ -6,16 +6,28 @@ import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
+
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.w028006g.regnlogin.activity.MapsActivityNew;
+
+import android.widget.Toast;
+
+import com.example.w028006g.regnlogin.activity.MapsActivityNew;
+import com.example.w028006g.regnlogin.helper.MarkerClasses.Attraction;
+import com.example.w028006g.regnlogin.helper.MarkerClasses.Event;
+import com.example.w028006g.regnlogin.helper.MarkerClasses.Landmark;
+import com.example.w028006g.regnlogin.helper.MarkerClasses.POI;
+import com.example.w028006g.regnlogin.helper.MarkerClasses.Post;
+
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -40,6 +52,10 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+
 public class DatabaseRetrieval  extends Service {
 
     private String TAG = DatabaseRetrieval.class.getSimpleName();
@@ -59,6 +75,9 @@ public class DatabaseRetrieval  extends Service {
     public static Event event;
     public static Ticket ticket;
     public static Post post;
+
+    public static int ncount = 0;
+
 
 
     //Event Stuff
@@ -122,12 +141,14 @@ public class DatabaseRetrieval  extends Service {
     }
 
 
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // Let it continue running until it is stopped.
         Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
         return START_STICKY;
     }
+
 
     @Override
     public void onDestroy() {

@@ -7,14 +7,18 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
+
 import android.location.Address;
 import android.location.Geocoder;
+
 import android.location.LocationManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
+
 import android.support.v4.app.Fragment;
+
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +26,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
 import android.widget.Button;
 import android.widget.EditText;
 import android.support.design.widget.BottomNavigationView;
@@ -29,12 +34,29 @@ import android.support.design.widget.BottomNavigationView;
 import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
 import com.example.w028006g.regnlogin.GeolocationService;
 import com.example.w028006g.regnlogin.MarkerManager;
+=======
+import android.support.design.widget.BottomNavigationView;
+import android.widget.ImageButton;
+
+import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
+import com.example.w028006g.regnlogin.GeolocationService;
+import com.example.w028006g.regnlogin.helper.MarkerClasses.MarkerManager;
+
 import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.SimpleGeofence;
 import com.example.w028006g.regnlogin.SimpleGeofenceStore;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
+
 import com.example.w028006g.regnlogin.helper.POI;
 import com.github.gorbin.asne.twitter.TwitterSocialNetwork;
+=======
+import com.example.w028006g.regnlogin.helper.MarkerClasses.POI;
+import com.example.w028006g.regnlogin.helper.MarkerClasses.UserPin;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -47,6 +69,7 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+<
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,10 +78,13 @@ import java.util.Map;
 
 
 public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCallback
+
 {
     //Assigns the String "TAG" the name of the class for error reports
     private static final String TAG = MapsActivityNew.class.getSimpleName();
     private LatLngBounds Demo = new LatLngBounds(new LatLng(49.495091,-10.722460), new LatLng(59.497134,1.843598));
+    private LatLngBounds StokeBounds = new LatLngBounds(new LatLng(52.722390, -2.654259), new LatLng(53.252159, -1.687220));
+
     private static ArrayList<POI> poiArrayList = new ArrayList<>();
     LocationManager locationManager;
     private boolean pauseState = false;
@@ -99,6 +125,9 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     private static final String NOTIFICATION_MSG = "NOTIFICATION MSG";
     public Button btnQR;
     public Button btnFilter;
+
+    public ImageButton btnFilter;
+
 
     static public boolean geofencesAlreadyRegistered = false;
 
@@ -157,7 +186,9 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
                         break;
 
                     case R.id.ic_Rec:
+
                         Intent intent4 = new Intent(getApplicationContext(), MainActivity.class);
+
                         startActivity(intent4);
                         break;
                 }
@@ -169,8 +200,8 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         startService(new Intent(this, GeolocationService.class));
 
 
+        btnFilter = (ImageButton) findViewById(R.id.FilterButton);
 
-        btnFilter = (Button) findViewById(R.id.FilterButton);
         btnFilter.setOnClickListener(new View.OnClickListener()
         {
 
@@ -181,8 +212,30 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
                 startActivity(i);
             }
         });
-    }
 
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+
+        autocompleteFragment.setBoundsBias(StokeBounds);
+
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                LatLng latlng = place.getLatLng();
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
+                UserPin userPin = new UserPin(place);
+                poiArrayList.add(userPin);
+                Log.i(TAG, "Place: " + place.getName());
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                Log.i(TAG, "An error occurred: " + status);
+            }
+        });
+    }
 
 
     public void onClick(View view)
@@ -301,31 +354,30 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
 
 
     //Search implementation, pins a marker on the location of the user
-    public void onMapSearch(View view) {
-        EditText locationSearch = (EditText) findViewById(R.id.gSearch);
-        String location = locationSearch.getText().toString();
-        List<Address> addressList = null;
-
-        if (!location.equals("")) {
-            Geocoder geocoder = new Geocoder(this);
-            try {
-                addressList = geocoder.getFromLocationName(location, 1);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Address address = addressList.get(0);
-
-            //Marker mSearch = new Marker();
-            //mSearch.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.searchbutton));
-
-            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-            Marker mSearch = (mMap.addMarker(new MarkerOptions().position(latLng).title("Search query").icon(BitmapDescriptorFactory.fromResource(R.drawable.searchbutton))));
-            mSearch.setDraggable(true);
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        }
-
-    }
+//    public void onMapSearch(View view) {
+//        EditText locationSearch = (EditText) findViewById(R.id.place_autocomplete_fragment);
+//        String location = locationSearch.getText().toString();
+//        List<Address> addressList = null;
+//
+//        if (!location.equals("")) {
+//            Geocoder geocoder = new Geocoder(this);
+//            try {
+//                addressList = geocoder.getFromLocationName(location, 1);
+//
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            Address address = addressList.get(0);
+//
+//            //Marker mSearch = new Marker();
+//            //mSearch.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.searchbutton));
+//
+//            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+//            Marker mSearch = (mMap.addMarker(new MarkerOptions().position(latLng).title("Search query").icon(BitmapDescriptorFactory.fromResource(R.drawable.searchbutton))));
+//            mSearch.setDraggable(true);
+//            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+//        }
+//}
 
     @Override
     protected void onResume()
@@ -350,10 +402,10 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     @Override
     public void onMapReady(GoogleMap googleMap)
     {
-
         mMap = googleMap;
         mMap.setLatLngBoundsForCameraTarget(Demo);
         mMap.setMinZoomPreference(5);
+
 
         //Calls function to display geofence circle
         displayGeofences();
@@ -397,6 +449,13 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         mm.popMap();
     }
 
+
+    @Override
+    public boolean onMarkerClick(Marker marker)
+    {
+
+        return false;
+    }
 }
 
 

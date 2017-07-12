@@ -3,6 +3,9 @@ package com.example.w028006g.regnlogin.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+
+import android.content.Intent;
+
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,6 +23,7 @@ import android.view.MenuItem;
 
 import android.widget.Button;
 import android.widget.ImageView;
+
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -47,6 +51,21 @@ import com.google.android.gms.common.api.Status;
 
 import android.view.View;
 import android.widget.Toast;
+import android.widget.TextView;
+
+import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
+import com.example.w028006g.regnlogin.Person;
+import com.example.w028006g.regnlogin.R;
+import com.example.w028006g.regnlogin.Tickets_My;
+import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
+import com.example.w028006g.regnlogin.helper.DownloadImageTask;
+import com.example.w028006g.regnlogin.helper.MyRecyclerViewAdapterPosts;
+import com.example.w028006g.regnlogin.helper.MarkerClasses.Post;
+import com.example.w028006g.regnlogin.helper.SQLiteHandler;
+import com.example.w028006g.regnlogin.helper.SessionManager;
+
+import android.view.View;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -69,10 +88,12 @@ import java.util.Set;
 
 import static com.example.w028006g.regnlogin.app.AppConfig.CONNECTION_TIMEOUT;
 import static com.example.w028006g.regnlogin.app.AppConfig.READ_TIMEOUT;
+
 import static com.example.w028006g.regnlogin.app.AppController.personEmail;
 import static com.example.w028006g.regnlogin.app.AppController.personName;
 
 public class Profile extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
+
 
     private TextView txtName;
     private TextView txtEmail;
@@ -87,14 +108,18 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
     private Button btnLogout;
     private Button btnMaps;
     private ImageView imgUser;
+
     private GoogleApiClient mGoogleApiClient;
+
 
 
     private SQLiteHandler db;
     private SessionManager session;
     public static Person userDetails;
+
     private SocialNetwork socialNetwork;
     private int networkId;
+
 
     String name;
     String email;
@@ -107,6 +132,9 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
     private Transition transition;
     //flag to swap between scenes
     private boolean start;
+
+
+    private ArrayList<Integer> post = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -133,9 +161,11 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
         menuItem.setChecked(true);
 
 
+
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
                 switch (item.getItemId()) {
                     case R.id.ic_map:
                         Intent intent = new Intent(getApplicationContext(), MapsActivityNew.class);
@@ -158,7 +188,9 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
                         break;
 
                     case R.id.ic_Rec:
+
                         Intent intent4 = new Intent(getApplicationContext(), MainActivity.class);
+
                         startActivity(intent4);
                         break;
                 }
@@ -168,7 +200,9 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
 
         //Download user image
         new DownloadImageTask((ImageView) findViewById(R.id.profilePic))
+
                 .execute("https://concussive-shirt.000webhostapp.com/uploads/" + MainActivity.userDetails.getU_id() + ".png");
+
         // Displaying the user details on the screen
         txtName.setText(MainActivity.userDetails.getName());
         txtEmail.setText(MainActivity.userDetails.getEmail());
@@ -208,8 +242,6 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
                 logoutUser();
             }
         });
-
-
 
         SharedPreferences prefs = AppController.getInstance().getSharedPreferences("MYPREFS", Context.MODE_PRIVATE);
         networkId = prefs.getInt("SocialNet", -1);
@@ -264,6 +296,7 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
     }
+
     public void changeScene(View v){
 
         //check flag
@@ -405,6 +438,7 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
                         posts = c.getString("posts");
                     }
 
+
                     posts = posts.substring(1);
                     String[] postsParts = posts.split(",");
                     ArrayList<Integer> post = new ArrayList<>();
@@ -441,7 +475,6 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
                     System.out.println(posts);
 
                     // Launch main activity
-
                 } else {
                     // Error in login. Get the error message
                     String errorMsg = jObj.getString("error_msg");
@@ -461,6 +494,7 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
     }
 
     private void logoutUser() {
+
         switch (networkId) {
             case -1:
                 session.setLogin(false);

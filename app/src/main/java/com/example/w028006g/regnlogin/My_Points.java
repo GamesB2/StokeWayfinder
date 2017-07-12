@@ -13,6 +13,9 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.example.w028006g.regnlogin.activity.MainActivity;
+
+import com.example.w028006g.regnlogin.activity.StartScreen;
+
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 import com.example.w028006g.regnlogin.helper.MyRecyclerViewAdapter;
 import com.example.w028006g.regnlogin.helper.Ticket;
@@ -59,7 +62,9 @@ public class My_Points extends AppCompatActivity {
         setContentView(R.layout.tickets);
 
 
+
         new My_Points.AsyncLogin().execute(MainActivity.userDetails.getEmail());
+
 
 
 

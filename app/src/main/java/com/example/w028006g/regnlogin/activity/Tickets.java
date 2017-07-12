@@ -1,8 +1,6 @@
 package com.example.w028006g.regnlogin.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -49,6 +47,7 @@ public class Tickets extends AppCompatActivity {
 
 
 
+
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView_Bar);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
         Menu menu = bottomNavigationView.getMenu();
@@ -90,6 +89,7 @@ public class Tickets extends AppCompatActivity {
                 return false;
             }
         });
+
 
 
 

@@ -94,6 +94,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="13dp" />
+
         </GridLayout>
 
 
@@ -105,15 +106,18 @@
             android:layout_height="40dip"
             android:layout_gravity="center"
             android:layout_marginTop="15dip"
+
             android:background="@color/white"
             android:text="@string/btn_login"
             android:textColor="#000"/>
+
 
         <!-- Link to Login Screen -->
 
         <TextView
             android:id="@+id/loginvia"
             android:layout_width="wrap_content"
+<<<<<<< HEAD
             android:layout_height="37dp"
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"
