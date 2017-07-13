@@ -169,28 +169,37 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
                     case R.id.ic_map:
                         Intent intent = new Intent(getApplicationContext(), MapsActivityNew.class);
                         startActivity(intent);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
                     case R.id.ic_Profile:
                         Intent intent1 = new Intent(getApplicationContext(), Profile.class);
                         startActivity(intent1);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
                     case R.id.ic_qr:
                         Intent intent2 = new Intent(getApplicationContext(), qrActivity.class);
                         startActivity(intent2);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
                     case R.id.ic_shop:
                         Intent intent3 = new Intent(getApplicationContext(), Tickets.class);
                         startActivity(intent3);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
                     case R.id.ic_Rec:
 
                         Intent intent4 = new Intent(getApplicationContext(), MainActivity.class);
-
                         startActivity(intent4);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
                 }
                 return false;
@@ -212,6 +221,7 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
             public void onClick(View v) {
                 Intent intent4 = new Intent(Profile.this, Tickets_My.class);
                 startActivity(intent4);
+                overridePendingTransition(0,0);
             }
         });
 
@@ -523,6 +533,14 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
         // Launching the login activity
         Intent intent = new Intent(Profile.this, MainActivity1.class);
         startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+        overridePendingTransition(0, 0);
         finish();
     }
 }
