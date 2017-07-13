@@ -245,37 +245,37 @@ public class Tickets_My extends AppCompatActivity {
                         JSONObject c = contacts.getJSONObject(i);
                         tickets = c.getString("tickets");
                     }
+                    if(!tickets.equalsIgnoreCase("")) {
+                        tickets = tickets.substring(1);
+                        String[] ticketParts = tickets.split(",");
+                        ArrayList<Integer> ticket = new ArrayList<>();
 
-                    tickets = tickets.substring(1);
-                    String[] ticketParts = tickets.split(",");
-                    ArrayList<Integer> ticket = new ArrayList<>();
+                        //Now Sort
 
-                    //Now Sort
+                        Set<String> mySet = new HashSet<String>(Arrays.asList(ticketParts));
+                        for (String s : mySet) {
+                            ticket.add(Integer.parseInt(s));
+                        }
 
-                    Set<String> mySet = new HashSet<String>(Arrays.asList(ticketParts));
-                    for (String s : mySet) {
-                        ticket.add(Integer.parseInt(s));
-                    }
+                        for (int i = 0; i < ticket.size(); i++) {
+                            for (int j = 0; j < DatabaseRetrieval.ticketsAl.size(); j++) {
+                                Integer check = ticket.get(i);
 
-                    for (int i = 0; i < ticket.size(); i++) {
-                        for (int j = 0; j < DatabaseRetrieval.ticketsAl.size(); j++) {
-                            Integer check = ticket.get(i);
-
-                            if (check == DatabaseRetrieval.ticketsAl.get(j).getId()) {
-                                //if(!post.contains(postsParts[i]))
-                                //{
-                                tickList.add(DatabaseRetrieval.ticketsAl.get(j));
-                                //}
+                                if (check == DatabaseRetrieval.ticketsAl.get(j).getId()) {
+                                    //if(!post.contains(postsParts[i]))
+                                    //{
+                                    tickList.add(DatabaseRetrieval.ticketsAl.get(j));
+                                    //}
+                                }
                             }
                         }
+
+                        mRecyclerView = (RecyclerView) findViewById(R.id.rv);
+                        mRecyclerView.setLayoutManager(new LinearLayoutManager(Tickets_My.this));
+                        adapter = new MyRecyclerViewAdapter(Tickets_My.this, tickList);
+                        mRecyclerView.setAdapter(adapter);
+
                     }
-
-                    mRecyclerView = (RecyclerView) findViewById(R.id.rv);
-                    mRecyclerView.setLayoutManager(new LinearLayoutManager(Tickets_My.this));
-                    adapter = new MyRecyclerViewAdapter(Tickets_My.this, tickList);
-                    mRecyclerView.setAdapter(adapter);
-
-
                     // Launch main activity
 
                 } else {
