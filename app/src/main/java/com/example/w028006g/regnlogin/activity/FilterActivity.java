@@ -12,11 +12,7 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
-
-import com.example.w028006g.regnlogin.MarkerManager;
-
 import com.example.w028006g.regnlogin.helper.MarkerClasses.FilterManager;
-
 import com.example.w028006g.regnlogin.R;
 
 import java.util.ArrayList;
@@ -71,7 +67,6 @@ public class FilterActivity extends AppCompatActivity
                 R.id.events,
                 R.id.totems,
                 R.id.userpins};
-
 
         boolean[] filter = FilterManager.getFilter();
         btnClearFilter = (Button)findViewById(R.id.clearFilter);
@@ -153,7 +148,7 @@ public class FilterActivity extends AppCompatActivity
                 {
                     slider.setProgress(MAX);
                     slider.setEnabled(false);
-                    MarkerManager.setRangeFilter(false);
+                    FilterManager.setRangeFilter(false);
 
                     radius.setText(String.valueOf(MAX));
                     radius.setEnabled(false);
@@ -163,7 +158,7 @@ public class FilterActivity extends AppCompatActivity
                 }
                 else if(!swRadius.isChecked())
                 {
-                    MarkerManager.setRangeFilter(true);
+                    FilterManager.setRangeFilter(true);
                     slider.setEnabled(true);
 
                     radius.setText(String.valueOf(MAX));
@@ -250,14 +245,14 @@ public class FilterActivity extends AppCompatActivity
         {
             if(checkBoxes.get(i).isChecked())
             {
-                MarkerManager.filterIn(i);
+                FilterManager.filterIn(i);
             }
             else
             {
-                MarkerManager.filterOut(i);
+                FilterManager.filterOut(i);
             }
         }
-        MarkerManager.setMaxRange(nRadius);
+        FilterManager.setMaxRange(nRadius);
         this.finish();
     }
 }

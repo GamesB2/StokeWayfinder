@@ -7,13 +7,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
-
 import android.location.LocationManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
-
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -24,19 +22,21 @@ import android.view.View;
 
 import android.widget.Button;
 import android.support.design.widget.BottomNavigationView;
+import android.widget.ImageButton;
 
 import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
 import com.example.w028006g.regnlogin.GeolocationService;
-
 import com.example.w028006g.regnlogin.helper.MarkerClasses.FilterManager;
-
 import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.SimpleGeofence;
 import com.example.w028006g.regnlogin.SimpleGeofenceStore;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
-
 import com.example.w028006g.regnlogin.helper.MarkerClasses.POI;
-
+import com.example.w028006g.regnlogin.helper.MarkerClasses.UserPin;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -46,24 +46,25 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
+import com.google.maps.android.clustering.ClusterManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 
-public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCallback
+public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener
 
 {
     //Assigns the String "TAG" the name of the class for error reports
     private static final String TAG = MapsActivityNew.class.getSimpleName();
     private LatLngBounds Demo = new LatLngBounds(new LatLng(49.495091,-10.722460), new LatLng(59.497134,1.843598));
     private LatLngBounds StokeBounds = new LatLngBounds(new LatLng(52.722390, -2.654259), new LatLng(53.252159, -1.687220));
-
     private static ArrayList<POI> poiArrayList = new ArrayList<>();
     LocationManager locationManager;
+    private ClusterManager<POI> clusterManager;
     private boolean pauseState = false;
     private FilterManager filterManager;
 
@@ -73,31 +74,6 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     public String lat;
     public String lon;
     private GoogleMap mMap;
-
-    //List of constants declared to sort the markers
-    final int MUSIC= 0;
-    final int BUSINESS= 1;
-    final int FOOD_AND_DRINK=2;
-    final int COMMUNITY=3;
-    final int ARTS=4;
-    final int FILM_AND_MEDIA=5;
-    final int SPORTS=6;
-    final int HEALTH_AND_FITNESS=7;
-    final int SCIENCE_AND_TECH=8;
-    final int TRAVEL_AND_OUTDOOR=9;
-    final int CHARITY=10;
-    final int SPIRITUALITY=11;
-    final int FAMILY_AND_EDUCATION=12;
-    final int HOLIDAY=13;
-    final int GOVERNMENT=14;
-    final int FASHION=15;
-    final int HOME_AND_LIFESTYLE=16;
-    final int AUTO_BOAT_AND_AIR=17;
-    final int HOBBIES=18;
-
-    final int ATTRACTIONS=19;
-    final int LANDMARKS=20;
-    final int EVENTS=21;
 
     private static final String NOTIFICATION_MSG = "NOTIFICATION MSG";
     public Button btnQR;
@@ -175,9 +151,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         //Starts Geolocation Service
         startService(new Intent(this, GeolocationService.class));
 
-
-        btnFilter = (Button) findViewById(R.id.FilterButton);
-
+        btnFilter = (ImageButton) findViewById(R.id.FilterButton);
         btnFilter.setOnClickListener(new View.OnClickListener()
         {
 
@@ -189,30 +163,29 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
             }
         });
 
-//        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
-//                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-//
-//        autocompleteFragment.setBoundsBias(StokeBounds);
-//
-//        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-//            @Override
-//            public void onPlaceSelected(Place place) {
-//                // TODO: Get info about the selected place.
-//                LatLng latlng = place.getLatLng();
-//                mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
-//                UserPin userPin = new UserPin(place);
-//                poiArrayList.add(userPin);
-//                Log.i(TAG, "Place: " + place.getName());
-//            }
-//
-//            @Override
-//            public void onError(Status status) {
-//                // TODO: Handle the error.
-//                Log.i(TAG, "An error occurred: " + status);
-//            }
-//        });
-    }
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
 
+        autocompleteFragment.setBoundsBias(StokeBounds);
+
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                LatLng latlng = place.getLatLng();
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
+                UserPin userPin = new UserPin(place);
+                poiArrayList.add(userPin);
+                Log.i(TAG, "Place: " + place.getName());
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                Log.i(TAG, "An error occurred: " + status);
+            }
+        });
+    }
 
     public void onClick(View view)
     {
@@ -360,8 +333,10 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     {
         if (pauseState)
         {
+            clusterManager.clearItems();
+            fm.popFilter();
             mMap.clear();
-            filterManager.popMap();
+            fillCM();
         }
         pauseState = true;
         startService(new Intent(this, DatabaseRetrieval.class));
@@ -381,6 +356,15 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         mMap = googleMap;
         mMap.setLatLngBoundsForCameraTarget(Demo);
         mMap.setMinZoomPreference(5);
+        clusterManager = new ClusterManager<>(this,mMap);
+        mMap.setOnCameraIdleListener(clusterManager);
+        mMap.setOnMarkerClickListener(clusterManager);
+
+        fm = new FilterManager(mMap,poiArrayList);
+
+        fillCM();
+
+
 
 
         //Calls function to display geofence circle
@@ -425,13 +409,22 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         filterManager.popMap();
     }
 
-//
-//    @Override
-//    public boolean onMarkerClick(Marker marker)
-//    {
-//
-//        return false;
-//    }
+    @Override
+    public boolean onMarkerClick(Marker marker)
+    {
+
+        return false;
+    }
+
+    public void fillCM()
+    {
+        ArrayList<POI> points = new ArrayList<>();
+        points = FilterManager.getFilteredPoints();
+        for(int i = 0; i < points.size(); i++)
+        {
+            clusterManager.addItem(points.get(i));
+        }
+    }
 }
 
 

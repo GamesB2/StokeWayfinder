@@ -19,6 +19,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.ClusterManager;
 
 import java.util.ArrayList;
 
@@ -29,7 +30,7 @@ import java.util.ArrayList;
 public class FilterManager
 {
     public static ArrayList<POI> poiArrayList = new ArrayList<>();
-    public static ArrayList<Marker> markerArrayList = new ArrayList<>();
+    private static ArrayList<POI> FilteredPoints;
     public static GoogleMap mMap;
     private static boolean[] filter;
     private static int maxRange = 50000;
@@ -38,14 +39,15 @@ public class FilterManager
     private static LatLng userLatLng;
 
     //Group Categories
-    final static int ATTRACTIONS=IconManager.nArrIconID.length+1;
-    final static int LANDMARKS=ATTRACTIONS+1;
-    final static int EVENTS=ATTRACTIONS+2;
-    final static int TOTEM=ATTRACTIONS+3;
+    final static int ATTRACTIONS= IconManager.nArrIconID.length;
+    final static int LANDMARKS= ATTRACTIONS+1;
+    final static int EVENTS= ATTRACTIONS+2;
+    final static int TOTEM= ATTRACTIONS+3;
     final static int USERPINS = ATTRACTIONS+4;
 
     public FilterManager(GoogleMap map, ArrayList<POI> arrayList)
     {
+
         poiArrayList = arrayList;
         mMap = map;
         filter = new boolean[25];
@@ -69,11 +71,13 @@ public class FilterManager
     }
 
     //Populates the maps with ALL markers and icons from the POI Array
-    public static void popMap()
+    public static void popFilter()
     {
         location = new Location("");
         location.setLatitude(userLatLng.latitude);
         location.setLongitude(userLatLng.longitude);
+
+        FilteredPoints = new ArrayList<>();
 
         if (!filter[USERPINS])
         {
@@ -103,7 +107,6 @@ public class FilterManager
     //Populates the maps with Attractions markers from the POI Array
     public static void popMapAtt()
     {
-        Marker temp = null;
         for (int i = 0; i < poiArrayList.size(); i++)
         {
             POI item = poiArrayList.get(i);
@@ -121,13 +124,13 @@ public class FilterManager
 
                 if ((!rangeFilter || distance <= maxRange)&&(!filter[att.getIcon()]))
                 {
-                    temp = mMap.addMarker(new MarkerOptions()
-                            .position(dest)
-                            .title(add.getFeatureName())
-                            .snippet(item.getDescription())
-                            .icon(BitmapDescriptorFactory.fromResource(IconManager.nArrIconID[att.getIcon()])));
+//                    temp = mMap.addMarker(new MarkerOptions()
+//                            .position(dest)
+//                            .title(add.getFeatureName())
+//                            .snippet(item.getDescription())
+//                            .icon(BitmapDescriptorFactory.fromResource(IconManager.nArrIconID[att.getIcon()])));
 
-                    markerArrayList.add(temp);
+                    FilteredPoints.add(item);
                 }
             }
         }
@@ -143,7 +146,7 @@ public class FilterManager
             POI item = poiArrayList.get(i);
             if (item instanceof Landmark)
             {
-                Landmark lnd = (Landmark) item;
+                Landmark lnd = (Landmark)item;
                 Address add = item.getAddressInfo();
                 LatLng dest = new LatLng(add.getLatitude(), add.getLongitude());
 
@@ -155,13 +158,13 @@ public class FilterManager
 
                 if ((!rangeFilter || distance <= maxRange))
                 {
-                    temp = mMap.addMarker(new MarkerOptions()
-                            .position(dest)
-                            .title(add.getFeatureName())
-                            .snippet(item.getDescription())
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.landmark)));
+//                    temp = mMap.addMarker(new MarkerOptions()
+//                            .position(dest)
+//                            .title(add.getFeatureName())
+//                            .snippet(item.getDescription())
+//                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.landmark)));
 
-                    markerArrayList.add(temp);
+                    FilteredPoints.add(item);
                 }
             }
         }
@@ -176,7 +179,7 @@ public class FilterManager
             POI item = poiArrayList.get(i);
             if (item instanceof Event)
             {
-                Event event = (Event)item;
+                Event evnt = (Event)item;
                 Address add = item.getAddressInfo();
                 LatLng dest = new LatLng(add.getLatitude(), add.getLongitude());
 
@@ -186,16 +189,16 @@ public class FilterManager
 
                 float distance = location.distanceTo(destLoc);
 
-                if ((!rangeFilter || distance <= maxRange)&&(!filter[event.getIcon()]))
+                if ((!rangeFilter || distance <= maxRange)&&(!filter[evnt.getIcon()]))
                 {
-                    Bitmap bitmap = changeIcon(event.getIcon());
-                    temp = mMap.addMarker(new MarkerOptions()
-                            .position(dest)
-                            .title(add.getFeatureName())
-                            .snippet(item.getDescription())
-                            .icon(BitmapDescriptorFactory.fromResource(IconManager.nArrIconID[event.getIcon()])));
+//                    Bitmap bitmap = changeIcon(event.getIcon());
+//                    temp = mMap.addMarker(new MarkerOptions()
+//                            .position(dest)
+//                            .title(add.getFeatureName())
+//                            .snippet(item.getDescription())
+//                            .icon(BitmapDescriptorFactory.fromResource(IconManager.nArrIconID[event.getIcon()])));
 
-                    markerArrayList.add(temp);
+                    FilteredPoints.add(item);
                 }
             }
         }
@@ -221,13 +224,13 @@ public class FilterManager
 
                 if ((!rangeFilter || distance <= maxRange))
                 {
-                    temp = mMap.addMarker(new MarkerOptions()
-                            .position(dest)
-                            .title(add.getFeatureName())
-                            .snippet(item.getDescription())
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.totem)));
+//                    temp = mMap.addMarker(new MarkerOptions()
+//                            .position(dest)
+//                            .title(add.getFeatureName())
+//                            .snippet(item.getDescription())
+//                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.totem)));
 
-                    markerArrayList.add(temp);
+                    FilteredPoints.add(item);
                 }
             }
         }
@@ -235,7 +238,6 @@ public class FilterManager
 
     public static void popMapPins()
     {
-        Marker temp = null;
         for (int i = 0; i < poiArrayList.size(); i++)
         {
             POI item = poiArrayList.get(i);
@@ -253,13 +255,13 @@ public class FilterManager
                 //float distance = location.distanceTo(destLoc);
                 //if((!rangeFilter || distance <= maxRange))
                 {
-                    temp = mMap.addMarker(new MarkerOptions()
-                            .position(dest)
-                            .title(add.getFeatureName())
-                            .snippet(item.getDescription())
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.userpin)));
+//                    temp = mMap.addMarker(new MarkerOptions()
+//                            .position(dest)
+//                            .title(add.getFeatureName())
+//                            .snippet(item.getDescription())
+//                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.userpin)));
 
-                    markerArrayList.add(temp);
+                    FilteredPoints.add(item);
                 }
             }
         }
@@ -285,10 +287,17 @@ public class FilterManager
         return rangeFilter;
     }
 
+    public static ArrayList<POI> getFilteredPoints()
+    {
+        popFilter();
+        return FilteredPoints;
+    }
+
     public static Bitmap changeIcon(int bmp)
     {
         Bitmap icon = null;
         return icon;
     }
+
 }
 
