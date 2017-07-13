@@ -24,7 +24,7 @@ import android.widget.ImageButton;
 
 import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
 import com.example.w028006g.regnlogin.GeolocationService;
-import com.example.w028006g.regnlogin.helper.MarkerClasses.MarkerManager;
+import com.example.w028006g.regnlogin.helper.MarkerClasses.FilterManager;
 import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.SimpleGeofence;
 import com.example.w028006g.regnlogin.SimpleGeofenceStore;
@@ -46,6 +46,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.ClusterManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,8 +61,9 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     private LatLngBounds StokeBounds = new LatLngBounds(new LatLng(52.722390, -2.654259), new LatLng(53.252159, -1.687220));
     private static ArrayList<POI> poiArrayList = new ArrayList<>();
     LocationManager locationManager;
+    private ClusterManager<POI> clusterManager;
     private boolean pauseState = false;
-    private MarkerManager mm;
+    private FilterManager fm;
 
     //Constant used as a request code for the location permissions
     final int MY_PERMISSIONS_REQUEST_LOCATION = 14;
@@ -69,31 +71,6 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     public String lat;
     public String lon;
     private GoogleMap mMap;
-
-    //List of constants declared to sort the markers
-    final int MUSIC= 0;
-    final int BUSINESS= 1;
-    final int FOOD_AND_DRINK=2;
-    final int COMMUNITY=3;
-    final int ARTS=4;
-    final int FILM_AND_MEDIA=5;
-    final int SPORTS=6;
-    final int HEALTH_AND_FITNESS=7;
-    final int SCIENCE_AND_TECH=8;
-    final int TRAVEL_AND_OUTDOOR=9;
-    final int CHARITY=10;
-    final int SPIRITUALITY=11;
-    final int FAMILY_AND_EDUCATION=12;
-    final int HOLIDAY=13;
-    final int GOVERNMENT=14;
-    final int FASHION=15;
-    final int HOME_AND_LIFESTYLE=16;
-    final int AUTO_BOAT_AND_AIR=17;
-    final int HOBBIES=18;
-
-    final int ATTRACTIONS=19;
-    final int LANDMARKS=20;
-    final int EVENTS=21;
 
     private static final String NOTIFICATION_MSG = "NOTIFICATION MSG";
     public ImageButton btnFilter;
@@ -348,8 +325,10 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     {
         if (pauseState)
         {
+            clusterManager.clearItems();
+            fm.popFilter();
             mMap.clear();
-            mm.popMap();
+            fillCM();
         }
         pauseState = true;
         startService(new Intent(this, DatabaseRetrieval.class));
@@ -369,6 +348,15 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         mMap = googleMap;
         mMap.setLatLngBoundsForCameraTarget(Demo);
         mMap.setMinZoomPreference(5);
+        clusterManager = new ClusterManager<>(this,mMap);
+        mMap.setOnCameraIdleListener(clusterManager);
+        mMap.setOnMarkerClickListener(clusterManager);
+
+        fm = new FilterManager(mMap,poiArrayList);
+
+        fillCM();
+
+
 
 
         //Calls function to display geofence circle
@@ -408,9 +396,8 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
             centerOn(lat, lon);
         }
 
-        //Executes popMap to populate the markers on the maps
-        mm = new MarkerManager(mMap,poiArrayList);
-        mm.popMap();
+        //Executes popFilter to populate the markers on the maps
+        //fm.popFilter();
     }
 
     @Override
@@ -418,6 +405,16 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     {
 
         return false;
+    }
+
+    public void fillCM()
+    {
+        ArrayList<POI> points = new ArrayList<>();
+        points = FilterManager.getFilteredPoints();
+        for(int i = 0; i < points.size(); i++)
+        {
+            clusterManager.addItem(points.get(i));
+        }
     }
 }
 

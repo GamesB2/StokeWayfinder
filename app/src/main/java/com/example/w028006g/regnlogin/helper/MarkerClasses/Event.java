@@ -27,9 +27,9 @@ public class Event extends IconManager
 
     public void setStartDate(String date, String time)
     {
-        String sYear = date.substring(0,4);
-        String sMonth= date.substring(5,7);
-        String sDay= date.substring(8);
+        String sYear    = date.substring(0,4);
+        String sMonth   = date.substring(5,7);
+        String sDay     = date.substring(8);
 
         String sHour    = time.substring(0,2);
         String sMin     = time.substring(3,5);

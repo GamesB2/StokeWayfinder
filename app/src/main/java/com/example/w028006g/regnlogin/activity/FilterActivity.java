@@ -12,7 +12,7 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.example.w028006g.regnlogin.helper.MarkerClasses.MarkerManager;
+import com.example.w028006g.regnlogin.helper.MarkerClasses.FilterManager;
 import com.example.w028006g.regnlogin.R;
 
 import java.util.ArrayList;
@@ -33,8 +33,6 @@ public class FilterActivity extends AppCompatActivity
     public EditText radius;
     private int MAX = 50000;
     public int nRadius;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -68,7 +66,7 @@ public class FilterActivity extends AppCompatActivity
                 R.id.totems,
                 R.id.userpins};
 
-        boolean[] filter = MarkerManager.getFilter();
+        boolean[] filter = FilterManager.getFilter();
         btnClearFilter = (Button)findViewById(R.id.clearFilter);
         btnClearMap = (Button)findViewById(R.id.clearMap);
         swRadius = (Switch)findViewById(R.id.switch3);
@@ -76,8 +74,9 @@ public class FilterActivity extends AppCompatActivity
         slider = (SeekBar)findViewById(seekBar);
         tv1 = (TextView)findViewById(textView);
         tv2 = (TextView)findViewById(textView2);
-        nRadius = MarkerManager.getMaxRange();
-        if(!MarkerManager.getRangeFilter())
+        nRadius = FilterManager.getMaxRange();
+
+        if(!FilterManager.getRangeFilter())
         {
             swRadius.setChecked(true);
 
@@ -148,7 +147,7 @@ public class FilterActivity extends AppCompatActivity
                 {
                     slider.setProgress(MAX);
                     slider.setEnabled(false);
-                    MarkerManager.setRangeFilter(false);
+                    FilterManager.setRangeFilter(false);
 
                     radius.setText(String.valueOf(MAX));
                     radius.setEnabled(false);
@@ -158,7 +157,7 @@ public class FilterActivity extends AppCompatActivity
                 }
                 else if(!swRadius.isChecked())
                 {
-                    MarkerManager.setRangeFilter(true);
+                    FilterManager.setRangeFilter(true);
                     slider.setEnabled(true);
 
                     radius.setText(String.valueOf(MAX));
@@ -245,14 +244,14 @@ public class FilterActivity extends AppCompatActivity
         {
             if(checkBoxes.get(i).isChecked())
             {
-                MarkerManager.filterIn(i);
+                FilterManager.filterIn(i);
             }
             else
             {
-                MarkerManager.filterOut(i);
+                FilterManager.filterOut(i);
             }
         }
-        MarkerManager.setMaxRange(nRadius);
+        FilterManager.setMaxRange(nRadius);
         this.finish();
     }
 }
