@@ -517,11 +517,13 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
                                 // [END_EXCLUDE]
                             }
                         });
+                db.deleteUsers();
                 break;
 
             default:
                 session.setLogin(false);
                 socialNetwork.logout();
+                db.deleteUsers();
                 break;
         }
 
