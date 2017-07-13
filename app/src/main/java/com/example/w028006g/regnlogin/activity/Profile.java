@@ -245,35 +245,41 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
         SharedPreferences prefs = AppController.getInstance().getSharedPreferences("MYPREFS", Context.MODE_PRIVATE);
         networkId = prefs.getInt("SocialNet", -1);
 
-        if (networkId == -1) {
-            new DownloadImageTask((ImageView) findViewById(R.id.profilePic))
-                    .execute("https://concussive-shirt.000webhostapp.com/uploads/" + MainActivity.userDetails.getU_id() + ".png");
-            // Displaying the user details on the screen
-            txtName.setText(MainActivity.userDetails.getName());
-            txtEmail.setText(MainActivity.userDetails.getEmail());
-            new Profile.AsyncLogin().execute(MainActivity.userDetails.getEmail());
-        }
-        if (networkId == 0 || networkId == 3) {
 
-            txtName.setText(AppController.getInstance().getGName());
-            txtEmail.setText(AppController.getInstance().getGEmail());
-        } else {
-            socialNetwork = LoginActivity.mSocialNetworkManager.getSocialNetwork(networkId);
-            socialNetwork.setOnRequestCurrentPersonCompleteListener(new OnRequestSocialPersonCompleteListener() {
-                @Override
-                public void onRequestSocialPersonSuccess(int socialNetworkId, SocialPerson socialPerson) {
-                    txtName.setText(socialPerson.name);
-                    txtEmail.setText(socialPerson.email);
-                    new DownloadImageTask((ImageView) findViewById(R.id.profilePic))
-                            .execute(socialPerson.avatarURL);
-                }
+        switch (networkId) {
+            case -1:
+                new DownloadImageTask((ImageView) findViewById(R.id.profilePic))
+                        .execute("https://concussive-shirt.000webhostapp.com/uploads/" + MainActivity.userDetails.getU_id() + ".png");
+                // Displaying the user details on the screen
+                txtName.setText(MainActivity.userDetails.getName());
+                txtEmail.setText(MainActivity.userDetails.getEmail());
+                new Profile.AsyncLogin().execute(MainActivity.userDetails.getEmail());
+                break;
 
-                @Override
-                public void onError(int socialNetworkID, String requestID, String errorMessage, Object data) {
-                    Toast.makeText(getApplicationContext(), "something went oopsy", Toast.LENGTH_SHORT);
-                }
-            });
-            socialNetwork.requestCurrentPerson();
+            case 3:
+                txtName.setText(AppController.getInstance().getGName());
+                txtEmail.setText(AppController.getInstance().getGEmail());
+                break;
+
+            case 4:
+                socialNetwork = LoginActivity.mSocialNetworkManager.getSocialNetwork(networkId);
+                socialNetwork.setOnRequestCurrentPersonCompleteListener(new OnRequestSocialPersonCompleteListener() {
+                    @Override
+                    public void onRequestSocialPersonSuccess(int socialNetworkId, SocialPerson socialPerson) {
+                        txtName.setText(socialPerson.name);
+                        txtEmail.setText(socialPerson.email);
+                        new DownloadImageTask((ImageView) findViewById(R.id.profilePic))
+                                .execute(socialPerson.avatarURL);
+                    }
+
+                    @Override
+                    public void onError(int socialNetworkID, String requestID, String errorMessage, Object data) {
+                        Toast.makeText(getApplicationContext(), "something went oopsy", Toast.LENGTH_SHORT);
+                    }
+                });
+                socialNetwork.requestCurrentPerson();
+                break;
+
         }
     }
 

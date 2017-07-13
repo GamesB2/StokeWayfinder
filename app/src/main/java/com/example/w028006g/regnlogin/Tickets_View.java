@@ -109,7 +109,7 @@ public class Tickets_View extends AppCompatActivity {
         if (networkId == -1){
 
         } else {
-            if (networkId != 0) {
+            if (networkId == 4) {
                 socialNetwork = LoginActivity.mSocialNetworkManager.getSocialNetwork(networkId);
                 //socialNetwork.setOnRequestCurrentPersonCompleteListener(this);
                 socialNetwork.requestCurrentPerson();

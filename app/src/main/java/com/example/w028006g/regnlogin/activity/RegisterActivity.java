@@ -236,14 +236,14 @@ public class RegisterActivity extends AppCompatActivity {
 
                         // Launch login activity
 
-                        FragmentManager manager = getSupportFragmentManager();
-                        if (manager != null){
-                            FragmentTransaction transaction = manager.beginTransaction();
-                            if (transaction != null) {
-                                transaction.replace(R.id.container, new LoginActivity());
-                                transaction.commit();
-                            }
-                        }
+//                        FragmentManager manager = getSupportFragmentManager();
+//                        if (manager != null){
+//                            FragmentTransaction transaction = manager.beginTransaction();
+//                            if (transaction != null) {
+//                                transaction.replace(R.id.container, new LoginActivity());
+//                                transaction.commit();
+//                            }
+//                        }
 
                         Intent intent = new Intent(
                                 RegisterActivity.this,
