@@ -2,13 +2,16 @@ package com.example.w028006g.regnlogin.helper.MarkerClasses;
 
 import android.location.Address;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.clustering.ClusterItem;
+
 import java.util.Locale;
 
 /**
  * Created by a025178g on 15/06/2017.
  */
 
-public abstract class POI
+public abstract class POI implements ClusterItem
 {
     protected int id;
     protected Address aAddressInfo = new Address(Locale.getDefault());
@@ -43,10 +46,8 @@ public abstract class POI
 
     public boolean setWeb(String sWeb)
     {
-
             aAddressInfo.setUrl(sWeb);
             return true;
-
     }
 
     public boolean setPrice(String sPrice)
@@ -80,32 +81,22 @@ public abstract class POI
 
     public void setLat (String sLat)
     {
-
             aAddressInfo.setLatitude(Double.parseDouble(sLat));
-
-
     }
 
     public void setLong (String sLong)
     {
-
             aAddressInfo.setLongitude(Double.parseDouble(sLong));
-
-
     }
 
     public void setName (String sName)
     {
-
             aAddressInfo.setFeatureName(sName);
-
-
     }
 
     //Method used to extract the number from the address
     private static String extractNumber(final String str)
     {
-
         if(str == null || str.isEmpty()) return "";
 
         StringBuilder sb = new StringBuilder();
@@ -125,4 +116,26 @@ public abstract class POI
 
         return sb.toString();
     }
+
+    @Override
+    public LatLng getPosition()
+    {
+        LatLng latLng = new LatLng(aAddressInfo.getLatitude(),aAddressInfo.getLongitude());
+        return latLng;
+    }
+
+    @Override
+    public String getTitle()
+    {
+        String title = aAddressInfo.getFeatureName();
+        return title;
+    }
+
+    @Override
+    public String getSnippet()
+    {
+        return sDescription;
+    }
+
+
 }
