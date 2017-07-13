@@ -151,7 +151,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         //Starts Geolocation Service
         startService(new Intent(this, GeolocationService.class));
 
-        btnFilter = (ImageButton) findViewById(R.id.FilterButton);
+        btnFilter = (Button) findViewById(R.id.FilterButton);
         btnFilter.setOnClickListener(new View.OnClickListener()
         {
 
@@ -163,28 +163,28 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
             }
         });
 
-        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
-                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-
-        autocompleteFragment.setBoundsBias(StokeBounds);
-
-        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                // TODO: Get info about the selected place.
-                LatLng latlng = place.getLatLng();
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
-                UserPin userPin = new UserPin(place);
-                poiArrayList.add(userPin);
-                Log.i(TAG, "Place: " + place.getName());
-            }
-
-            @Override
-            public void onError(Status status) {
-                // TODO: Handle the error.
-                Log.i(TAG, "An error occurred: " + status);
-            }
-        });
+//        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+//                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+//
+//        autocompleteFragment.setBoundsBias(StokeBounds);
+//
+//        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+//            @Override
+//            public void onPlaceSelected(Place place) {
+//                // TODO: Get info about the selected place.
+//                LatLng latlng = place.getLatLng();
+//                mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
+//                UserPin userPin = new UserPin(place);
+//                poiArrayList.add(userPin);
+//                Log.i(TAG, "Place: " + place.getName());
+//            }
+//
+//            @Override
+//            public void onError(Status status) {
+//                // TODO: Handle the error.
+//                Log.i(TAG, "An error occurred: " + status);
+//            }
+//        });
     }
 
     public void onClick(View view)
@@ -334,7 +334,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         if (pauseState)
         {
             clusterManager.clearItems();
-            fm.popFilter();
+            filterManager.popFilter();
             mMap.clear();
             fillCM();
         }
@@ -360,7 +360,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         mMap.setOnCameraIdleListener(clusterManager);
         mMap.setOnMarkerClickListener(clusterManager);
 
-        fm = new FilterManager(mMap,poiArrayList);
+        filterManager = new FilterManager(mMap,poiArrayList);
 
         fillCM();
 
@@ -405,8 +405,8 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         }
 
         //Executes popMap to populate the markers on the maps
-        filterManager = new FilterManager(mMap,poiArrayList);
-        filterManager.popMap();
+//        filterManager = new FilterManager(mMap,poiArrayList);
+//        filterManager.popMap();
     }
 
     @Override
