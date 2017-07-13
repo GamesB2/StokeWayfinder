@@ -117,7 +117,6 @@
         <TextView
             android:id="@+id/loginvia"
             android:layout_width="wrap_content"
-<<<<<<< HEAD
             android:layout_height="37dp"
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"

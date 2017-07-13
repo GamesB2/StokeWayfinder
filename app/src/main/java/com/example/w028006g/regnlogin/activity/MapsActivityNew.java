@@ -8,16 +8,11 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 
-import android.location.Address;
-import android.location.Geocoder;
-
 import android.location.LocationManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
-
-import android.support.v4.app.Fragment;
 
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -28,34 +23,19 @@ import android.view.MenuItem;
 import android.view.View;
 
 import android.widget.Button;
-import android.widget.EditText;
 import android.support.design.widget.BottomNavigationView;
 
 import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
 import com.example.w028006g.regnlogin.GeolocationService;
-import com.example.w028006g.regnlogin.MarkerManager;
-=======
-import android.support.design.widget.BottomNavigationView;
-import android.widget.ImageButton;
 
-import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
-import com.example.w028006g.regnlogin.GeolocationService;
-import com.example.w028006g.regnlogin.helper.MarkerClasses.MarkerManager;
+import com.example.w028006g.regnlogin.helper.MarkerClasses.FilterManager;
 
 import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.SimpleGeofence;
 import com.example.w028006g.regnlogin.SimpleGeofenceStore;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 
-import com.example.w028006g.regnlogin.helper.POI;
-import com.github.gorbin.asne.twitter.TwitterSocialNetwork;
-=======
 import com.example.w028006g.regnlogin.helper.MarkerClasses.POI;
-import com.example.w028006g.regnlogin.helper.MarkerClasses.UserPin;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -66,14 +46,11 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-<
-import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -88,7 +65,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     private static ArrayList<POI> poiArrayList = new ArrayList<>();
     LocationManager locationManager;
     private boolean pauseState = false;
-    private MarkerManager mm;
+    private FilterManager filterManager;
 
     //Constant used as a request code for the location permissions
     final int MY_PERMISSIONS_REQUEST_LOCATION = 14;
@@ -124,9 +101,8 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
 
     private static final String NOTIFICATION_MSG = "NOTIFICATION MSG";
     public Button btnQR;
-    public Button btnFilter;
 
-    public ImageButton btnFilter;
+    public Button btnFilter;
 
 
     static public boolean geofencesAlreadyRegistered = false;
@@ -200,7 +176,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         startService(new Intent(this, GeolocationService.class));
 
 
-        btnFilter = (ImageButton) findViewById(R.id.FilterButton);
+        btnFilter = (Button) findViewById(R.id.FilterButton);
 
         btnFilter.setOnClickListener(new View.OnClickListener()
         {
@@ -213,28 +189,28 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
             }
         });
 
-        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
-                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-
-        autocompleteFragment.setBoundsBias(StokeBounds);
-
-        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                // TODO: Get info about the selected place.
-                LatLng latlng = place.getLatLng();
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
-                UserPin userPin = new UserPin(place);
-                poiArrayList.add(userPin);
-                Log.i(TAG, "Place: " + place.getName());
-            }
-
-            @Override
-            public void onError(Status status) {
-                // TODO: Handle the error.
-                Log.i(TAG, "An error occurred: " + status);
-            }
-        });
+//        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+//                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+//
+//        autocompleteFragment.setBoundsBias(StokeBounds);
+//
+//        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+//            @Override
+//            public void onPlaceSelected(Place place) {
+//                // TODO: Get info about the selected place.
+//                LatLng latlng = place.getLatLng();
+//                mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
+//                UserPin userPin = new UserPin(place);
+//                poiArrayList.add(userPin);
+//                Log.i(TAG, "Place: " + place.getName());
+//            }
+//
+//            @Override
+//            public void onError(Status status) {
+//                // TODO: Handle the error.
+//                Log.i(TAG, "An error occurred: " + status);
+//            }
+//        });
     }
 
 
@@ -385,7 +361,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         if (pauseState)
         {
             mMap.clear();
-            mm.popMap();
+            filterManager.popMap();
         }
         pauseState = true;
         startService(new Intent(this, DatabaseRetrieval.class));
@@ -445,17 +421,17 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         }
 
         //Executes popMap to populate the markers on the maps
-        mm = new MarkerManager(mMap,poiArrayList);
-        mm.popMap();
+        filterManager = new FilterManager(mMap,poiArrayList);
+        filterManager.popMap();
     }
 
-
-    @Override
-    public boolean onMarkerClick(Marker marker)
-    {
-
-        return false;
-    }
+//
+//    @Override
+//    public boolean onMarkerClick(Marker marker)
+//    {
+//
+//        return false;
+//    }
 }
 
 

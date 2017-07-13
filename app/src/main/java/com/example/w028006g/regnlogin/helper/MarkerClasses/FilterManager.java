@@ -26,7 +26,7 @@ import java.util.ArrayList;
  * Created by a025178g on 21/06/2017.
  */
 
-public class MarkerManager
+public class FilterManager
 {
     public static ArrayList<POI> poiArrayList = new ArrayList<>();
     public static ArrayList<Marker> markerArrayList = new ArrayList<>();
@@ -44,7 +44,7 @@ public class MarkerManager
     final static int TOTEM=ATTRACTIONS+3;
     final static int USERPINS = ATTRACTIONS+4;
 
-    public MarkerManager(GoogleMap map, ArrayList<POI> arrayList)
+    public FilterManager(GoogleMap map, ArrayList<POI> arrayList)
     {
         poiArrayList = arrayList;
         mMap = map;

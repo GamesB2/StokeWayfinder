@@ -15,11 +15,12 @@ import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrievalNow;
 import com.example.w028006g.regnlogin.helper.MyRecyclerViewAdapter;
 import com.example.w028006g.regnlogin.helper.MyRecyclerViewAdapterPosts;
-import com.example.w028006g.regnlogin.helper.Post;
+import com.example.w028006g.regnlogin.helper.MarkerClasses.Post;
 import com.example.w028006g.regnlogin.helper.Ticket;
 
 import com.example.w028006g.regnlogin.helper.MyRecyclerViewAdapterPosts;
-import com.example.w028006g.regnlogin.helper.MarkerClasses.Post;
+
+
 
 
 import org.json.JSONArray;

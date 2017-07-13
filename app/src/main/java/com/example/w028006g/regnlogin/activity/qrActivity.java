@@ -23,9 +23,9 @@ import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 import com.example.w028006g.regnlogin.helper.MyRecyclerViewAdapterPosts;
 
-import com.example.w028006g.regnlogin.helper.Post;
-
 import com.example.w028006g.regnlogin.helper.MarkerClasses.Post;
+
+
 
 import com.google.zxing.client.android.BeepManager;
 import com.google.zxing.integration.android.IntentIntegrator;

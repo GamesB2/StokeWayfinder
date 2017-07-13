@@ -60,7 +60,6 @@ import com.example.w028006g.regnlogin.Tickets_My;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 import com.example.w028006g.regnlogin.helper.DownloadImageTask;
 import com.example.w028006g.regnlogin.helper.MyRecyclerViewAdapterPosts;
-import com.example.w028006g.regnlogin.helper.MarkerClasses.Post;
 import com.example.w028006g.regnlogin.helper.SQLiteHandler;
 import com.example.w028006g.regnlogin.helper.SessionManager;
 
@@ -102,7 +101,7 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
     private Button btnPoints;
     private RecyclerView mRecyclerView;
     private MyRecyclerViewAdapterPosts adapter;
-    private ArrayList<Post> postist = new ArrayList<>();
+    private ArrayList<com.example.w028006g.regnlogin.helper.MarkerClasses.Post> postist = new ArrayList<>();
     private String posts="";
 
     private Button btnLogout;

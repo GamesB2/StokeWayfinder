@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.example.w028006g.regnlogin.MarkerManager;
 
-import com.example.w028006g.regnlogin.helper.MarkerClasses.MarkerManager;
+import com.example.w028006g.regnlogin.helper.MarkerClasses.FilterManager;
 
 import com.example.w028006g.regnlogin.R;
 
@@ -73,7 +73,7 @@ public class FilterActivity extends AppCompatActivity
                 R.id.userpins};
 
 
-        boolean[] filter = MarkerManager.getFilter();
+        boolean[] filter = FilterManager.getFilter();
         btnClearFilter = (Button)findViewById(R.id.clearFilter);
         btnClearMap = (Button)findViewById(R.id.clearMap);
         swRadius = (Switch)findViewById(R.id.switch3);
@@ -81,8 +81,8 @@ public class FilterActivity extends AppCompatActivity
         slider = (SeekBar)findViewById(seekBar);
         tv1 = (TextView)findViewById(textView);
         tv2 = (TextView)findViewById(textView2);
-        nRadius = MarkerManager.getMaxRange();
-        if(!MarkerManager.getRangeFilter())
+        nRadius = FilterManager.getMaxRange();
+        if(!FilterManager.getRangeFilter())
         {
             swRadius.setChecked(true);
 

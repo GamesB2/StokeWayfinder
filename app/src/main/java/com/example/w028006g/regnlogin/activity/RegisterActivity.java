@@ -46,7 +46,6 @@ import java.util.Map;
 
 
 import com.example.w028006g.regnlogin.MainActivity1;
-
 import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.app.AppConfig;
 import com.example.w028006g.regnlogin.app.AppController;
