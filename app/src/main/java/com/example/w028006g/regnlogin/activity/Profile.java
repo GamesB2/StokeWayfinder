@@ -443,42 +443,38 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
                         posts = c.getString("posts");
                     }
 
+                    if(!posts.equalsIgnoreCase("")) {
+                        posts = posts.substring(1);
+                        String[] postsParts = posts.split(",");
+                        ArrayList<Integer> post = new ArrayList<>();
 
-                    posts = posts.substring(1);
-                    String[] postsParts = posts.split(",");
-                    ArrayList<Integer> post = new ArrayList<>();
+                        //Now Sort
 
-                    //Now Sort
+                        Set<String> mySet = new HashSet<String>(Arrays.asList(postsParts));
+                        for (String s : mySet) {
+                            post.add(Integer.parseInt(s));
+                        }
 
-                    Set<String> mySet = new HashSet<String>(Arrays.asList(postsParts));
-                    for(String s : mySet)
-                    {
-                        post.add(Integer.parseInt(s));
-                    }
+                        for (int i = 0; i < post.size(); i++) {
+                            for (int j = 0; j < DatabaseRetrieval.postsAl.size(); j++) {
+                                Integer check = post.get(i);
 
-                    for(int i = 0; i< post.size(); i++)
-                    {
-                        for (int j = 0; j< DatabaseRetrieval.postsAl.size(); j++)
-                        {
-                            Integer check = post.get(i);
-
-                            if(check == DatabaseRetrieval.postsAl.get(j).getId())
-                            {
-                                //if(!post.contains(postsParts[i]))
-                                //{
-                                postist.add(DatabaseRetrieval.postsAl.get(j));
-                                //}
+                                if (check == DatabaseRetrieval.postsAl.get(j).getId()) {
+                                    //if(!post.contains(postsParts[i]))
+                                    //{
+                                    postist.add(DatabaseRetrieval.postsAl.get(j));
+                                    //}
+                                }
                             }
                         }
+
+                        mRecyclerView = (RecyclerView) findViewById(R.id.rvH);
+                        mRecyclerView.setLayoutManager(new LinearLayoutManager(Profile.this));
+                        adapter = new MyRecyclerViewAdapterPosts(Profile.this, postist);
+                        mRecyclerView.setAdapter(adapter);
+
+                        System.out.println(posts);
                     }
-
-                    mRecyclerView = (RecyclerView) findViewById(R.id.rvH);
-                    mRecyclerView.setLayoutManager(new LinearLayoutManager(Profile.this));
-                    adapter = new MyRecyclerViewAdapterPosts(Profile.this, postist);
-                    mRecyclerView.setAdapter(adapter);
-
-                    System.out.println(posts);
-
                     // Launch main activity
                 } else {
                     // Error in login. Get the error message
