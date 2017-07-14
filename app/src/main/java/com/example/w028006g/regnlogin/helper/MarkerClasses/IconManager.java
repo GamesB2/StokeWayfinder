@@ -1,6 +1,9 @@
 package com.example.w028006g.regnlogin.helper.MarkerClasses;
 
 import com.example.w028006g.regnlogin.R;
+import com.example.w028006g.regnlogin.helper.HttpHandler;
+
+import java.util.HashMap;
 
 /**
  * Created by a025178g on 11/07/2017.
@@ -8,6 +11,7 @@ import com.example.w028006g.regnlogin.R;
 
 public class IconManager extends POI
 {
+    private static HashMap<Integer, String> catConversion;
     protected static int[] nArrIconID =
             {
             R.drawable.music,

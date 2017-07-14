@@ -29,7 +29,7 @@ public class DatabaseRetrieval  extends Service {
 
     ArrayList<HashMap<String, String>> dataList;
 
-    public static ArrayList<POI> poiArrayList = new ArrayList<>();
+    private static ArrayList<POI> poiArrayList = new ArrayList<>();
     public static ArrayList<Ticket> ticketsAl = new ArrayList<>();
     //public static ArrayList<Events> eventsAl = new ArrayList(); //Main events list.
     public static ArrayList<Post> postsAl = new ArrayList();
@@ -197,7 +197,7 @@ public class DatabaseRetrieval  extends Service {
                     att.setAddressLine(address);
                     att.setPostCode(postcode);
                     att.setWeb(website);
-                    att.setIcon(icon);
+                    att.setTags(icon);
                     poiArrayList.add(att);
 
                     Log.e(TAG, "Attractions Added OK!: ");
@@ -302,7 +302,7 @@ public class DatabaseRetrieval  extends Service {
                         event.setAddressLine(add);
                         event.setStartDate(dateStart,time);
                         event.setEndDate(dateEnd);
-                        event.setIcon(cat);
+                        event.setTags(cat);
                         event.setConName(cName);
                         event.setConNum(cNumber);
 
@@ -453,6 +453,10 @@ public class DatabaseRetrieval  extends Service {
             i.putExtra("MyObjectAsString", target);
             startActivity(i);
         }
+    }
+    public static ArrayList<POI> getPoints()
+    {
+        return poiArrayList;
     }
 
 

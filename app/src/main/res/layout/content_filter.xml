@@ -199,9 +199,9 @@
             android:id="@+id/charity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:buttonTint="@color/bg_register"
             android:checked="true"
-            android:text="Charity"
-            android:buttonTint="@color/bg_register"/>
+            android:text="Charity"/>
 
         <CheckBox
             android:id="@+id/spirituality"

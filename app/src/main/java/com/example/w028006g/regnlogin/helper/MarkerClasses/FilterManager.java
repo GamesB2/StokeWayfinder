@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Location;
 import android.os.Parcelable;
+import android.widget.CheckBox;
 
 import com.example.w028006g.regnlogin.GeolocationService;
 import com.example.w028006g.regnlogin.R;
@@ -20,8 +21,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.ClusterManager;
+import com.twitter.sdk.android.core.models.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by a025178g on 21/06/2017.
@@ -29,30 +32,25 @@ import java.util.ArrayList;
 
 public class FilterManager
 {
-    public static ArrayList<POI> poiArrayList = new ArrayList<>();
-    private static ArrayList<POI> FilteredPoints;
-    public static GoogleMap mMap;
+    private static ArrayList<POI> poiArrayList = new ArrayList<>();
+    private static ArrayList<POI> FilteredPOI;
+    private static ArrayList<String> tagsArrayList = new ArrayList<>();
+    private static GoogleMap mMap;
     private static boolean[] filter;
     private static int maxRange = 50000;
     private static boolean rangeFilter = false;//Should be the same as MAX constant in FilterActivity
     private static Location location;
     private static LatLng userLatLng;
 
-    //Group Categories
-    final static int ATTRACTIONS= IconManager.nArrIconID.length;
-    final static int LANDMARKS= ATTRACTIONS+1;
-    final static int EVENTS= ATTRACTIONS+2;
-    final static int TOTEM= ATTRACTIONS+3;
-    final static int USERPINS = ATTRACTIONS+4;
+    //Type Filter: Attractions, Landmarks, Events, etc.
+    private static HashMap<CheckBox, Boolean> TypeFilter;
+    //Categorical Filter: Music, Business, Family, etc.
+    private static boolean[] catFilter;
 
     public FilterManager(GoogleMap map, ArrayList<POI> arrayList)
     {
-
         poiArrayList = arrayList;
-        mMap = map;
-        filter = new boolean[25];
-
-        userLatLng = GeolocationService.getLatLng();
+        fillTags();
     }
 
     public static boolean[] getFilter()
@@ -77,29 +75,29 @@ public class FilterManager
         location.setLatitude(userLatLng.latitude);
         location.setLongitude(userLatLng.longitude);
 
-        FilteredPoints = new ArrayList<>();
+        FilteredPOI = new ArrayList<>();
 
-        if (!filter[USERPINS])
+        if (!filter[0])
         {
             popMapPins();
         }
 
-        if(!filter[ATTRACTIONS])
+        if(!filter[1])
         {
             popMapAtt();
         }
 
-        if(!filter[LANDMARKS])
+        if(!filter[2])
         {
             popMapLnd();
         }
 
-        if(!filter[EVENTS])
+        if(!filter[3])
         {
             popMapEvents();
         }
 
-        if(!filter[TOTEM])
+        if(!filter[4])
         {
             popMapTotem();
         }
@@ -130,7 +128,7 @@ public class FilterManager
 //                            .snippet(item.getDescription())
 //                            .icon(BitmapDescriptorFactory.fromResource(IconManager.nArrIconID[att.getIcon()])));
 
-                    FilteredPoints.add(item);
+                    FilteredPOI.add(item);
                 }
             }
         }
@@ -164,7 +162,7 @@ public class FilterManager
 //                            .snippet(item.getDescription())
 //                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.landmark)));
 
-                    FilteredPoints.add(item);
+                    FilteredPOI.add(item);
                 }
             }
         }
@@ -198,7 +196,7 @@ public class FilterManager
 //                            .snippet(item.getDescription())
 //                            .icon(BitmapDescriptorFactory.fromResource(IconManager.nArrIconID[event.getIcon()])));
 
-                    FilteredPoints.add(item);
+                    FilteredPOI.add(item);
                 }
             }
         }
@@ -230,7 +228,7 @@ public class FilterManager
 //                            .snippet(item.getDescription())
 //                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.totem)));
 
-                    FilteredPoints.add(item);
+                    FilteredPOI.add(item);
                 }
             }
         }
@@ -261,7 +259,7 @@ public class FilterManager
 //                            .snippet(item.getDescription())
 //                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.userpin)));
 
-                    FilteredPoints.add(item);
+                    FilteredPOI.add(item);
                 }
             }
         }
@@ -287,16 +285,34 @@ public class FilterManager
         return rangeFilter;
     }
 
-    public static ArrayList<POI> getFilteredPoints()
+    public static ArrayList<POI> getFilteredPOI()
     {
         popFilter();
-        return FilteredPoints;
+        return FilteredPOI;
     }
 
     public static Bitmap changeIcon(int bmp)
     {
         Bitmap icon = null;
         return icon;
+    }
+
+    public static void addPin(UserPin userPin)
+    {
+        poiArrayList.add(userPin);
+    }
+
+    private static void fillTags()
+    {
+        for(int i = 0; i < poiArrayList.size(); i++)
+        {
+
+        }
+    }
+
+    public static ArrayList<POI> getFilteredPoints()
+    {
+        return poiArrayList;
     }
 
 }

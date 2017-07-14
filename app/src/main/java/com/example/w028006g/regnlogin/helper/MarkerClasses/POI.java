@@ -5,6 +5,7 @@ import android.location.Address;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 /**
@@ -17,6 +18,7 @@ public abstract class POI implements ClusterItem
     protected Address aAddressInfo = new Address(Locale.getDefault());
     protected String sDescription;
     protected double dPrice = 0;
+    private ArrayList<Tag> tags = new ArrayList<>();
 
     public boolean setID(String sID)
     {
@@ -95,7 +97,7 @@ public abstract class POI implements ClusterItem
     }
 
     //Method used to extract the number from the address
-    private static String extractNumber(final String str)
+    private String extractNumber(final String str)
     {
         if(str == null || str.isEmpty()) return "";
 
@@ -137,5 +139,39 @@ public abstract class POI implements ClusterItem
         return sDescription;
     }
 
+    public void setTags(String sTags)
+    {
+        {
+            String def = sTags;
+            if(!def.isEmpty())
+            {
+                if(def.contains("/"))
+                {
+                    String[] temp = def.split("/");
+                    for(int i = 0; i < temp.length; i++)
+                    {
+                        addTag(temp[i]);
+                    }
+                }
+                else
+                {
+                    addTag(def);
+                }
+            }
+        }
+    }
 
+    private void addTag(String sTag)
+    {
+        Tag temp;
+        if(Tag.checkExisting(sTag))
+        {
+            temp = Tag.getTag(sTag);
+        }
+        else
+        {
+            temp = new Tag(sTag,this);
+        }
+        tags.add(temp);
+    }
 }

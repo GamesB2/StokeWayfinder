@@ -52,7 +52,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener
 {
     //Assigns the String "TAG" the name of the class for error reports
@@ -63,7 +62,6 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     LocationManager locationManager;
     private ClusterManager<POI> clusterManager;
     private boolean pauseState = false;
-    private FilterManager fm;
 
     //Constant used as a request code for the location permissions
     final int MY_PERMISSIONS_REQUEST_LOCATION = 14;
@@ -89,8 +87,6 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         SupportMapFragment mapFragment = ((SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map));
         mapFragment.getMapAsync(this);
 
-        //Landmarks, Attractions, and Events Stored in POI Array
-        poiArrayList = DatabaseRetrieval.poiArrayList;
         //Lat and Long from FireMSGService brought in here
         Bundle FireNotification = getIntent().getExtras();
         if (FireNotification != null) {
@@ -150,7 +146,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
             public void onClick(View view)
             {
                 Intent i = new Intent(MapsActivityNew.this,
-                        FilterActivity.class);
+                        NewFilterActivity.class);
                 startActivity(i);
             }
         });
@@ -182,7 +178,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     public void onClick(View view)
     {
         Intent i = new Intent(MapsActivityNew.this,
-                FilterActivity.class);
+                NewFilterActivity.class);
         startActivity(i);
     }
 
@@ -326,7 +322,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         if (pauseState)
         {
             clusterManager.clearItems();
-            fm.popFilter();
+            FilterManager.popFilter();
             mMap.clear();
             fillCM();
         }
@@ -352,7 +348,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         mMap.setOnCameraIdleListener(clusterManager);
         mMap.setOnMarkerClickListener(clusterManager);
 
-        fm = new FilterManager(mMap,poiArrayList);
+        new FilterManager(mMap,DatabaseRetrieval.getPoints());
 
         fillCM();
 
