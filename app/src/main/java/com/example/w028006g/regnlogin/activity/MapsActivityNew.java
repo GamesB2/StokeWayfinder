@@ -7,9 +7,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.LocationManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -22,6 +25,7 @@ import android.view.View;
 
 import android.widget.Button;
 import android.support.design.widget.BottomNavigationView;
+import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
@@ -50,12 +54,14 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.ClusterManager;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
-public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener
+public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, View.OnClickListener
 
 {
     //Assigns the String "TAG" the name of the class for error reports
@@ -74,11 +80,15 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     public String lat;
     public String lon;
     private GoogleMap mMap;
+    private Button mButton1;
+    private BottomSheetBehavior mBottomSheetBehavior1;
 
     private static final String NOTIFICATION_MSG = "NOTIFICATION MSG";
     public Button btnQR;
 
-    public Button btnFilter;
+    public ImageButton btnFilter;
+
+    private BottomSheetBehavior mBottomSheetBehavior;
 
 
     static public boolean geofencesAlreadyRegistered = false;
@@ -90,7 +100,10 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         setContentView(R.layout.activity_maps_new);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-//
+        //Bottom Sheet stuff
+        //-------------------------END Sheets
+
+
 //         Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = ((SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map));
         mapFragment.getMapAsync(this);
@@ -151,7 +164,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         //Starts Geolocation Service
         startService(new Intent(this, GeolocationService.class));
 
-        btnFilter = (Button) findViewById(R.id.FilterButton);
+        btnFilter = (ImageButton) findViewById(R.id.FilterButton);
         btnFilter.setOnClickListener(new View.OnClickListener()
         {
 
@@ -163,36 +176,37 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
             }
         });
 
-//        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
-//                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-//
-//        autocompleteFragment.setBoundsBias(StokeBounds);
-//
-//        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-//            @Override
-//            public void onPlaceSelected(Place place) {
-//                // TODO: Get info about the selected place.
-//                LatLng latlng = place.getLatLng();
-//                mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
-//                UserPin userPin = new UserPin(place);
-//                poiArrayList.add(userPin);
-//                Log.i(TAG, "Place: " + place.getName());
-//            }
-//
-//            @Override
-//            public void onError(Status status) {
-//                // TODO: Handle the error.
-//                Log.i(TAG, "An error occurred: " + status);
-//            }
-//        });
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+
+        autocompleteFragment.setBoundsBias(StokeBounds);
+
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                LatLng latlng = place.getLatLng();
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
+                UserPin userPin = new UserPin(place);
+                poiArrayList.add(userPin);
+                Log.i(TAG, "Place: " + place.getName());
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                Log.i(TAG, "An error occurred: " + status);
+            }
+        });
+        pullBottomSheet();
     }
 
-    public void onClick(View view)
-    {
-        Intent i = new Intent(MapsActivityNew.this,
-                FilterActivity.class);
-        startActivity(i);
-    }
+//    public void onClick()
+//    {
+//        Intent i = new Intent(MapsActivityNew.this,
+//                FilterActivity.class);
+//        startActivity(i);
+//    }
 
 
     //Displays the circle around the geofence - wont need this for final just so we can see where they are
@@ -240,6 +254,40 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         }
     }
 
+    private void pullBottomSheet() {
+        View bottomSheet = findViewById( R.id.bottom_sheet );
+        Button button2 = (Button) findViewById( R.id.button_2 );
+        button2.setOnClickListener(this);
+
+
+
+        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+
+        mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(View bottomSheet, int newState) {
+                if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
+                    mBottomSheetBehavior.setPeekHeight(0);
+                }
+            }
+
+            @Override
+            public void onSlide(View bottomSheet, float slideOffset) {
+            }
+        });
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch( v.getId() ) {
+            case R.id.button_2: {
+                mBottomSheetBehavior.setPeekHeight(300);
+                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                break;
+            }
+
+        }
+    }
 
     //Asks for permission to access GPS and handles the outcome of allow or deny
     @Override
@@ -302,31 +350,31 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
 
 
 
-    //Search implementation, pins a marker on the location of the user
-//    public void onMapSearch(View view) {
-//        EditText locationSearch = (EditText) findViewById(R.id.place_autocomplete_fragment);
-//        String location = locationSearch.getText().toString();
-//        List<Address> addressList = null;
-//
-//        if (!location.equals("")) {
-//            Geocoder geocoder = new Geocoder(this);
-//            try {
-//                addressList = geocoder.getFromLocationName(location, 1);
-//
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            Address address = addressList.get(0);
-//
-//            //Marker mSearch = new Marker();
-//            //mSearch.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.searchbutton));
-//
-//            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-//            Marker mSearch = (mMap.addMarker(new MarkerOptions().position(latLng).title("Search query").icon(BitmapDescriptorFactory.fromResource(R.drawable.searchbutton))));
-//            mSearch.setDraggable(true);
-//            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-//        }
-//}
+   // Search implementation, pins a marker on the location of the user
+    public void onMapSearch(View view) {
+        EditText locationSearch = (EditText) findViewById(R.id.place_autocomplete_fragment);
+        String location = locationSearch.getText().toString();
+        List<Address> addressList = null;
+
+        if (!location.equals("")) {
+            Geocoder geocoder = new Geocoder(this);
+            try {
+                addressList = geocoder.getFromLocationName(location, 1);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Address address = addressList.get(0);
+
+            //Marker mSearch = new Marker();
+            //mSearch.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.searchbutton));
+
+            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+            Marker mSearch = (mMap.addMarker(new MarkerOptions().position(latLng).title("Search query").icon(BitmapDescriptorFactory.fromResource(R.drawable.searchbutton))));
+            mSearch.setDraggable(true);
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        }
+}
 
     @Override
     protected void onResume()
@@ -358,7 +406,16 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         mMap.setMinZoomPreference(5);
         clusterManager = new ClusterManager<>(this,mMap);
         mMap.setOnCameraIdleListener(clusterManager);
-        mMap.setOnMarkerClickListener(clusterManager);
+        mMap.setOnMarkerClickListener(this);
+//        clusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<POI>()
+//        {
+//            @Override
+//            public boolean onClusterItemClick(POI poi)
+//            {
+//                pullBottomSheet();
+//                return false;
+//            }
+//        });
 
         filterManager = new FilterManager(mMap,poiArrayList);
 
@@ -412,7 +469,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     @Override
     public boolean onMarkerClick(Marker marker)
     {
-
+        pullBottomSheet();
         return false;
     }
 

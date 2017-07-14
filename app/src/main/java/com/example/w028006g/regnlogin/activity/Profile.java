@@ -197,14 +197,14 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
             }
         });
 
-        //Download user image
-        new DownloadImageTask((ImageView) findViewById(R.id.profilePic))
-
-                .execute("https://concussive-shirt.000webhostapp.com/uploads/" + MainActivity.userDetails.getU_id() + ".png");
-
-        // Displaying the user details on the screen
-        txtName.setText(MainActivity.userDetails.getName());
-        txtEmail.setText(MainActivity.userDetails.getEmail());
+//        //Download user image
+//        new DownloadImageTask((ImageView) findViewById(R.id.profilePic))
+//
+//                .execute("https://concussive-shirt.000webhostapp.com/uploads/" + MainActivity.userDetails.getU_id() + ".png");
+//
+//        // Displaying the user details on the screen
+//        txtName.setText(MainActivity.userDetails.getName());
+//        txtEmail.setText(MainActivity.userDetails.getEmail());
 
         btnView.setOnClickListener(new View.OnClickListener() {
 
