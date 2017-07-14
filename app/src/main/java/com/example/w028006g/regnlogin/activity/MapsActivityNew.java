@@ -340,14 +340,13 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     @Override
     protected void onResume()
     {
-        if (pauseState)
+        if (clusterManager != null)
         {
             clusterManager.clearItems();
             filterManager.popFilter();
             mMap.clear();
             fillCM();
         }
-        pauseState = true;
         startService(new Intent(this, DatabaseRetrieval.class));
         super.onResume();
     }
@@ -355,7 +354,6 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     @Override
     public void onDestroy()
     {
-        stopService(new Intent(this, DatabaseRetrieval.class));
         super.onDestroy();
     }
 
@@ -371,7 +369,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
 
         filterManager = new FilterManager(mMap,poiArrayList);
 
-        fillCM();
+
 
 
 
@@ -416,6 +414,8 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         //Executes popMap to populate the markers on the maps
 //        filterManager = new FilterManager(mMap,poiArrayList);
 //        filterManager.popMap();
+
+        fillCM();
     }
 
     @Override
@@ -441,6 +441,12 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         startActivity(intent);
         overridePendingTransition(0, 0);
         finish();
+    }
+
+    @Override
+    public void finish() {
+        clusterManager.clearItems();
+        super.finish();
     }
 }
 

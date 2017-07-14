@@ -124,7 +124,7 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
     String email;
     String u_id;
     String tickets;
-
+    private Thread thread;
 
     private Scene scene1, scene2;
     //transition to move between scenes
@@ -261,17 +261,30 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
             // Displaying the user details on the screen
             txtName.setText(MainActivity.userDetails.getName());
             txtEmail.setText(MainActivity.userDetails.getEmail());
-            new Profile.AsyncLogin().execute(MainActivity.userDetails.getEmail());
-        }
-        if (networkId == 0 || networkId == 3) {
 
+            thread = new Thread() {
+                @Override
+                public void run() {
+                    while (!isInterrupted())
+                    {
+                        new Profile.AsyncLogin().execute(MainActivity.userDetails.getEmail());
+                    }
+                }
+            };
+        }
+        if (networkId == 0 || networkId == 3)
+        {
             txtName.setText(AppController.getInstance().getGName());
             txtEmail.setText(AppController.getInstance().getGEmail());
-        } else {
+        } else
+
+            {
             socialNetwork = LoginActivity.mSocialNetworkManager.getSocialNetwork(networkId);
-            socialNetwork.setOnRequestCurrentPersonCompleteListener(new OnRequestSocialPersonCompleteListener() {
+            socialNetwork.setOnRequestCurrentPersonCompleteListener(new OnRequestSocialPersonCompleteListener()
+            {
                 @Override
-                public void onRequestSocialPersonSuccess(int socialNetworkId, SocialPerson socialPerson) {
+                public void onRequestSocialPersonSuccess(int socialNetworkId, SocialPerson socialPerson)
+                {
                     txtName.setText(socialPerson.name);
                     txtEmail.setText(socialPerson.email);
                     new DownloadImageTask((ImageView) findViewById(R.id.profilePic))
@@ -279,12 +292,13 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
                 }
 
                 @Override
-                public void onError(int socialNetworkID, String requestID, String errorMessage, Object data) {
+                public void onError(int socialNetworkID, String requestID, String errorMessage, Object data)
+                {
                     Toast.makeText(getApplicationContext(), "something went oopsy", Toast.LENGTH_SHORT);
                 }
             });
             socialNetwork.requestCurrentPerson();
-        }
+            }
     }
 
     @Override
@@ -295,15 +309,15 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
     }
 
     protected synchronized void buildGoogleApiClient() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
+        if (mGoogleApiClient == null) {
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail()
+                    .build();
+            mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                    .build();
+        }
     }
 
     public void changeScene(View v){
@@ -497,7 +511,6 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
             }
 
 
-
         }
 
     }
@@ -542,5 +555,14 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
         startActivity(intent);
         overridePendingTransition(0, 0);
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (thread != null) {
+            thread.interrupt();
+        }
+
     }
 }
