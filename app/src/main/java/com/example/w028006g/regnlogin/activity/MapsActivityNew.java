@@ -10,6 +10,8 @@ import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.LocationManager;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
@@ -27,9 +29,14 @@ import android.widget.Button;
 import android.support.design.widget.BottomNavigationView;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
 import com.example.w028006g.regnlogin.GeolocationService;
+import com.example.w028006g.regnlogin.helper.GMapV2Direction;
+import com.example.w028006g.regnlogin.helper.GMapV2DirectionAsyncTask;
 import com.example.w028006g.regnlogin.helper.MarkerClasses.FilterManager;
 import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.SimpleGeofence;
@@ -52,16 +59,22 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PointOfInterest;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
+
+import org.w3c.dom.Document;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.RunnableFuture;
 
 
-public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, View.OnClickListener
+public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener
 
 {
     //Assigns the String "TAG" the name of the class for error reports
@@ -87,6 +100,10 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     public Button btnQR;
 
     public ImageButton btnFilter;
+
+    private TextView Title;
+    private ImageView Picture;
+    private TextView Descritption;
 
     private BottomSheetBehavior mBottomSheetBehavior;
 
@@ -198,8 +215,9 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
                 Log.i(TAG, "An error occurred: " + status);
             }
         });
-        pullBottomSheet();
+
     }
+
 
 //    public void onClick()
 //    {
@@ -254,39 +272,72 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         }
     }
 
-    private void pullBottomSheet() {
+    private void pullBottomSheet(final LatLng location) {
+
         View bottomSheet = findViewById( R.id.bottom_sheet );
-        Button button2 = (Button) findViewById( R.id.button_2 );
-        button2.setOnClickListener(this);
-
-
-
-        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-
-        mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+        TextView Directions = (TextView) findViewById(R.id.direction);
+        final LatLng stoke = new LatLng(53.0027, -2.1794);
+        Directions.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onStateChanged(View bottomSheet, int newState) {
-                if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
-                    mBottomSheetBehavior.setPeekHeight(0);
+            public void onClick(View view) {
+                route(stoke, location);
+            }
+        });
+        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                mBottomSheetBehavior.setPeekHeight(0);
+            }
+        });
+        runOnUiThread(new Runnable() {
+            public void run() {
+
+                mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+                    @Override
+                    public void onStateChanged(View bottomSheet, int newState) {
+                        if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
+                            mBottomSheetBehavior.setPeekHeight(300);
+                        }
+                    }
+
+                    @Override
+                    public void onSlide(View bottomSheet, float slideOffset) {
+                        mBottomSheetBehavior.setPeekHeight(300);
+                    }
+                });
+            }
+        });
+
+
+        if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+            mBottomSheetBehavior.setPeekHeight(300);
+        }
+    }
+
+    protected void route(LatLng sourcePosition, LatLng destPosition) {
+        final Handler handler = new Handler() {
+            public void handleMessage(Message msg) {
+                try {
+                    Document doc = (Document) msg.obj;
+                    GMapV2Direction md = new GMapV2Direction();
+                    ArrayList<LatLng> directionPoint = md.getDirection(doc);
+                    PolylineOptions rectLine = new PolylineOptions().width(15).color(R.color.bg_login) ;
+                    for (int i = 0; i < directionPoint.size(); i++) {
+                        rectLine.add(directionPoint.get(i));
+                    }
+                    mMap.addPolyline(rectLine);md.getDurationText(doc);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
 
-            @Override
-            public void onSlide(View bottomSheet, float slideOffset) {
-            }
-        });
-    }
+            ;
+        };
 
-    @Override
-    public void onClick(View v) {
-        switch( v.getId() ) {
-            case R.id.button_2: {
-                mBottomSheetBehavior.setPeekHeight(300);
-                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                break;
-            }
-
-        }
+        new GMapV2DirectionAsyncTask(handler, sourcePosition, destPosition, GMapV2Direction.MODE_WALKING).execute();
     }
 
     //Asks for permission to access GPS and handles the outcome of allow or deny
@@ -350,45 +401,45 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
 
 
 
-   // Search implementation, pins a marker on the location of the user
-    public void onMapSearch(View view) {
-        EditText locationSearch = (EditText) findViewById(R.id.place_autocomplete_fragment);
-        String location = locationSearch.getText().toString();
-        List<Address> addressList = null;
-
-        if (!location.equals("")) {
-            Geocoder geocoder = new Geocoder(this);
-            try {
-                addressList = geocoder.getFromLocationName(location, 1);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Address address = addressList.get(0);
-
-            //Marker mSearch = new Marker();
-            //mSearch.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.searchbutton));
-
-            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-            Marker mSearch = (mMap.addMarker(new MarkerOptions().position(latLng).title("Search query").icon(BitmapDescriptorFactory.fromResource(R.drawable.searchbutton))));
-            mSearch.setDraggable(true);
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        }
-}
+//   // Search implementation, pins a marker on the location of the user
+//    public void onMapSearch(View view) {
+//        EditText locationSearch = (EditText) findViewById(R.id.place_autocomplete_fragment);
+//        String location = locationSearch.getText().toString();
+//        List<Address> addressList = null;
+//
+//        if (!location.equals("")) {
+//            Geocoder geocoder = new Geocoder(this);
+//            try {
+//                addressList = geocoder.getFromLocationName(location, 1);
+//
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            Address address = addressList.get(0);
+//
+//            //Marker mSearch = new Marker();
+//            //mSearch.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.searchbutton));
+//
+//            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+//            Marker mSearch = (mMap.addMarker(new MarkerOptions().position(latLng).title("Search query").icon(BitmapDescriptorFactory.fromResource(R.drawable.searchbutton))));
+//            mSearch.setDraggable(true);
+//            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+//        }
+//}
 
     @Override
     protected void onResume()
     {
-        if (pauseState)
-        {
+        super.onResume();
+        if (clusterManager != null) {
             clusterManager.clearItems();
             filterManager.popFilter();
             mMap.clear();
             fillCM();
         }
-        pauseState = true;
+
         startService(new Intent(this, DatabaseRetrieval.class));
-        super.onResume();
+
     }
 
     @Override
@@ -406,23 +457,44 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         mMap.setMinZoomPreference(5);
         clusterManager = new ClusterManager<>(this,mMap);
         mMap.setOnCameraIdleListener(clusterManager);
-        mMap.setOnMarkerClickListener(this);
-//        clusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<POI>()
-//        {
-//            @Override
-//            public boolean onClusterItemClick(POI poi)
-//            {
-//                pullBottomSheet();
-//                return false;
-//            }
-//        });
-
+        mMap.setOnMarkerClickListener(clusterManager);
+        LatLng stoke = new LatLng(53.0027, -2.1794);
         filterManager = new FilterManager(mMap,poiArrayList);
 
         fillCM();
+        pullBottomSheet(stoke);
+        clusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<POI>()
+        {
+            @Override
+            public boolean onClusterItemClick(POI poi)
+            {
+                final POI PointOfInt = poi;
+
+                runOnUiThread(new Runnable() {
+                    public void run() {
+
+                        Runnable test = new Runnable() {
+                            @Override
+                            public void run() {
+                                LatLng poiLocation = PointOfInt.getPosition();
+
+                                Title = (TextView) findViewById(R.id.title);
+                                Picture = (ImageView) findViewById(R.id.pic);
+                                Descritption = (TextView) findViewById(R.id.desc);
+                                Title.setText(PointOfInt.getAddressInfo().getFeatureName());
+                                Descritption.setText(PointOfInt.getDescription());
 
 
+                                pullBottomSheet(poiLocation);
+                            }
+                        };
 
+                        runOnUiThread(test);
+                    }
+                });
+                return false;
+            }
+        });
 
         //Calls function to display geofence circle
         displayGeofences();
@@ -444,7 +516,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         }
 
         //Location LatLng defined here
-        LatLng stoke = new LatLng(53.0027, -2.1794);
+
         //LatLng center = new LatLng(0, 0);
 
         //Permanent Markers added and camera zoom on initial startup
@@ -469,7 +541,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     @Override
     public boolean onMarkerClick(Marker marker)
     {
-        pullBottomSheet();
+
         return false;
     }
 

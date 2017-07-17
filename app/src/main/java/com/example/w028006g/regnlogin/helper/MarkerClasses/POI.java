@@ -128,13 +128,13 @@ public abstract class POI implements ClusterItem
     public String getTitle()
     {
         String title = aAddressInfo.getFeatureName();
-        return title;
+        return null;
     }
 
     @Override
     public String getSnippet()
     {
-        return sDescription;
+        return null;
     }
 
 

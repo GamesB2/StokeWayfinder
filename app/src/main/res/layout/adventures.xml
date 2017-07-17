@@ -47,7 +47,11 @@
                 android:background="@drawable/white_grey_border_top"
                 app:menu="@menu/bottom_navigation_menu">
 
-
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    android:layout_above="@id/bottomBar"
+                    android:background="@drawable/shadow"/>
             </android.support.design.widget.BottomNavigationView>
         </RelativeLayout>
 
