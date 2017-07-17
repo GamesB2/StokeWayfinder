@@ -174,4 +174,9 @@ public abstract class POI implements ClusterItem
         }
         tags.add(temp);
     }
+
+    public ArrayList<Tag> getTags()
+    {
+        return tags;
+    }
 }

@@ -1,4 +1,5 @@
 package com.example.w028006g.regnlogin.app;
+import android.net.Uri;
 
 public class AppConfig {
     // Server user login url
@@ -19,4 +20,5 @@ public class AppConfig {
     public static final int CONNECTION_TIMEOUT=10000;
 
     public static final int READ_TIMEOUT=15000;
+
 }

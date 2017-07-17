@@ -1,6 +1,9 @@
 package com.example.w028006g.regnlogin.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,20 +21,33 @@ import android.view.MenuItem;
 
 import android.widget.Button;
 import android.widget.ImageView;
+
 import android.widget.TextView;
 
 import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
+import com.example.w028006g.regnlogin.MainActivity1;
 import com.example.w028006g.regnlogin.Person;
 import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.Tickets_My;
+import com.example.w028006g.regnlogin.app.AppController;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 import com.example.w028006g.regnlogin.helper.DownloadImageTask;
 import com.example.w028006g.regnlogin.helper.MyRecyclerViewAdapterPosts;
-import com.example.w028006g.regnlogin.helper.MarkerClasses.Post;
 import com.example.w028006g.regnlogin.helper.SQLiteHandler;
 import com.example.w028006g.regnlogin.helper.SessionManager;
+import com.github.gorbin.asne.core.SocialNetwork;
+import com.github.gorbin.asne.core.listener.OnRequestSocialPersonCompleteListener;
+import com.github.gorbin.asne.core.persons.SocialPerson;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 
 import android.view.View;
+import android.widget.Toast;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,7 +71,8 @@ import java.util.Set;
 import static com.example.w028006g.regnlogin.app.AppConfig.CONNECTION_TIMEOUT;
 import static com.example.w028006g.regnlogin.app.AppConfig.READ_TIMEOUT;
 
-public class Profile extends AppCompatActivity {
+public class Profile extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
+
 
     private TextView txtName;
     private TextView txtEmail;
@@ -64,12 +81,14 @@ public class Profile extends AppCompatActivity {
     private Button btnPoints;
     private RecyclerView mRecyclerView;
     private MyRecyclerViewAdapterPosts adapter;
-    private ArrayList<Post> postist = new ArrayList<>();
+    private ArrayList<com.example.w028006g.regnlogin.helper.MarkerClasses.Post> postist = new ArrayList<>();
     private String posts="";
 
     private Button btnLogout;
     private Button btnMaps;
     private ImageView imgUser;
+
+    private GoogleApiClient mGoogleApiClient;
 
 
 
@@ -77,17 +96,24 @@ public class Profile extends AppCompatActivity {
     private SessionManager session;
     public static Person userDetails;
 
+    private SocialNetwork socialNetwork;
+    private int networkId;
+
+
     String name;
     String email;
     String u_id;
     String tickets;
-
+    private Thread thread;
 
     private Scene scene1, scene2;
     //transition to move between scenes
     private Transition transition;
     //flag to swap between scenes
     private boolean start;
+
+
+    private ArrayList<Integer> post = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -114,35 +140,46 @@ public class Profile extends AppCompatActivity {
         menuItem.setChecked(true);
 
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener()
-        {
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item)
-            {
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
                 switch (item.getItemId()) {
                     case R.id.ic_map:
                         Intent intent = new Intent(getApplicationContext(), MapsActivityNew.class);
                         startActivity(intent);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
                     case R.id.ic_Profile:
                         Intent intent1 = new Intent(getApplicationContext(), Profile.class);
                         startActivity(intent1);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
                     case R.id.ic_qr:
                         Intent intent2 = new Intent(getApplicationContext(), qrActivity.class);
                         startActivity(intent2);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
                     case R.id.ic_shop:
                         Intent intent3 = new Intent(getApplicationContext(), Tickets.class);
                         startActivity(intent3);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
                     case R.id.ic_Rec:
-                        Intent intent4 = new Intent(getApplicationContext(), StartScreen.class);
+
+                        Intent intent4 = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent4);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
                 }
                 return false;
@@ -151,7 +188,9 @@ public class Profile extends AppCompatActivity {
 
         //Download user image
         new DownloadImageTask((ImageView) findViewById(R.id.profilePic))
-                .execute("https://concussive-shirt.000webhostapp.com/uploads/" + MainActivity.userDetails.getU_id() + ".png" );
+
+                .execute("https://concussive-shirt.000webhostapp.com/uploads/" + MainActivity.userDetails.getU_id() + ".png");
+
         // Displaying the user details on the screen
         txtName.setText(MainActivity.userDetails.getName());
         txtEmail.setText(MainActivity.userDetails.getEmail());
@@ -162,6 +201,7 @@ public class Profile extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent4 = new Intent(Profile.this, Tickets_My.class);
                 startActivity(intent4);
+                overridePendingTransition(0,0);
             }
         });
 
@@ -192,9 +232,73 @@ public class Profile extends AppCompatActivity {
             }
         });
 
-        new Profile.AsyncLogin().execute(MainActivity.userDetails.getEmail());
+        SharedPreferences prefs = AppController.getInstance().getSharedPreferences("MYPREFS", Context.MODE_PRIVATE);
+        networkId = prefs.getInt("SocialNet", -1);
+
+        if (networkId == -1) {
+            new DownloadImageTask((ImageView) findViewById(R.id.profilePic))
+                    .execute("https://concussive-shirt.000webhostapp.com/uploads/" + MainActivity.userDetails.getU_id() + ".png");
+            // Displaying the user details on the screen
+            txtName.setText(MainActivity.userDetails.getName());
+            txtEmail.setText(MainActivity.userDetails.getEmail());
+
+            thread = new Thread() {
+                @Override
+                public void run() {
+                    while (!isInterrupted())
+                    {
+                        new Profile.AsyncLogin().execute(MainActivity.userDetails.getEmail());
+                    }
+                }
+            };
+        }
+        if (networkId == 0 || networkId == 3)
+        {
+            txtName.setText(AppController.getInstance().getGName());
+            txtEmail.setText(AppController.getInstance().getGEmail());
+        } else
+
+            {
+            socialNetwork = LoginActivity.mSocialNetworkManager.getSocialNetwork(networkId);
+            socialNetwork.setOnRequestCurrentPersonCompleteListener(new OnRequestSocialPersonCompleteListener()
+            {
+                @Override
+                public void onRequestSocialPersonSuccess(int socialNetworkId, SocialPerson socialPerson)
+                {
+                    txtName.setText(socialPerson.name);
+                    txtEmail.setText(socialPerson.email);
+                    new DownloadImageTask((ImageView) findViewById(R.id.profilePic))
+                            .execute(socialPerson.avatarURL);
+                }
+
+                @Override
+                public void onError(int socialNetworkID, String requestID, String errorMessage, Object data)
+                {
+                    Toast.makeText(getApplicationContext(), "something went oopsy", Toast.LENGTH_SHORT);
+                }
+            });
+            socialNetwork.requestCurrentPerson();
+            }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        buildGoogleApiClient();
+        mGoogleApiClient.connect();
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+
+        if (mGoogleApiClient == null) {
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail()
+                    .build();
+            mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                    .build();
+        }
+    }
 
     public void changeScene(View v){
 
@@ -207,6 +311,21 @@ public class Profile extends AppCompatActivity {
             TransitionManager.go(scene1, transition);
             start=true;
         }
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 
     private class AsyncLogin extends AsyncTask<String, String, String>
@@ -322,6 +441,7 @@ public class Profile extends AppCompatActivity {
                         posts = c.getString("posts");
                     }
 
+
                     posts = posts.substring(1);
                     String[] postsParts = posts.split(",");
                     ArrayList<Integer> post = new ArrayList<>();
@@ -358,7 +478,6 @@ public class Profile extends AppCompatActivity {
                     System.out.println(posts);
 
                     // Launch main activity
-
                 } else {
                     // Error in login. Get the error message
                     String errorMsg = jObj.getString("error_msg");
@@ -372,19 +491,58 @@ public class Profile extends AppCompatActivity {
             }
 
 
-
         }
 
     }
 
     private void logoutUser() {
-        session.setLogin(false);
 
-        db.deleteUsers();
+        switch (networkId) {
+            case -1:
+                session.setLogin(false);
+                db.deleteUsers();
+                break;
+
+            case 3:
+                session.setLogin(false);
+                Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                        new ResultCallback<Status>() {
+                            @Override
+                            public void onResult(Status status) {
+                                // [START_EXCLUDE]
+                                //updateUI(false);
+                                // [END_EXCLUDE]
+                            }
+                        });
+                break;
+
+            default:
+                session.setLogin(false);
+                socialNetwork.logout();
+                break;
+        }
+
 
         // Launching the login activity
-        Intent intent = new Intent(Profile.this, LoginActivity.class);
+        Intent intent = new Intent(Profile.this, MainActivity1.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+        overridePendingTransition(0, 0);
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (thread != null) {
+            thread.interrupt();
+        }
+
     }
 }

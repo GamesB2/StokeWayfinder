@@ -12,6 +12,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
@@ -42,6 +44,8 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
+
+import com.example.w028006g.regnlogin.MainActivity1;
 import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.app.AppConfig;
 import com.example.w028006g.regnlogin.app.AppController;
@@ -147,7 +151,8 @@ public class RegisterActivity extends AppCompatActivity {
 
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(),
-                        LoginActivity.class);
+                        MainActivity1.class);
+
                 startActivity(i);
                 finish();
             }
@@ -230,10 +235,21 @@ public class RegisterActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "You Have Successfully Registered. Please Try login now!", Toast.LENGTH_LONG).show();
 
                         // Launch login activity
+
+                        FragmentManager manager = getSupportFragmentManager();
+                        if (manager != null){
+                            FragmentTransaction transaction = manager.beginTransaction();
+                            if (transaction != null) {
+                                transaction.replace(R.id.container, new LoginActivity());
+                                transaction.commit();
+                            }
+                        }
+
                         Intent intent = new Intent(
                                 RegisterActivity.this,
-                                LoginActivity.class);
+                                MainActivity1.class);
                         startActivity(intent);
+
                         finish();
                     } else {
 

@@ -72,6 +72,7 @@ public class MainActivity1 extends AppCompatActivity implements FragmentManager.
         return super.onOptionsItemSelected(item);
     }
 
+
     public static void showProgress(String message) {
         pd = new ProgressDialog(context);
         pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);

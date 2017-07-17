@@ -1,7 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          package="com.example.w028006g.regnlogin">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.w028006g.regnlogin">
+
+
+    <!--
+           The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+           Google Maps Android API v2, but you must specify either coarse or fine
+           location permissions for the 'MyLocation' functionality.
+    -->
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -10,30 +27,14 @@
              sign the APK for publishing.
              You can define the keys for the debug and release targets in src/debug/ and src/release/.
     -->
-    <!-- <meta-data -->
-    <!-- android:name="com.google.android.geo.API_KEY" -->
-    <!-- android:value="AIzaSyDhzP3Rhgkqr1dOLurL8VnaNVw3aqhmQ7c" /> -->
+    <!--<meta-data-->
+        <!--android:name="com.google.android.geo.API_KEY"-->
+        <!--android:value="AIzaSyDhzP3Rhgkqr1dOLurL8VnaNVw3aqhmQ7c" />-->
+
     <uses-sdk
+        tools:node="merge"
         android:minSdkVersion="23"
-        android:targetSdkVersion="25"
-        tools:node="merge"/>
-
-    <!--
-           The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
-           Google Maps Android API v2, but you must specify either coarse or fine
-           location permissions for the 'MyLocation' functionality.
-    -->
-
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-
+        android:targetSdkVersion="25"/>
     <application
         android:name=".app.AppController"
         android:allowBackup="true"
@@ -45,9 +46,9 @@
             android:name=".activity.SplashActivity"
             android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
@@ -59,21 +60,26 @@
         <service
             android:name=".helper.DatabaseRetrieval"
             android:exported="false"/>
-
         <activity
             android:name=".MainActivity1"
             android:label="@string/app_name"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop" />
         <activity
             android:name=".activity.RegisterActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop" />
         <activity
+
+            android:name=".activity.SignInActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTop" />
+        <activity
+
             android:name=".activity.ResetActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"/>
@@ -90,7 +96,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key"/>
+            android:value="@string/google_maps_key" />
 
         <service
             android:name=".GeolocationService"
@@ -113,7 +119,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.w028006g.regnlogin.activity.MapsActivityNew"/>
+                android:value="com.example.w028006g.regnlogin.activity.MapsActivityNew" />
         </activity>
         <activity
             android:name=".activity.SettingsActivity"
@@ -134,6 +140,7 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
+
         <service
             android:name=".GeolocationService"
             android:icon="@drawable/ic_action_location"
@@ -141,24 +148,20 @@
         </service>
         <service
             android:name=".GeofenceReceiver"
-            android:exported="false">
+            android:exported="false" >
         </service>
 
         <receiver
             android:name=".GeofenceReceiver"
-            android:exported="false">
+            android:exported="false" >
             <intent-filter>
-                <action android:name="com.example.w028006g.regnlogin.ACTION_RECEIVE_GEOFENCE"/>
+                <action android:name="com.example.w028006g.regnlogin.ACTION_RECEIVE_GEOFENCE" />
             </intent-filter>
         </receiver>
 
-        <meta-data
-            android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
-
-        <provider
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <provider android:authorities="com.facebook.app.FacebookContentProvider759833020854274"
             android:name="com.facebook.FacebookContentProvider"
-            android:authorities="com.facebook.app.FacebookContentProvider759833020854274"
             android:exported="true"/>
 
         <activity android:name=".Tickets_View"/>
@@ -167,8 +170,8 @@
         <activity android:name=".History"/>
         <activity android:name=".activity.Profile"/>
         <activity android:name=".activity.Tickets"/>
-        <activity android:name=".My_Points"/>
-        <activity android:name=".activity.StartScreen"/>
+        <activity android:name=".My_Points"></activity>
+
         <activity
             android:name=".activity.FilterActivity"
             android:label="activity_filter"

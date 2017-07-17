@@ -1,4 +1,5 @@
 package com.example.w028006g.regnlogin.activity;
+import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
 
 import com.example.w028006g.regnlogin.MainActivity1;
 import com.example.w028006g.regnlogin.activity.LoginActivity;
@@ -35,9 +36,17 @@ import android.graphics.BitmapFactory;
 import android.media.Image;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
+import android.util.Log;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -67,7 +76,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.recommend);
+
 
         Intent intent = new Intent(MainActivity.this, GeolocationService.class);
         startService(intent);
@@ -106,8 +116,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Displaying the user details on the screen
-        txtName.setText(name);
-        txtEmail.setText(email);
+//        txtName.setText(name);
+//        txtEmail.setText(email);
+
 
 
         try {
@@ -127,47 +138,87 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Logout button click event
-        btnLogout.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                logoutUser();
-                if (networkId == -1){
+//        btnLogout.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                logoutUser();
+//                if (networkId == -1) {
+//
+//                } else {
+//                    socialNetwork.logout();
+//                }
+//
+//            }
+//        });
 
-                } else {
-                    socialNetwork.logout();
-                }
-
-            }
-        });
-
-        btnMaps.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MapsActivityNew.class);
-                startActivity(intent);
-            }
-        });
+//        btnMaps.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getApplicationContext(), MapsActivityNew.class);
+//                startActivity(intent);
+//            }
+//        });
 
         checkIntent(getIntent());
 
-        SharedPreferences prefs = AppController.getInstance().getSharedPreferences("MYPREFS", Context.MODE_PRIVATE);
-        networkId = prefs.getInt("SocialNet", -1);
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView_Bar);
+        BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
+        Menu menu = bottomNavigationView.getMenu();
+        MenuItem menuItem = menu.getItem(0);
+        menuItem.setChecked(true);
 
-        if (networkId == -1) {
 
-        } else {
-            if (networkId != 0) {
-                socialNetwork = LoginActivity.mSocialNetworkManager.getSocialNetwork(networkId);
-                //socialNetwork.setOnRequestCurrentPersonCompleteListener(this);
-                socialNetwork.requestCurrentPerson();
-            } else {
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener()
+        {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item)
+            {
+                switch (item.getItemId()) {
+                    case R.id.ic_map:
+                        Intent intent = new Intent(getApplicationContext(), MapsActivityNew.class);
+                        startActivity(intent);
+                        overridePendingTransition(0, 0);
+                        finish();
+                        break;
 
+                    case R.id.ic_Profile:
+                        Intent intent1 = new Intent(getApplicationContext(), Profile.class);
+                        startActivity(intent1);
+                        overridePendingTransition(0, 0);
+                        finish();
+                        break;
+
+                    case R.id.ic_qr:
+                        Intent intent2 = new Intent(getApplicationContext(), qrActivity.class);
+                        startActivity(intent2);
+                        overridePendingTransition(0, 0);
+                        finish();
+                        break;
+
+                    case R.id.ic_shop:
+                        Intent intent3 = new Intent(getApplicationContext(), Tickets.class);
+                        startActivity(intent3);
+                        overridePendingTransition(0, 0);
+                        finish();
+                        break;
+
+                    case R.id.ic_Rec:
+                        Intent intent4 = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(intent4);
+                        overridePendingTransition(0, 0);
+                        finish();
+                        break;
+                }
+                return false;
             }
-        }
+        });
 
     }
+
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -175,7 +226,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         new DownloadImageTask((ImageView) findViewById(R.id.img_userprofile))
-                .execute("https://concussive-shirt.000webhostapp.com/uploads/" + u_id + ".png" );
+                .execute("https://concussive-shirt.000webhostapp.com/uploads/" + u_id + ".png");
+
     }
 
     public void checkIntent(Intent intent) {
@@ -183,14 +235,19 @@ public class MainActivity extends AppCompatActivity {
             ClickActionHelper.startActivity(intent.getStringExtra("click_action"), intent.getExtras(), this);
         }
     }
+
     /**
      * Logging out the user. Will set isLoggedIn flag to false in shared
      * preferences Clears the user data from sqlite users table
-     * */
+     */
     private void logoutUser() {
-        session.setLogin(false);
+        if (networkId == -1) {
+            socialNetwork.logout();
+        } else {
+            session.setLogin(false);
+            db.deleteUsers();
+        }
 
-        db.deleteUsers();
 
         // Launching the login activity
         Intent intent = new Intent(MainActivity.this, MainActivity1.class);

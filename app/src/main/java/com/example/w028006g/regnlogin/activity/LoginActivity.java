@@ -2,20 +2,27 @@ package com.example.w028006g.regnlogin.activity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+
 import android.support.v4.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+
 import android.util.Base64;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+
+import android.widget.ImageView;
+
 import android.widget.Toast;
 import com.android.volley.Request.Method;
 import com.android.volley.Response;
@@ -25,30 +32,53 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 import com.example.w028006g.regnlogin.activity.MainActivity;
+
 import com.example.w028006g.regnlogin.MainActivity1;
 
 import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.app.AppConfig;
 import com.example.w028006g.regnlogin.app.AppController;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
+
+import com.example.w028006g.regnlogin.helper.DownloadImageTask;
+
 import com.example.w028006g.regnlogin.helper.SQLiteHandler;
 import com.example.w028006g.regnlogin.helper.SessionManager;
 import com.github.gorbin.asne.core.SocialNetwork;
 import com.github.gorbin.asne.core.SocialNetworkManager;
 import com.github.gorbin.asne.core.listener.OnLoginCompleteListener;
+
+import com.github.gorbin.asne.core.listener.OnRequestSocialPersonCompleteListener;
+import com.github.gorbin.asne.core.persons.SocialPerson;
+import com.github.gorbin.asne.facebook.FacebookSocialNetwork;
+import com.github.gorbin.asne.twitter.TwitterSocialNetwork;
+import com.scottyab.aescrypt.AESCrypt;
+
+
+
 import com.github.gorbin.asne.facebook.FacebookSocialNetwork;
 import com.github.gorbin.asne.linkedin.LinkedInSocialNetwork;
 import com.github.gorbin.asne.twitter.TwitterSocialNetwork;
 
 import static android.content.Context.MODE_PRIVATE;
+
 import static com.example.w028006g.regnlogin.MainActivity1.SOCIAL_NETWORK_TAG;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -64,7 +94,8 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
     private SessionManager session;
     private SQLiteHandler db;
 
-    private int networkId = 0;
+
+    private int networkId;
 
     public static SocialNetworkManager mSocialNetworkManager;
     /**
@@ -82,6 +113,8 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
     private Button twitter;
     private Button linkedin;
     private Button googleplus;
+    private SocialNetwork socialNetwork;
+
 
 
     public LoginActivity() {
@@ -191,7 +224,7 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
         // init buttons and set Listener
         facebook = (Button) rootView.findViewById(R.id.facebook);
         facebook.setOnClickListener(loginClick);
-        google = (Button) rootView.findViewById(R.id.twitter);
+        google = (Button) rootView.findViewById(R.id.googleplus);
         google.setOnClickListener(loginClick);
 
 
@@ -224,7 +257,7 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
             TwitterSocialNetwork twNetwork = new TwitterSocialNetwork(this, TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_CALLBACK_URL);
             mSocialNetworkManager.addSocialNetwork(twNetwork);
 
-            //Init and add to manager LinkedInSocialNetwork
+
 //            GooglePlusSocialNetwork gpNetwork = new GooglePlusSocialNetwork(this);
 //            mSocialNetworkManager.addSocialNetwork(gpNetwork);
 
@@ -252,12 +285,14 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
                     networkId = FacebookSocialNetwork.ID;
                     break;
 //                case GooglePlusSocialNetwork.ID:
-//                    google.setText("Continue With");
+
+//                    googleplus.setText("Continue With");
 //                    break;
-                case TwitterSocialNetwork.ID:
-                    google.setText("Continue With");
-                    networkId = TwitterSocialNetwork.ID;
-                    break;
+//                case TwitterSocialNetwork.ID:
+//                    google.setText("Continue With");
+//                    networkId = GooglePlusSocialNetwork.ID;
+//                    break;
+
             }
         }
     }
@@ -280,23 +315,31 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
                 case R.id.facebook:
                     networkId = FacebookSocialNetwork.ID;
                     break;
-//                case R.id.google:
-//                    networkId = GooglePlusSocialNetwork.ID;
-//                    break;
-                case R.id.twitter:
-                    networkId = TwitterSocialNetwork.ID;
+
+                case R.id.googleplus:
+                    networkId = 3;
                     break;
+
             }
-            SocialNetwork socialNetwork = mSocialNetworkManager.getSocialNetwork(networkId);
-            if(!socialNetwork.isConnected()) {
-                if(networkId != 0) {
-                    socialNetwork.requestLogin();
-                    MainActivity1.showProgress("Loading social person");
-                } else {
-                    Toast.makeText(getActivity(), "Wrong networkId", Toast.LENGTH_LONG).show();
-                }
+            if (networkId == 3) {
+                SharedPreferences prefs = AppController.getInstance().getSharedPreferences("MYPREFS", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putInt("SocialNet", networkId).apply();
+                editor.commit();
+                Intent glogin = new Intent(getApplicationContext(), SignInActivity.class);
+                startActivity(glogin);
             } else {
-                startProfile(socialNetwork.getID());
+                SocialNetwork socialNetwork = mSocialNetworkManager.getSocialNetwork(networkId);
+                if (!socialNetwork.isConnected()) {
+                    if (networkId != 0) {
+                        socialNetwork.requestLogin();
+                        MainActivity1.showProgress("Loading social person");
+                    } else {
+                        Toast.makeText(getActivity(), "Wrong networkId", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    startProfile(socialNetwork.getID());
+                }
             }
 
 
@@ -323,11 +366,38 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt("SocialNet", networkId).apply();
         editor.commit();
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Date date = new Date();
+        final String datestring =  (dateFormat.format(date)); //2016/11/16 12:08:43
+
+
+        socialNetwork = LoginActivity.mSocialNetworkManager.getSocialNetwork(networkId);
+        socialNetwork.setOnRequestCurrentPersonCompleteListener(new OnRequestSocialPersonCompleteListener() {
+            @Override
+            public void onRequestSocialPersonSuccess(int socialNetworkId, SocialPerson socialPerson) {
+                try {
+                    String encryptedPass = AESCrypt.encrypt("wayfinder", socialPerson.email);
+                    BackgroundTaskSocial backgroundTask=new BackgroundTaskSocial(getApplicationContext());
+                    backgroundTask.execute("register", socialPerson.email, encryptedPass, socialPerson.name, datestring);
+                } catch( Exception e ) {
+                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG);
+                }
+            }
+
+            @Override
+            public void onError(int socialNetworkID, String requestID, String errorMessage, Object data) {
+                Toast.makeText(getApplicationContext(), "something went oopsy", Toast.LENGTH_SHORT);
+            }
+        });
+
+        socialNetwork.requestCurrentPerson();
+
         startActivity(maps);
     }
     /**
      * function to verify login details in mysql db
      * */
+
     private void checkLogin(final String email, final String password)
     {
         // Tag used to cancel the request
@@ -427,7 +497,7 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
     private void hideDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();
-        
+
     }
 
     public void startService(View view) {

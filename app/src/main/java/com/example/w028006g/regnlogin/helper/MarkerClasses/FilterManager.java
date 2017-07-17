@@ -1,318 +1,125 @@
 package com.example.w028006g.regnlogin.helper.MarkerClasses;
 
-import android.graphics.Bitmap;
-import android.location.Address;
-import android.location.Location;
-import android.os.Parcelable;
-import android.widget.CheckBox;
-
-import com.example.w028006g.regnlogin.GeolocationService;
-import com.example.w028006g.regnlogin.R;
-import com.example.w028006g.regnlogin.helper.MarkerClasses.Attraction;
-import com.example.w028006g.regnlogin.helper.MarkerClasses.Event;
-import com.example.w028006g.regnlogin.helper.MarkerClasses.Landmark;
-import com.example.w028006g.regnlogin.helper.MarkerClasses.POI;
-import com.example.w028006g.regnlogin.helper.MarkerClasses.Post;
-import com.example.w028006g.regnlogin.helper.MarkerClasses.UserPin;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.maps.android.clustering.ClusterManager;
-import com.twitter.sdk.android.core.models.User;
+import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
-/**
- * Created by a025178g on 21/06/2017.
- */
 
 public class FilterManager
 {
-    private static ArrayList<POI> poiArrayList = new ArrayList<>();
-    private static ArrayList<POI> FilteredPOI;
-    private static ArrayList<String> tagsArrayList = new ArrayList<>();
-    private static GoogleMap mMap;
-    private static boolean[] filter;
-    private static int maxRange = 50000;
-    private static boolean rangeFilter = false;//Should be the same as MAX constant in FilterActivity
-    private static Location location;
-    private static LatLng userLatLng;
+    private static final ArrayList<POI> POINTSARRAY = DatabaseRetrieval.getPoints();
+    private static ArrayList<POI> FILTERABLE = getFilterablePoints();
+    private static ArrayList<POI> filteredPoints = POINTSARRAY;
+    private static ArrayList<Tag> filteredTags = null;
+    private static ArrayList<Tag> ALLTAGS = Tag.getAllTags();
+    private static ArrayList<Tag> availableTags = ALLTAGS;
+    private static boolean[] typeFilter = new boolean[3];
+    private static boolean typeFilterFlag = false;
+    private static final int ATTRACTION = 0;
+    private static final int LANDMARK = 1;
+    private static final int EVENT = 2;
 
-    //Type Filter: Attractions, Landmarks, Events, etc.
-    private static HashMap<CheckBox, Boolean> TypeFilter;
-    //Categorical Filter: Music, Business, Family, etc.
-    private static boolean[] catFilter;
-
-    public FilterManager(GoogleMap map, ArrayList<POI> arrayList)
+    public static void setFilteredTags(Tag tag)
     {
-        poiArrayList = arrayList;
-        fillTags();
-    }
-
-    public static boolean[] getFilter()
-    {
-        return filter;
-    }
-
-    public static void filterOut(int CONSTANT)
-    {
-        filter[CONSTANT] = true;
-    }
-
-    public static void filterIn(int CONSTANT)
-    {
-        filter[CONSTANT] = false;
-    }
-
-    //Populates the maps with ALL markers and icons from the POI Array
-    public static void popFilter()
-    {
-        location = new Location("");
-        location.setLatitude(userLatLng.latitude);
-        location.setLongitude(userLatLng.longitude);
-
-        FilteredPOI = new ArrayList<>();
-
-        if (!filter[0])
+        if (filteredTags == null)
         {
-            popMapPins();
+            filteredTags.add(tag);
         }
 
-        if(!filter[1])
-        {
-            popMapAtt();
-        }
+    }
 
-        if(!filter[2])
-        {
-            popMapLnd();
-        }
+    public static ArrayList<Tag> getFilteredTags()
+    {
+        return filteredTags;
+    }
 
-        if(!filter[3])
+    public static void setFilterByType(int index)
+    {
+        typeFilter = new boolean[3];
+        typeFilterFlag = false;
+        if(index >=0 && index <= 2)
         {
-            popMapEvents();
-        }
-
-        if(!filter[4])
-        {
-            popMapTotem();
+            typeFilter[index] = true;
+            typeFilterFlag = true;
         }
     }
-    //Populates the maps with Attractions markers from the POI Array
-    public static void popMapAtt()
+
+    public static boolean[] getTypeFilter()
     {
-        for (int i = 0; i < poiArrayList.size(); i++)
+        return typeFilter;
+    }
+
+    private static void setFilteredPoints()
+    {
+        filteredPoints.clear();
+        if(typeFilterFlag)
         {
-            POI item = poiArrayList.get(i);
-            if (item instanceof Attraction)
+            filterOutTypes();
+        }
+        else
+        {
+            filteredPoints = FILTERABLE;
+        }
+
+        availableTags = Tag.getRelevantTags(filteredPoints);
+
+        if(!filteredTags.isEmpty()) //No filtered tags have been selected so show all results
+        {
+            refineByTags();
+        }
+    }
+
+    private static ArrayList<POI> getFilterablePoints()
+    {
+        ArrayList<POI> templist = new ArrayList<>();
+        for(int i = 0; i < POINTSARRAY.size(); i++)
+        {
+            POI temp = POINTSARRAY.get(i);
+            if(temp instanceof Attraction|| temp instanceof Event || temp instanceof Landmark)
             {
-                Attraction att = (Attraction)item;
-                Address add = item.getAddressInfo();
-                LatLng dest = new LatLng(add.getLatitude(), add.getLongitude());
+                templist.add(temp);
+            }
+        }
+        return templist;
+    }
 
-                Location destLoc = new Location("");
-                destLoc.setLatitude(dest.latitude);
-                destLoc.setLongitude(dest.longitude);
-
-                float distance = location.distanceTo(destLoc);
-
-                if ((!rangeFilter || distance <= maxRange)&&(!filter[att.getIcon()]))
+    private static void filterOutTypes()
+    {
+        if(typeFilter[ATTRACTION])
+        {
+            for(int i = 0; i < FILTERABLE.size(); i++)
+            {
+                POI temp = filteredPoints.get(i);
+                if(temp instanceof Attraction)
                 {
-//                    temp = mMap.addMarker(new MarkerOptions()
-//                            .position(dest)
-//                            .title(add.getFeatureName())
-//                            .snippet(item.getDescription())
-//                            .icon(BitmapDescriptorFactory.fromResource(IconManager.nArrIconID[att.getIcon()])));
-
-                    FilteredPOI.add(item);
+                    filteredPoints.add(temp);
+                }
+            }
+        } else if (typeFilter[EVENT])
+        {
+            for(int i = 0; i < FILTERABLE.size(); i++)
+            {
+                POI temp = filteredPoints.get(i);
+                if (temp instanceof Event)
+                {
+                    filteredPoints.add(temp);
+                }
+            }
+        } else if (typeFilter[LANDMARK])
+        {
+            for(int i = 0; i < FILTERABLE.size(); i++)
+            {
+                POI temp = filteredPoints.get(i);
+                if (temp instanceof Landmark)
+                {
+                    filteredPoints.add(temp);
                 }
             }
         }
     }
 
-
-    //Populates the maps with Landmarks markers from the POI Array
-    public static void popMapLnd()
+    private static void refineByTags()
     {
-        Marker temp = null;
-        for (int i = 0; i < poiArrayList.size(); i++)
-        {
-            POI item = poiArrayList.get(i);
-            if (item instanceof Landmark)
-            {
-                Landmark lnd = (Landmark)item;
-                Address add = item.getAddressInfo();
-                LatLng dest = new LatLng(add.getLatitude(), add.getLongitude());
 
-                Location destLoc = new Location("");
-                destLoc.setLatitude(dest.latitude);
-                destLoc.setLongitude(dest.longitude);
-
-                float distance = location.distanceTo(destLoc);
-
-                if ((!rangeFilter || distance <= maxRange))
-                {
-//                    temp = mMap.addMarker(new MarkerOptions()
-//                            .position(dest)
-//                            .title(add.getFeatureName())
-//                            .snippet(item.getDescription())
-//                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.landmark)));
-
-                    FilteredPOI.add(item);
-                }
-            }
-        }
-    }
-
-    //Populates the maps with Events markers from the POI Array
-    public static void popMapEvents()
-    {
-        Marker temp = null;
-        for (int i = 0; i < poiArrayList.size(); i++)
-        {
-            POI item = poiArrayList.get(i);
-            if (item instanceof Event)
-            {
-                Event evnt = (Event)item;
-                Address add = item.getAddressInfo();
-                LatLng dest = new LatLng(add.getLatitude(), add.getLongitude());
-
-                Location destLoc = new Location("");
-                destLoc.setLatitude(dest.latitude);
-                destLoc.setLongitude(dest.longitude);
-
-                float distance = location.distanceTo(destLoc);
-
-                if ((!rangeFilter || distance <= maxRange)&&(!filter[evnt.getIcon()]))
-                {
-//                    Bitmap bitmap = changeIcon(event.getIcon());
-//                    temp = mMap.addMarker(new MarkerOptions()
-//                            .position(dest)
-//                            .title(add.getFeatureName())
-//                            .snippet(item.getDescription())
-//                            .icon(BitmapDescriptorFactory.fromResource(IconManager.nArrIconID[event.getIcon()])));
-
-                    FilteredPOI.add(item);
-                }
-            }
-        }
-    }
-
-    public static void popMapTotem()
-    {
-        Marker temp = null;
-        for (int i = 0; i < poiArrayList.size(); i++)
-        {
-            POI item = poiArrayList.get(i);
-            if (item instanceof Post)
-            {
-                Post post = (Post) item;
-                Address add = item.getAddressInfo();
-                LatLng dest = new LatLng(add.getLatitude(), add.getLongitude());
-
-                Location destLoc = new Location("");
-                destLoc.setLatitude(dest.latitude);
-                destLoc.setLongitude(dest.longitude);
-
-                float distance = location.distanceTo(destLoc);
-
-                if ((!rangeFilter || distance <= maxRange))
-                {
-//                    temp = mMap.addMarker(new MarkerOptions()
-//                            .position(dest)
-//                            .title(add.getFeatureName())
-//                            .snippet(item.getDescription())
-//                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.totem)));
-
-                    FilteredPOI.add(item);
-                }
-            }
-        }
-    }
-
-    public static void popMapPins()
-    {
-        for (int i = 0; i < poiArrayList.size(); i++)
-        {
-            POI item = poiArrayList.get(i);
-            if (item instanceof UserPin)
-            {
-                UserPin userPin = (UserPin) item;
-                Address add = item.getAddressInfo();
-                LatLng dest = new LatLng(add.getLatitude(), add.getLongitude());
-
-                Location destLoc = new Location("");
-                destLoc.setLatitude(dest.latitude);
-                destLoc.setLongitude(dest.longitude);
-
-                //TODO: implement if we enable range filter on user pins
-                //float distance = location.distanceTo(destLoc);
-                //if((!rangeFilter || distance <= maxRange))
-                {
-//                    temp = mMap.addMarker(new MarkerOptions()
-//                            .position(dest)
-//                            .title(add.getFeatureName())
-//                            .snippet(item.getDescription())
-//                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.userpin)));
-
-                    FilteredPOI.add(item);
-                }
-            }
-        }
-    }
-
-    public static void setMaxRange(int nRange)
-    {
-        maxRange = nRange;
-    }
-
-    public static int getMaxRange()
-    {
-        return maxRange;
-    }
-
-    public static void setRangeFilter(boolean filter)
-    {
-        rangeFilter = filter;
-    }
-
-    public static boolean getRangeFilter()
-    {
-        return rangeFilter;
-    }
-
-    public static ArrayList<POI> getFilteredPOI()
-    {
-        popFilter();
-        return FilteredPOI;
-    }
-
-    public static Bitmap changeIcon(int bmp)
-    {
-        Bitmap icon = null;
-        return icon;
-    }
-
-    public static void addPin(UserPin userPin)
-    {
-        poiArrayList.add(userPin);
-    }
-
-    private static void fillTags()
-    {
-        for(int i = 0; i < poiArrayList.size(); i++)
-        {
-
-        }
-    }
-
-    public static ArrayList<POI> getFilteredPoints()
-    {
-        return poiArrayList;
     }
 
 }

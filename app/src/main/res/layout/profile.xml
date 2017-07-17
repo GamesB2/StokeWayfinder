@@ -23,7 +23,9 @@
                 android:layout_height="300dp"
                 android:layout_alignBottom="@+id/linearLayout"
                 android:scaleType="centerCrop"
-                android:src="@drawable/background" />
+
+                android:src="@color/bg_login" />
+
 
             <android.support.v7.widget.Toolbar
                 android:layout_width="match_parent"
@@ -49,7 +51,7 @@
                     android:id="@+id/txtName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tyler Edwards"
+                    android:text=""
                     android:textStyle="bold"
                     android:textSize="20sp"
                     android:layout_marginTop="8dp"
@@ -58,9 +60,24 @@
                     android:id="@+id/txtUserEmail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="\@TylerEdwards"
+                    android:text=""
                     android:textStyle="bold"
                     android:textColor="@color/white"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_place_black_24dp"
+                    android:tint="@android:color/white" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Staffordshire, Stoke-ont-Trent"
+                    android:layout_gravity="center"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="8dp"
+                    android:textColor="@color/white" />
 
                 <Button
                     android:id="@+id/btnTickets"
@@ -68,7 +85,8 @@
                     android:layout_height="wrap_content"
                     android:text="My Purchases"
                     android:layout_marginTop="30dip"
-                    android:background="@color/btn_logut_bg"
+                    android:background="#0d80d9"
+
                     android:textColor="@color/white"
                     android:textSize="15dp" />
 
@@ -77,33 +95,13 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:background="@color/btn_logut_bg"
+                    android:background="#0d80d9"
+
                     android:text="@string/btn_logout"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="15dp" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_place_black_24dp"
-                        android:tint="@android:color/white"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Staffordshire, Stoke-ont-Trent"
-                        android:layout_gravity="center"
-                        android:textStyle="bold"
-                        android:layout_marginLeft="8dp"
-                        android:textColor="@color/white"/>
-
-
-                </LinearLayout>
 
             </LinearLayout>
 

@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#b71c1c</color>
-    <color name="colorPrimaryDark">#b71c1c</color>
+
+    <color name="colorPrimary">#90caf9</color>
+    <color name="colorPrimaryDark">#0d80d9</color>
     <color name="colorAccent">#eceef1</color>
-    <color name="bg_login">#b71c1c</color>
-    <color name="bg_register">#b71c1c</color>
+    <color name="bg_login">#90caf9</color>
+    <color name="bg_register">#90caf9</color>
+
     <color name="bg_main">#1f7abe</color>
     <color name="white">#ffffff</color>
     <color name="colorWhite">#ffffff</color>
@@ -16,8 +18,11 @@
     <color name="btn_login">#26ae90</color>
     <color name="btn_login_bg">#eceef1</color>
     <color name="lbl_name">#333333</color>
-    <color name="btn_logut_bg">#ff6861</color>
-    <color name="btn_text_login">#f14545</color>
+
+    <color name="btn_logut_bg">#90caf9</color>
+    <color name="btn_text_login">#0d80d9</color>
+
+
     <color name="btn_bg_login">#fff</color>
     <color name="colorGrey">#ffffffff </color>
     <color name="grey_light">#FFCCCCCC</color>
@@ -27,5 +32,12 @@
     <color name="linkedin">#287bbc</color>
     <color name="googleplus">#D34836</color>
     <color name="filterPrimary">#ef5350</color>
+
+    <color name="blue_grey_500">#607D8B</color>
+    <color name="blue_grey_600">#546E7A</color>
+    <color name="blue_grey_700">#455A64</color>
+    <color name="blue_grey_800">#37474F</color>
+    <color name="blue_grey_900">#263238</color>
+
 
 </resources>

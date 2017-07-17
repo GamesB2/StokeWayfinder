@@ -19,6 +19,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import android.widget.Button;
 import android.support.design.widget.BottomNavigationView;
 import android.widget.ImageButton;
 
@@ -52,6 +54,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener
 {
     //Assigns the String "TAG" the name of the class for error reports
@@ -62,6 +65,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     LocationManager locationManager;
     private ClusterManager<POI> clusterManager;
     private boolean pauseState = false;
+    private FilterManager;
 
     //Constant used as a request code for the location permissions
     final int MY_PERMISSIONS_REQUEST_LOCATION = 14;
@@ -71,7 +75,10 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     private GoogleMap mMap;
 
     private static final String NOTIFICATION_MSG = "NOTIFICATION MSG";
+    public Button btnQR;
+
     public ImageButton btnFilter;
+
 
     static public boolean geofencesAlreadyRegistered = false;
 
@@ -82,11 +89,12 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         setContentView(R.layout.activity_maps_new);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-//
 //         Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = ((SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map));
         mapFragment.getMapAsync(this);
 
+        //Landmarks, Attractions, and Events Stored in POI Array
+        poiArrayList = DatabaseRetrieval.getPoints();
         //Lat and Long from FireMSGService brought in here
         Bundle FireNotification = getIntent().getExtras();
         if (FireNotification != null) {
@@ -110,26 +118,37 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
                     case R.id.ic_map:
                         Intent intent = new Intent(getApplicationContext(), MapsActivityNew.class);
                         startActivity(intent);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
                     case R.id.ic_Profile:
                         Intent intent1 = new Intent(getApplicationContext(), Profile.class);
                         startActivity(intent1);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
                     case R.id.ic_qr:
                         Intent intent2 = new Intent(getApplicationContext(), qrActivity.class);
                         startActivity(intent2);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
                     case R.id.ic_shop:
                         Intent intent3 = new Intent(getApplicationContext(), Tickets.class);
                         startActivity(intent3);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
                     case R.id.ic_Rec:
-                        Intent intent4 = new Intent(getApplicationContext(), StartScreen.class);
+
+                        Intent intent4 = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent4);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
                 }
                 return false;
@@ -139,7 +158,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         //Starts Geolocation Service
         startService(new Intent(this, GeolocationService.class));
 
-        btnFilter = (ImageButton) findViewById(R.id.FilterButton);
+        btnFilter = (ImageButton)findViewById(R.id.FilterButton);
         btnFilter.setOnClickListener(new View.OnClickListener()
         {
 
@@ -319,14 +338,13 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     @Override
     protected void onResume()
     {
-        if (pauseState)
+        if (clusterManager != null)
         {
             clusterManager.clearItems();
-            FilterManager.popFilter();
+            filterManager.popFilter();
             mMap.clear();
             fillCM();
         }
-        pauseState = true;
         startService(new Intent(this, DatabaseRetrieval.class));
         super.onResume();
     }
@@ -334,7 +352,6 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     @Override
     public void onDestroy()
     {
-        stopService(new Intent(this, DatabaseRetrieval.class));
         super.onDestroy();
     }
 
@@ -350,7 +367,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
 
         new FilterManager(mMap,DatabaseRetrieval.getPoints());
 
-        fillCM();
+
 
 
 
@@ -392,8 +409,11 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
             centerOn(lat, lon);
         }
 
-        //Executes popFilter to populate the markers on the maps
-        //fm.popFilter();
+        //Executes popMap to populate the markers on the maps
+//        filterManager = new FilterManager(mMap,poiArrayList);
+//        filterManager.popMap();
+
+        fillCM();
     }
 
     @Override
@@ -411,6 +431,20 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         {
             clusterManager.addItem(points.get(i));
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+        overridePendingTransition(0, 0);
+        finish();
+    }
+
+    @Override
+    public void finish() {
+        clusterManager.clearItems();
+        super.finish();
     }
 }
 

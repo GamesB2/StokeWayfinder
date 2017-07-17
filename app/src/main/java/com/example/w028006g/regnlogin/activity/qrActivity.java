@@ -15,12 +15,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
+
 import com.example.w028006g.regnlogin.JonnysLab.NewBeep;
+
 import com.example.w028006g.regnlogin.MultiMedia;
 import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 import com.example.w028006g.regnlogin.helper.MyRecyclerViewAdapterPosts;
+
 import com.example.w028006g.regnlogin.helper.MarkerClasses.Post;
+
+
+
 import com.google.zxing.client.android.BeepManager;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -37,7 +43,6 @@ public class qrActivity extends AppCompatActivity implements View.OnClickListene
     //qr code scanner object
     private IntentIntegrator qrScan;
     private BeepManager beepManager;
-    private NewBeep nb;
     private String sResult;
     private final String URL = "http://www.examplesite.com";
     private ArrayList<Post> alPrevScan = new ArrayList<>();
@@ -103,26 +108,36 @@ public class qrActivity extends AppCompatActivity implements View.OnClickListene
                     case R.id.ic_map:
                         Intent intent = new Intent(getApplicationContext(), MapsActivityNew.class);
                         startActivity(intent);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
                     case R.id.ic_Profile:
                         Intent intent1 = new Intent(getApplicationContext(), Profile.class);
                         startActivity(intent1);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
                     case R.id.ic_qr:
                         Intent intent2 = new Intent(getApplicationContext(), qrActivity.class);
                         startActivity(intent2);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
                     case R.id.ic_shop:
                         Intent intent3 = new Intent(getApplicationContext(), Tickets.class);
                         startActivity(intent3);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
                     case R.id.ic_Rec:
-                        Intent intent4 = new Intent(getApplicationContext(), StartScreen.class);
+                        Intent intent4 = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent4);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
                 }
                 return false;
@@ -206,5 +221,13 @@ public class qrActivity extends AppCompatActivity implements View.OnClickListene
             }
         }
         return null;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+        overridePendingTransition(0, 0);
+        finish();
     }
 }

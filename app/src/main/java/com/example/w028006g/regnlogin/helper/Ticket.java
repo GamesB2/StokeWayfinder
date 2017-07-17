@@ -1,5 +1,7 @@
 package com.example.w028006g.regnlogin.helper;
 
+import java.text.DecimalFormat;
+
 /**
  * Created by chriswood on 22/06/2017.
  */
@@ -106,7 +108,10 @@ public class Ticket {
             p = "FREEE!";
         }else
         {
-            p = "£" + String.valueOf(price);
+
+            DecimalFormat df = new DecimalFormat("#.00");
+            p = "£" + df.format(price);
+
         }
         return p;
     }

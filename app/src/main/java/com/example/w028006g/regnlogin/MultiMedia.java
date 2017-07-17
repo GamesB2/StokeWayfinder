@@ -12,7 +12,8 @@ import android.widget.Toast;
 import com.example.w028006g.regnlogin.activity.MainActivity;
 import com.example.w028006g.regnlogin.app.AppConfig;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
-import com.example.w028006g.regnlogin.helper.MarkerClasses.Post;
+
+
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -31,7 +32,7 @@ public class MultiMedia extends YouTubeBaseActivity implements
     private TextView txtMoreInfo;
     private TextView txtName;
     private boolean open = false;
-    private Post p;
+    private com.example.w028006g.regnlogin.helper.MarkerClasses.Post p;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +51,8 @@ public class MultiMedia extends YouTubeBaseActivity implements
 
 
         Intent mIntent1 = getIntent();
-        final int intValue = mIntent1.getIntExtra("id", 0);
+
+        final int intValue = mIntent1.getIntExtra("locCode", 0);
         Intent qrIntent = getIntent();
         final int qrValue = qrIntent.getIntExtra("locCode", 0);
 

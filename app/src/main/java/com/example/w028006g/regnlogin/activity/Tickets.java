@@ -1,12 +1,18 @@
 package com.example.w028006g.regnlogin.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 
+import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
 import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 import com.example.w028006g.regnlogin.helper.MyRecyclerViewAdapter;
@@ -43,38 +49,65 @@ public class Tickets extends AppCompatActivity {
 
 
 
-/*        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
-                    case R.id.ic_map:
-                        Intent intent0 = new Intent(Tickets.this, MapsActivityNew.class);
-                        startActivity(intent0);
 
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView_Bar);
+        BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
+        Menu menu = bottomNavigationView.getMenu();
+        MenuItem menuItem = menu.getItem(4);
+        menuItem.setChecked(true);
+
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener()
+        {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item)
+            {
+                switch (item.getItemId()) {
+                    case R.id.ic_map:
+                        Intent intent = new Intent(getApplicationContext(), MapsActivityNew.class);
+                        startActivity(intent);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
                     case R.id.ic_Profile:
-                        Intent intent1 = new Intent(Tickets.this, Profile.class);
+                        Intent intent1 = new Intent(getApplicationContext(), Profile.class);
                         startActivity(intent1);
-                        startActivity(intent1,
-                                ActivityOptions.makeSceneTransitionAnimation(Tickets.this).toBundle());
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
-                    case R.id.ic_Adventures:
-                        Intent intent2 = new Intent(Tickets.this, Adventures.class);
+                    case R.id.ic_qr:
+                        Intent intent2 = new Intent(getApplicationContext(), qrActivity.class);
                         startActivity(intent2);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
-                    case R.id.ic_Tickets:
+                    case R.id.ic_shop:
+                        Intent intent3 = new Intent(getApplicationContext(), Tickets.class);
+                        startActivity(intent3);
+                        overridePendingTransition(0, 0);
+                        finish();
+                        break;
 
+                    case R.id.ic_Rec:
+                        Intent intent4 = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(intent4);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
                 }
                 return false;
-
             }
-        });*/
+        });
+    }
 
-
-
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+        overridePendingTransition(0, 0);
+        finish();
     }
 }

@@ -1,1 +1,1 @@
-include ':app', ':ASNECore', ':facebook', ':myzxing'
+include ':app', ':ASNECore', ':facebook'
