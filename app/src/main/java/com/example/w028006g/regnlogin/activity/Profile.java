@@ -36,7 +36,7 @@ import com.example.w028006g.regnlogin.app.AppController;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 import com.example.w028006g.regnlogin.helper.DownloadImageTask;
 import com.example.w028006g.regnlogin.helper.MyRecyclerViewAdapterPosts;
-import com.example.w028006g.regnlogin.helper.Post;
+import com.example.w028006g.regnlogin.helper.MarkerClasses.Post;
 import com.example.w028006g.regnlogin.helper.SQLiteHandler;
 import com.example.w028006g.regnlogin.helper.SessionManager;
 import com.github.gorbin.asne.core.SocialNetwork;
@@ -51,19 +51,6 @@ import com.google.android.gms.common.api.Status;
 
 import android.view.View;
 import android.widget.Toast;
-import android.widget.TextView;
-
-import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
-import com.example.w028006g.regnlogin.Person;
-import com.example.w028006g.regnlogin.R;
-import com.example.w028006g.regnlogin.Tickets_My;
-import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
-import com.example.w028006g.regnlogin.helper.DownloadImageTask;
-import com.example.w028006g.regnlogin.helper.MyRecyclerViewAdapterPosts;
-import com.example.w028006g.regnlogin.helper.SQLiteHandler;
-import com.example.w028006g.regnlogin.helper.SessionManager;
-
-import android.view.View;
 
 
 import org.json.JSONArray;
@@ -101,7 +88,7 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
     private Button btnPoints;
     private RecyclerView mRecyclerView;
     private MyRecyclerViewAdapterPosts adapter;
-    private ArrayList<com.example.w028006g.regnlogin.helper.MarkerClasses.Post> postist = new ArrayList<>();
+    private ArrayList<Post> postist = new ArrayList<>();
     private String posts="";
 
     private Button btnLogout;
@@ -110,7 +97,8 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
 
     private GoogleApiClient mGoogleApiClient;
 
-
+    private RecyclerView.LayoutManager mLayoutManager;
+    private RecyclerView.Adapter mAdapter;
 
     private SQLiteHandler db;
     private SessionManager session;
@@ -119,12 +107,15 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
     private SocialNetwork socialNetwork;
     private int networkId;
 
+    private ArrayList<Post> alPrevScan = new ArrayList<>();
+
+    private TextView emptyText;
 
     String name;
     String email;
     String u_id;
     String tickets;
-
+    private Thread thread;
 
     private Scene scene1, scene2;
     //transition to move between scenes
@@ -160,6 +151,25 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
         menuItem.setChecked(true);
 
 
+        for(int i = 0; i < DatabaseRetrieval.prevPost.size(); i++)
+        {
+            alPrevScan.add(DatabaseRetrieval.prevPost.get(i));
+        }
+
+        if(alPrevScan.size()==0)
+        {
+            emptyText = (TextView) findViewById(R.id.emptyText);
+            emptyText.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            mRecyclerView = (RecyclerView) findViewById(R.id.rvQR);
+            mLayoutManager = new LinearLayoutManager(Profile.this);
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            mAdapter = new MyRecyclerViewAdapterPosts(Profile.this, alPrevScan);
+            mRecyclerView.setAdapter(mAdapter);
+        }
+
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -169,28 +179,37 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
                     case R.id.ic_map:
                         Intent intent = new Intent(getApplicationContext(), MapsActivityNew.class);
                         startActivity(intent);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
                     case R.id.ic_Profile:
                         Intent intent1 = new Intent(getApplicationContext(), Profile.class);
                         startActivity(intent1);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
                     case R.id.ic_qr:
                         Intent intent2 = new Intent(getApplicationContext(), qrActivity.class);
                         startActivity(intent2);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
                     case R.id.ic_shop:
                         Intent intent3 = new Intent(getApplicationContext(), Tickets.class);
                         startActivity(intent3);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
                     case R.id.ic_Rec:
 
                         Intent intent4 = new Intent(getApplicationContext(), MainActivity.class);
-
                         startActivity(intent4);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
                 }
                 return false;
@@ -212,6 +231,7 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
             public void onClick(View v) {
                 Intent intent4 = new Intent(Profile.this, Tickets_My.class);
                 startActivity(intent4);
+                overridePendingTransition(0,0);
             }
         });
 
@@ -244,7 +264,6 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
 
         SharedPreferences prefs = AppController.getInstance().getSharedPreferences("MYPREFS", Context.MODE_PRIVATE);
         networkId = prefs.getInt("SocialNet", -1);
-
 
         switch (networkId) {
             case -1:
@@ -281,6 +300,7 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
                 break;
 
         }
+
     }
 
     @Override
@@ -291,15 +311,15 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
     }
 
     protected synchronized void buildGoogleApiClient() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
+        if (mGoogleApiClient == null) {
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail()
+                    .build();
+            mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                    .build();
+        }
     }
 
     public void changeScene(View v){
@@ -489,7 +509,6 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
             }
 
 
-
         }
 
     }
@@ -528,5 +547,22 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
         Intent intent = new Intent(Profile.this, MainActivity1.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+        overridePendingTransition(0, 0);
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (thread != null) {
+            thread.interrupt();
+        }
+
     }
 }

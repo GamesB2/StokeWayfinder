@@ -42,6 +42,7 @@ import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.SimpleGeofence;
 import com.example.w028006g.regnlogin.SimpleGeofenceStore;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
+import com.example.w028006g.regnlogin.helper.MarkerClasses.MarkerRenderer;
 import com.example.w028006g.regnlogin.helper.MarkerClasses.POI;
 import com.example.w028006g.regnlogin.helper.MarkerClasses.UserPin;
 import com.google.android.gms.common.api.Status;
@@ -50,6 +51,7 @@ import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -86,6 +88,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     private ClusterManager<POI> clusterManager;
     private boolean pauseState = false;
     private FilterManager filterManager;
+    public MarkerRenderer markerRenderer;
 
     //Constant used as a request code for the location permissions
     final int MY_PERMISSIONS_REQUEST_LOCATION = 14;
@@ -121,6 +124,9 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         //-------------------------END Sheets
 
 
+        MapsInitializer.initialize(getApplicationContext());
+
+//
 //         Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = ((SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map));
         mapFragment.getMapAsync(this);
@@ -150,28 +156,37 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
                     case R.id.ic_map:
                         Intent intent = new Intent(getApplicationContext(), MapsActivityNew.class);
                         startActivity(intent);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
                     case R.id.ic_Profile:
                         Intent intent1 = new Intent(getApplicationContext(), Profile.class);
                         startActivity(intent1);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
                     case R.id.ic_qr:
                         Intent intent2 = new Intent(getApplicationContext(), qrActivity.class);
                         startActivity(intent2);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
                     case R.id.ic_shop:
                         Intent intent3 = new Intent(getApplicationContext(), Tickets.class);
                         startActivity(intent3);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
                     case R.id.ic_Rec:
 
                         Intent intent4 = new Intent(getApplicationContext(), MainActivity.class);
-
                         startActivity(intent4);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
                 }
                 return false;
@@ -430,9 +445,12 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     @Override
     protected void onResume()
     {
+
         super.onResume();
-        if (clusterManager != null) {
+        if (clusterManager != null) 
+        {
             clusterManager.clearItems();
+            MarkerRenderer markerRenderer = new MarkerRenderer(getApplicationContext(), mMap, clusterManager);
             filterManager.popFilter();
             mMap.clear();
             fillCM();
@@ -445,7 +463,6 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     @Override
     public void onDestroy()
     {
-        stopService(new Intent(this, DatabaseRetrieval.class));
         super.onDestroy();
     }
 
@@ -460,6 +477,10 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         mMap.setOnMarkerClickListener(clusterManager);
         LatLng stoke = new LatLng(53.0027, -2.1794);
         filterManager = new FilterManager(mMap,poiArrayList);
+         
+        markerRenderer = new MarkerRenderer(getApplicationContext(), mMap, clusterManager);
+        filterManager = new FilterManager(mMap,poiArrayList);
+
 
         fillCM();
         pullBottomSheet(stoke);
@@ -536,6 +557,8 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         //Executes popMap to populate the markers on the maps
 //        filterManager = new FilterManager(mMap,poiArrayList);
 //        filterManager.popMap();
+
+        fillCM();
     }
 
     @Override
@@ -551,8 +574,26 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         points = FilterManager.getFilteredPoints();
         for(int i = 0; i < points.size(); i++)
         {
+            MarkerOptions markerOptions = new MarkerOptions()
+                    .position(points.get(i).getPosition())
+                    .icon(points.get(i).getIconBMP());
+
             clusterManager.addItem(points.get(i));
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+        overridePendingTransition(0, 0);
+        finish();
+    }
+
+    @Override
+    public void finish() {
+        clusterManager.clearItems();
+        super.finish();
     }
 }
 

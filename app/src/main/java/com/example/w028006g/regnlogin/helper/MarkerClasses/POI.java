@@ -2,7 +2,9 @@ package com.example.w028006g.regnlogin.helper.MarkerClasses;
 
 import android.location.Address;
 
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.ClusterItem;
 
 import java.util.Locale;
@@ -17,6 +19,7 @@ public abstract class POI implements ClusterItem
     protected Address aAddressInfo = new Address(Locale.getDefault());
     protected String sDescription;
     protected double dPrice = 0;
+    protected BitmapDescriptor icon;
 
     public boolean setID(String sID)
     {
@@ -79,6 +82,16 @@ public abstract class POI implements ClusterItem
 
     }
 
+    public void setIconBMP (BitmapDescriptor bmp)
+    {
+        icon = bmp;
+    }
+
+    public BitmapDescriptor getIconBMP()
+    {
+        return icon;
+    }
+
     public void setLat (String sLat)
     {
             aAddressInfo.setLatitude(Double.parseDouble(sLat));
@@ -137,5 +150,11 @@ public abstract class POI implements ClusterItem
         return null;
     }
 
-
+    public MarkerOptions getMarkerOptions(LatLng latLng, String title, String snippet, int iconRes) {
+        return new MarkerOptions()
+                .title(title)
+                .snippet(snippet)
+                .position(latLng)
+                .icon(getIconBMP());
+    }
 }
