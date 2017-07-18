@@ -64,12 +64,6 @@
                     android:textStyle="bold"
                     android:textColor="@color/white"/>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_place_black_24dp"
-                    android:tint="@android:color/white" />
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -149,11 +143,24 @@
             android:padding="16dp"
             android:orientation="vertical">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rvH"
+            <TextView
+                android:id="@+id/emptyText"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true"/>
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="false"
+                android:layout_centerInParent="true"
+                android:text="You haven't scanned any points today."
+                android:textSize="18sp"
+                android:visibility="invisible" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvQR"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:scrollbars="vertical"
+                android:padding="15dp">
+
+            </android.support.v7.widget.RecyclerView>
 
 
 
@@ -182,6 +189,18 @@
                 android:id="@+id/activityTitle1"
                 android:textAlignment="center"/>
 
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity=""
+                android:layout_marginStart="91dp"
+                android:layout_marginTop="46dp"
+                android:src="@drawable/ic_place_black_24dp"
+                android:tint="@android:color/white"
+                android:layout_below="@+id/activityTitle1"
+                android:layout_alignParentStart="true" />
+
         </RelativeLayout>
 
         <RelativeLayout
@@ -197,8 +216,11 @@
                 android:id="@+id/bottomNavView_Bar"
                 android:background="@drawable/white_grey_border_top"
                 app:menu="@menu/bottom_navigation_menu">
-
-
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    android:layout_above="@id/bottomBar"
+                    android:background="@drawable/shadow"/>
             </android.support.design.widget.BottomNavigationView>
         </RelativeLayout>
     </RelativeLayout>

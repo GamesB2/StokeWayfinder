@@ -13,7 +13,7 @@ import com.example.w028006g.regnlogin.activity.MainActivity;
 import com.example.w028006g.regnlogin.app.AppConfig;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 
-import com.example.w028006g.regnlogin.helper.Post;
+import com.example.w028006g.regnlogin.helper.MarkerClasses.Post;
 
 
 import com.google.android.youtube.player.YouTubeBaseActivity;

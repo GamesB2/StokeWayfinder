@@ -3,8 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ASNECore/ASNECore.iml" filepath="$PROJECT_DIR$/ASNECore/ASNECore.iml" />
-      <module fileurl="file://$PROJECT_DIR$/StokeWayfinder.iml" filepath="$PROJECT_DIR$/StokeWayfinder.iml" />
-      <module fileurl="file://$PROJECT_DIR$/StokeWayfinder-master.iml" filepath="$PROJECT_DIR$/StokeWayfinder-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/StokeWayfinderNew.iml" filepath="$PROJECT_DIR$/StokeWayfinderNew.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/facebook/facebook.iml" filepath="$PROJECT_DIR$/facebook/facebook.iml" />
     </modules>

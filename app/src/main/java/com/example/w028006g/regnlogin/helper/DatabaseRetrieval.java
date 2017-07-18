@@ -18,10 +18,12 @@ import android.widget.Toast;
 import com.example.w028006g.regnlogin.activity.MapsActivityNew;
 import com.example.w028006g.regnlogin.helper.MarkerClasses.Attraction;
 import com.example.w028006g.regnlogin.helper.MarkerClasses.Event;
+import com.example.w028006g.regnlogin.helper.MarkerClasses.IconManager;
 import com.example.w028006g.regnlogin.helper.MarkerClasses.Landmark;
 import com.example.w028006g.regnlogin.helper.MarkerClasses.POI;
 import com.example.w028006g.regnlogin.helper.MarkerClasses.Post;
 
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -62,6 +64,8 @@ public class DatabaseRetrieval  extends Service {
 
     ArrayList<HashMap<String, String>> dataList;
 
+
+    public static IconManager iconManager;
     public static ArrayList<POI> poiArrayList = new ArrayList<>();
     public static ArrayList<Ticket> ticketsAl = new ArrayList<>();
     //public static ArrayList<Events> eventsAl = new ArrayList(); //Main events list.
@@ -161,6 +165,7 @@ public class DatabaseRetrieval  extends Service {
     @Override
     public void onCreate()  {
 
+        MapsInitializer.initialize(getApplicationContext());
         new GetAttractions().execute();
         dataList = new ArrayList<>();
     }

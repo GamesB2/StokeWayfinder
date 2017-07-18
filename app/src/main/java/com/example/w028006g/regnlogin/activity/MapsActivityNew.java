@@ -7,9 +7,14 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.LocationManager;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -22,15 +27,22 @@ import android.view.View;
 
 import android.widget.Button;
 import android.support.design.widget.BottomNavigationView;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
 import com.example.w028006g.regnlogin.GeolocationService;
+import com.example.w028006g.regnlogin.helper.GMapV2Direction;
+import com.example.w028006g.regnlogin.helper.GMapV2DirectionAsyncTask;
 import com.example.w028006g.regnlogin.helper.MarkerClasses.FilterManager;
 import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.SimpleGeofence;
 import com.example.w028006g.regnlogin.SimpleGeofenceStore;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
+import com.example.w028006g.regnlogin.helper.MarkerClasses.MarkerRenderer;
 import com.example.w028006g.regnlogin.helper.MarkerClasses.POI;
 import com.example.w028006g.regnlogin.helper.MarkerClasses.UserPin;
 import com.google.android.gms.common.api.Status;
@@ -39,6 +51,7 @@ import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -48,11 +61,19 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PointOfInterest;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
 
+import org.w3c.dom.Document;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.RunnableFuture;
 
 
 public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener
@@ -67,6 +88,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     private ClusterManager<POI> clusterManager;
     private boolean pauseState = false;
     private FilterManager filterManager;
+    public MarkerRenderer markerRenderer;
 
     //Constant used as a request code for the location permissions
     final int MY_PERMISSIONS_REQUEST_LOCATION = 14;
@@ -74,11 +96,19 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     public String lat;
     public String lon;
     private GoogleMap mMap;
+    private Button mButton1;
+    private BottomSheetBehavior mBottomSheetBehavior1;
 
     private static final String NOTIFICATION_MSG = "NOTIFICATION MSG";
     public Button btnQR;
 
-    public Button btnFilter;
+    public ImageButton btnFilter;
+
+    private TextView Title;
+    private ImageView Picture;
+    private TextView Descritption;
+
+    private BottomSheetBehavior mBottomSheetBehavior;
 
 
     static public boolean geofencesAlreadyRegistered = false;
@@ -89,6 +119,12 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps_new);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        //Bottom Sheet stuff
+        //-------------------------END Sheets
+
+
+        MapsInitializer.initialize(getApplicationContext());
 
 //
 //         Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -120,28 +156,37 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
                     case R.id.ic_map:
                         Intent intent = new Intent(getApplicationContext(), MapsActivityNew.class);
                         startActivity(intent);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
                     case R.id.ic_Profile:
                         Intent intent1 = new Intent(getApplicationContext(), Profile.class);
                         startActivity(intent1);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
                     case R.id.ic_qr:
                         Intent intent2 = new Intent(getApplicationContext(), qrActivity.class);
                         startActivity(intent2);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
                     case R.id.ic_shop:
                         Intent intent3 = new Intent(getApplicationContext(), Tickets.class);
                         startActivity(intent3);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
 
                     case R.id.ic_Rec:
 
                         Intent intent4 = new Intent(getApplicationContext(), MainActivity.class);
-
                         startActivity(intent4);
+                        overridePendingTransition(0, 0);
+                        finish();
                         break;
                 }
                 return false;
@@ -151,7 +196,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         //Starts Geolocation Service
         startService(new Intent(this, GeolocationService.class));
 
-        btnFilter = (Button) findViewById(R.id.FilterButton);
+        btnFilter = (ImageButton) findViewById(R.id.FilterButton);
         btnFilter.setOnClickListener(new View.OnClickListener()
         {
 
@@ -163,36 +208,38 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
             }
         });
 
-//        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
-//                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-//
-//        autocompleteFragment.setBoundsBias(StokeBounds);
-//
-//        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-//            @Override
-//            public void onPlaceSelected(Place place) {
-//                // TODO: Get info about the selected place.
-//                LatLng latlng = place.getLatLng();
-//                mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
-//                UserPin userPin = new UserPin(place);
-//                poiArrayList.add(userPin);
-//                Log.i(TAG, "Place: " + place.getName());
-//            }
-//
-//            @Override
-//            public void onError(Status status) {
-//                // TODO: Handle the error.
-//                Log.i(TAG, "An error occurred: " + status);
-//            }
-//        });
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+
+        autocompleteFragment.setBoundsBias(StokeBounds);
+
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                LatLng latlng = place.getLatLng();
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
+                UserPin userPin = new UserPin(place);
+                poiArrayList.add(userPin);
+                Log.i(TAG, "Place: " + place.getName());
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                Log.i(TAG, "An error occurred: " + status);
+            }
+        });
+
     }
 
-    public void onClick(View view)
-    {
-        Intent i = new Intent(MapsActivityNew.this,
-                FilterActivity.class);
-        startActivity(i);
-    }
+
+//    public void onClick()
+//    {
+//        Intent i = new Intent(MapsActivityNew.this,
+//                FilterActivity.class);
+//        startActivity(i);
+//    }
 
 
     //Displays the circle around the geofence - wont need this for final just so we can see where they are
@@ -240,6 +287,73 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         }
     }
 
+    private void pullBottomSheet(final LatLng location) {
+
+        View bottomSheet = findViewById( R.id.bottom_sheet );
+        TextView Directions = (TextView) findViewById(R.id.direction);
+        final LatLng stoke = new LatLng(53.0027, -2.1794);
+        Directions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                route(stoke, location);
+            }
+        });
+        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                mBottomSheetBehavior.setPeekHeight(0);
+            }
+        });
+        runOnUiThread(new Runnable() {
+            public void run() {
+
+                mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+                    @Override
+                    public void onStateChanged(View bottomSheet, int newState) {
+                        if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
+                            mBottomSheetBehavior.setPeekHeight(300);
+                        }
+                    }
+
+                    @Override
+                    public void onSlide(View bottomSheet, float slideOffset) {
+                        mBottomSheetBehavior.setPeekHeight(300);
+                    }
+                });
+            }
+        });
+
+
+        if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+            mBottomSheetBehavior.setPeekHeight(300);
+        }
+    }
+
+    protected void route(LatLng sourcePosition, LatLng destPosition) {
+        final Handler handler = new Handler() {
+            public void handleMessage(Message msg) {
+                try {
+                    Document doc = (Document) msg.obj;
+                    GMapV2Direction md = new GMapV2Direction();
+                    ArrayList<LatLng> directionPoint = md.getDirection(doc);
+                    PolylineOptions rectLine = new PolylineOptions().width(15).color(R.color.bg_login) ;
+                    for (int i = 0; i < directionPoint.size(); i++) {
+                        rectLine.add(directionPoint.get(i));
+                    }
+                    mMap.addPolyline(rectLine);md.getDurationText(doc);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            ;
+        };
+
+        new GMapV2DirectionAsyncTask(handler, sourcePosition, destPosition, GMapV2Direction.MODE_WALKING).execute();
+    }
 
     //Asks for permission to access GPS and handles the outcome of allow or deny
     @Override
@@ -302,7 +416,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
 
 
 
-    //Search implementation, pins a marker on the location of the user
+//   // Search implementation, pins a marker on the location of the user
 //    public void onMapSearch(View view) {
 //        EditText locationSearch = (EditText) findViewById(R.id.place_autocomplete_fragment);
 //        String location = locationSearch.getText().toString();
@@ -331,22 +445,24 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     @Override
     protected void onResume()
     {
-        if (pauseState)
+
+        super.onResume();
+        if (clusterManager != null) 
         {
             clusterManager.clearItems();
+            MarkerRenderer markerRenderer = new MarkerRenderer(getApplicationContext(), mMap, clusterManager);
             filterManager.popFilter();
             mMap.clear();
             fillCM();
         }
-        pauseState = true;
+
         startService(new Intent(this, DatabaseRetrieval.class));
-        super.onResume();
+
     }
 
     @Override
     public void onDestroy()
     {
-        stopService(new Intent(this, DatabaseRetrieval.class));
         super.onDestroy();
     }
 
@@ -359,13 +475,47 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         clusterManager = new ClusterManager<>(this,mMap);
         mMap.setOnCameraIdleListener(clusterManager);
         mMap.setOnMarkerClickListener(clusterManager);
-
+        LatLng stoke = new LatLng(53.0027, -2.1794);
+        filterManager = new FilterManager(mMap,poiArrayList);
+         
+        markerRenderer = new MarkerRenderer(getApplicationContext(), mMap, clusterManager);
         filterManager = new FilterManager(mMap,poiArrayList);
 
+
         fillCM();
+        pullBottomSheet(stoke);
+        clusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<POI>()
+        {
+            @Override
+            public boolean onClusterItemClick(POI poi)
+            {
+                final POI PointOfInt = poi;
+
+                runOnUiThread(new Runnable() {
+                    public void run() {
+
+                        Runnable test = new Runnable() {
+                            @Override
+                            public void run() {
+                                LatLng poiLocation = PointOfInt.getPosition();
+
+                                Title = (TextView) findViewById(R.id.title);
+                                Picture = (ImageView) findViewById(R.id.pic);
+                                Descritption = (TextView) findViewById(R.id.desc);
+                                Title.setText(PointOfInt.getAddressInfo().getFeatureName());
+                                Descritption.setText(PointOfInt.getDescription());
 
 
+                                pullBottomSheet(poiLocation);
+                            }
+                        };
 
+                        runOnUiThread(test);
+                    }
+                });
+                return false;
+            }
+        });
 
         //Calls function to display geofence circle
         displayGeofences();
@@ -387,7 +537,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         }
 
         //Location LatLng defined here
-        LatLng stoke = new LatLng(53.0027, -2.1794);
+
         //LatLng center = new LatLng(0, 0);
 
         //Permanent Markers added and camera zoom on initial startup
@@ -407,6 +557,8 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         //Executes popMap to populate the markers on the maps
 //        filterManager = new FilterManager(mMap,poiArrayList);
 //        filterManager.popMap();
+
+        fillCM();
     }
 
     @Override
@@ -422,8 +574,26 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         points = FilterManager.getFilteredPoints();
         for(int i = 0; i < points.size(); i++)
         {
+            MarkerOptions markerOptions = new MarkerOptions()
+                    .position(points.get(i).getPosition())
+                    .icon(points.get(i).getIconBMP());
+
             clusterManager.addItem(points.get(i));
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+        overridePendingTransition(0, 0);
+        finish();
+    }
+
+    @Override
+    public void finish() {
+        clusterManager.clearItems();
+        super.finish();
     }
 }
 

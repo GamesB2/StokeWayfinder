@@ -152,35 +152,36 @@ public class Tickets_View extends AppCompatActivity {
 
         ImageView sharingButton = (ImageView) findViewById(R.id.share);
 
-        if (networkId != 4 && networkId != 1){
-            AlertDialog.Builder ad = alertDialogInit("Please login via Facebook or Twitter", link);
-            ad.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
 
-
-                }
-            });
-            ad.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int i) {
-                    dialog.cancel();
-                }
-            });
-            ad.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                public void onCancel(DialogInterface dialog) {
-                    dialog.cancel();
-                }
-            });
-            ad.create().show();
-        } else {
             share.setOnClickListener(new View.OnClickListener()
             {
                 @Override
-                public void onClick (View v){
-                    shareClick();
+                public void onClick (View v) {
+                    if (networkId != 4 && networkId != 1) {
+                        AlertDialog.Builder ad = alertDialogInit("You must be logged in via FaceBook or Google", link);
+                        ad.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+
+                            }
+                        });
+                        ad.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int i) {
+                                dialog.cancel();
+                            }
+                        });
+                        ad.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                            public void onCancel(DialogInterface dialog) {
+                                dialog.cancel();
+                            }
+                        });
+                        ad.create().show();
+                    } else {
+                        shareClick();
+                    }
                 }
             });
-        }
 
 
         sharingButton.setOnClickListener(new View.OnClickListener()
