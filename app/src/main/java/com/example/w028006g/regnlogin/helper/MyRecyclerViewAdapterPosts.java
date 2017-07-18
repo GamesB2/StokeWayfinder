@@ -58,6 +58,7 @@ public class MyRecyclerViewAdapterPosts extends RecyclerView.Adapter<MyRecyclerV
         customViewHolder.textViewE.setText((feedItem.getAddressInfo().getFeatureName()));
         customViewHolder.textViewD.setText((feedItem.getSummary()));
         customViewHolder.textViewP.setText((feedItem.getLatestScanTime()));
+        customViewHolder.textViewID.setText(String.valueOf(feedItem.getId()));
 
 
         View.OnClickListener listener = new View.OnClickListener() {
@@ -69,8 +70,11 @@ public class MyRecyclerViewAdapterPosts extends RecyclerView.Adapter<MyRecyclerV
                 //Toast.makeText(v.getContext(), "ITEM PRESSED = " + String.valueOf(customViewHolder.getAdapterPosition()), Toast.LENGTH_SHORT).show();
                 //} else {
                 Toast.makeText(v.getContext(), "ROW PRESSED = " + String.valueOf(customViewHolder.getAdapterPosition()), Toast.LENGTH_SHORT).show();
+
                 Intent myIntent1 = new Intent(v.getContext(), MultiMedia.class);
-                myIntent1.putExtra("id", ints.get(customViewHolder.getAdapterPosition()));
+                    myIntent1.putExtra("id", feedItem.getId());
+
+
                 System.out.println(ints.get(customViewHolder.getAdapterPosition()));
                 mContext.startActivity(myIntent1);
 
@@ -95,6 +99,7 @@ public class MyRecyclerViewAdapterPosts extends RecyclerView.Adapter<MyRecyclerV
         protected TextView textViewE;
         protected TextView textViewD;
         protected TextView textViewP;
+        protected TextView textViewID;
 
         public CustomViewHolder(View view) {
             super(view);
@@ -103,6 +108,7 @@ public class MyRecyclerViewAdapterPosts extends RecyclerView.Adapter<MyRecyclerV
             this.textViewE = (TextView) view.findViewById(R.id.title);
             this.textViewD = (TextView) view.findViewById(R.id.histDesc);
             this.textViewP = (TextView) view.findViewById(R.id.lastScan);
+            this.textViewID = (TextView) view.findViewById(R.id.txtPostID);
             //myInt = feedItemList.get(view.findViewById(getAdapterPosition()));
 
             //this.textViewD = (TextView) view.findViewById(R.id.tDesc);
