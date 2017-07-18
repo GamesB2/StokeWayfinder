@@ -1,19 +1,12 @@
-package com.example.w028006g.regnlogin;
+package com.example.w028006g.regnlogin.activity;
 
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
-
 import android.support.annotation.Nullable;
 
 import android.support.v7.app.AppCompatActivity;
@@ -22,35 +15,22 @@ import android.transition.Transition;
 import android.view.View;
 import android.widget.Button;
 
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.example.w028006g.regnlogin.activity.LoginActivity;
+
+import com.example.w028006g.regnlogin.BackgroundTask;
+import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.app.AppController;
-import com.facebook.FacebookSdk;
 import com.facebook.share.widget.LikeView;
-import com.facebook.share.widget.ShareButton;
 import com.github.gorbin.asne.core.SocialNetwork;
 import com.github.gorbin.asne.core.listener.OnPostingCompleteListener;
 import com.inthecheesefactory.lib.fblike.widget.FBLikeView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-import static com.example.w028006g.regnlogin.R.id.container;
-import static com.facebook.FacebookSdk.getApplicationContext;
-
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.example.w028006g.regnlogin.activity.MainActivity;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 import com.example.w028006g.regnlogin.helper.Ticket;
-
-import java.util.ArrayList;
 
 
 /**

@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
-import android.content.Intent;
-
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,14 +22,12 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
 import com.example.w028006g.regnlogin.MainActivity1;
 import com.example.w028006g.regnlogin.Person;
 import com.example.w028006g.regnlogin.R;
-import com.example.w028006g.regnlogin.Tickets_My;
 import com.example.w028006g.regnlogin.app.AppController;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 import com.example.w028006g.regnlogin.helper.DownloadImageTask;
@@ -74,9 +70,6 @@ import java.util.Set;
 
 import static com.example.w028006g.regnlogin.app.AppConfig.CONNECTION_TIMEOUT;
 import static com.example.w028006g.regnlogin.app.AppConfig.READ_TIMEOUT;
-
-import static com.example.w028006g.regnlogin.app.AppController.personEmail;
-import static com.example.w028006g.regnlogin.app.AppController.personName;
 
 public class Profile extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
 

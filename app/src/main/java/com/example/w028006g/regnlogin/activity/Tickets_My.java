@@ -1,4 +1,4 @@
-package com.example.w028006g.regnlogin;
+package com.example.w028006g.regnlogin.activity;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -14,12 +14,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.w028006g.regnlogin.activity.MainActivity;
-import com.example.w028006g.regnlogin.activity.MapsActivityNew;
-import com.example.w028006g.regnlogin.activity.Profile;
-import com.example.w028006g.regnlogin.activity.StartScreen;
-import com.example.w028006g.regnlogin.activity.Tickets;
-import com.example.w028006g.regnlogin.activity.qrActivity;
+import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
+import com.example.w028006g.regnlogin.Person;
+import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 import com.example.w028006g.regnlogin.helper.MyRecyclerViewAdapter;
 import com.example.w028006g.regnlogin.helper.Ticket;
