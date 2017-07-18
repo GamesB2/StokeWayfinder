@@ -52,7 +52,6 @@ public class MarkerManager
     final static int HOME_AND_LIFESTYLE=16;
     final static int AUTO_BOAT_AND_AIR=17;
     final static int HOBBIES=18;
-
     final static int ATTRACTIONS=19;
     final static int LANDMARKS=20;
     final static int EVENTS=21;

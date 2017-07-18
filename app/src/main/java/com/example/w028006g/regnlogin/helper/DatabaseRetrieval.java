@@ -134,6 +134,7 @@ public class DatabaseRetrieval  extends Service {
 
 
 
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
