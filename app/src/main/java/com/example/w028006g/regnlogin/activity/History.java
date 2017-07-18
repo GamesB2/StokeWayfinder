@@ -1,4 +1,4 @@
-package com.example.w028006g.regnlogin;
+package com.example.w028006g.regnlogin.activity;
 
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -9,18 +9,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 
-import com.example.w028006g.regnlogin.activity.MainActivity;
+import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 
-import com.example.w028006g.regnlogin.helper.DatabaseRetrievalNow;
-import com.example.w028006g.regnlogin.helper.MyRecyclerViewAdapter;
 import com.example.w028006g.regnlogin.helper.MyRecyclerViewAdapterPosts;
 import com.example.w028006g.regnlogin.helper.MarkerClasses.Post;
-import com.example.w028006g.regnlogin.helper.Ticket;
-
-import com.example.w028006g.regnlogin.helper.MyRecyclerViewAdapterPosts;
-
-
 
 
 import org.json.JSONArray;

@@ -1,4 +1,4 @@
-package com.example.w028006g.regnlogin;
+package com.example.w028006g.regnlogin.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,11 +9,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.w028006g.regnlogin.activity.MainActivity;
+import com.example.w028006g.regnlogin.BackgroundTaskPosts;
+import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.app.AppConfig;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
-
-import com.example.w028006g.regnlogin.helper.MarkerClasses.Post;
 
 
 import com.google.android.youtube.player.YouTubeBaseActivity;

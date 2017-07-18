@@ -105,7 +105,7 @@ public class Ticket {
     public  String getPriceS() {
         String p ="";
         if (price < 1) {
-            p = "FREEE!";
+            p = "Free!";
         }else
         {
 

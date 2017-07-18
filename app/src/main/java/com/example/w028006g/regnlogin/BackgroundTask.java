@@ -17,7 +17,7 @@ import java.net.URLEncoder;
 public class BackgroundTask  extends AsyncTask<String,Void,String> {
 
     Context ctx;
-    BackgroundTask(Context ctx)
+    public BackgroundTask(Context ctx)
     {
         this.ctx=ctx;
     }

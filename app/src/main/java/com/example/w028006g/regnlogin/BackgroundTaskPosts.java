@@ -19,7 +19,7 @@ import java.net.URLEncoder;
 public class BackgroundTaskPosts extends AsyncTask<String,Void,String> {
 
     Context ctx;
-    BackgroundTaskPosts(Context ctx)
+    public BackgroundTaskPosts(Context ctx)
     {
         this.ctx=ctx;
     }
