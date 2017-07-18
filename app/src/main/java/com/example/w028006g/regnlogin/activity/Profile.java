@@ -36,7 +36,7 @@ import com.example.w028006g.regnlogin.app.AppController;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 import com.example.w028006g.regnlogin.helper.DownloadImageTask;
 import com.example.w028006g.regnlogin.helper.MyRecyclerViewAdapterPosts;
-import com.example.w028006g.regnlogin.helper.Post;
+import com.example.w028006g.regnlogin.helper.MarkerClasses.Post;
 import com.example.w028006g.regnlogin.helper.SQLiteHandler;
 import com.example.w028006g.regnlogin.helper.SessionManager;
 import com.github.gorbin.asne.core.SocialNetwork;
@@ -51,19 +51,6 @@ import com.google.android.gms.common.api.Status;
 
 import android.view.View;
 import android.widget.Toast;
-import android.widget.TextView;
-
-import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
-import com.example.w028006g.regnlogin.Person;
-import com.example.w028006g.regnlogin.R;
-import com.example.w028006g.regnlogin.Tickets_My;
-import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
-import com.example.w028006g.regnlogin.helper.DownloadImageTask;
-import com.example.w028006g.regnlogin.helper.MyRecyclerViewAdapterPosts;
-import com.example.w028006g.regnlogin.helper.SQLiteHandler;
-import com.example.w028006g.regnlogin.helper.SessionManager;
-
-import android.view.View;
 
 
 import org.json.JSONArray;
@@ -101,7 +88,7 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
     private Button btnPoints;
     private RecyclerView mRecyclerView;
     private MyRecyclerViewAdapterPosts adapter;
-    private ArrayList<com.example.w028006g.regnlogin.helper.MarkerClasses.Post> postist = new ArrayList<>();
+    private ArrayList<Post> postist = new ArrayList<>();
     private String posts="";
 
     private Button btnLogout;
@@ -110,7 +97,8 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
 
     private GoogleApiClient mGoogleApiClient;
 
-
+    private RecyclerView.LayoutManager mLayoutManager;
+    private RecyclerView.Adapter mAdapter;
 
     private SQLiteHandler db;
     private SessionManager session;
@@ -119,6 +107,9 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
     private SocialNetwork socialNetwork;
     private int networkId;
 
+    private ArrayList<Post> alPrevScan = new ArrayList<>();
+
+    private TextView emptyText;
 
     String name;
     String email;
@@ -159,6 +150,25 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
         MenuItem menuItem = menu.getItem(2);
         menuItem.setChecked(true);
 
+
+        for(int i = 0; i < DatabaseRetrieval.prevPost.size(); i++)
+        {
+            alPrevScan.add(DatabaseRetrieval.prevPost.get(i));
+        }
+
+        if(alPrevScan.size()==0)
+        {
+            emptyText = (TextView) findViewById(R.id.emptyText);
+            emptyText.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            mRecyclerView = (RecyclerView) findViewById(R.id.rvQR);
+            mLayoutManager = new LinearLayoutManager(Profile.this);
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            mAdapter = new MyRecyclerViewAdapterPosts(Profile.this, alPrevScan);
+            mRecyclerView.setAdapter(mAdapter);
+        }
 
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

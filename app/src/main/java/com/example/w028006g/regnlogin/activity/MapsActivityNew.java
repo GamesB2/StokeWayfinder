@@ -31,6 +31,7 @@ import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.SimpleGeofence;
 import com.example.w028006g.regnlogin.SimpleGeofenceStore;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
+import com.example.w028006g.regnlogin.helper.MarkerClasses.MarkerRenderer;
 import com.example.w028006g.regnlogin.helper.MarkerClasses.POI;
 import com.example.w028006g.regnlogin.helper.MarkerClasses.UserPin;
 import com.google.android.gms.common.api.Status;
@@ -39,6 +40,7 @@ import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -67,6 +69,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     private ClusterManager<POI> clusterManager;
     private boolean pauseState = false;
     private FilterManager filterManager;
+    public MarkerRenderer markerRenderer;
 
     //Constant used as a request code for the location permissions
     final int MY_PERMISSIONS_REQUEST_LOCATION = 14;
@@ -89,6 +92,8 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps_new);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        MapsInitializer.initialize(getApplicationContext());
 
 //
 //         Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -343,6 +348,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         if (clusterManager != null)
         {
             clusterManager.clearItems();
+            MarkerRenderer markerRenderer = new MarkerRenderer(getApplicationContext(), mMap, clusterManager);
             filterManager.popFilter();
             mMap.clear();
             fillCM();
@@ -366,7 +372,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         clusterManager = new ClusterManager<>(this,mMap);
         mMap.setOnCameraIdleListener(clusterManager);
         mMap.setOnMarkerClickListener(clusterManager);
-
+        markerRenderer = new MarkerRenderer(getApplicationContext(), mMap, clusterManager);
         filterManager = new FilterManager(mMap,poiArrayList);
 
 
@@ -431,6 +437,10 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         points = FilterManager.getFilteredPoints();
         for(int i = 0; i < points.size(); i++)
         {
+            MarkerOptions markerOptions = new MarkerOptions()
+                    .position(points.get(i).getPosition())
+                    .icon(points.get(i).getIconBMP());
+
             clusterManager.addItem(points.get(i));
         }
     }

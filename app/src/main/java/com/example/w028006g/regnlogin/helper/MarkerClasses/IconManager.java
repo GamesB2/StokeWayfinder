@@ -1,6 +1,8 @@
 package com.example.w028006g.regnlogin.helper.MarkerClasses;
 
 import com.example.w028006g.regnlogin.R;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
 /**
  * Created by a025178g on 11/07/2017.
@@ -36,10 +38,16 @@ public class IconManager extends POI
     public void setIcon(String code)
     {
         nIcon = Integer.parseInt(code);
+
+        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(nArrIconID[nIcon]);
+
+        super.setIconBMP(icon);
     }
 
     public int getIcon()
     {
         return nIcon;
     }
+
+
 }
