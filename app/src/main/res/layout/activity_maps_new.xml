@@ -1,86 +1,191 @@
-<LinearLayout xmlns:map="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:orientation="vertical"
-              android:background="#90caf9">
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:background="@color/bg_login"
-        app:cardBackgroundColor="@color/bg_login"
-        app:cardCornerRadius="2dp"
-        app:cardElevation="4dp"
-        app:cardUseCompatPadding="true">
-
-
-        <GridLayout
-            android:layout_width="wrap_content"
-            android:layout_height="37dp"
-            android:columnCount="2">
-
-            <EditText
-                android:id="@+id/gSearch"
-                android:layout_width="301dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.03"
-                android:background="@color/white"
-                android:hint="Search"
-                android:paddingLeft="10dp"
-                android:textColor="#b71c1c" />
-
-            <ImageView
-                android:id="@+id/search_button"
-                android:layout_width="43dp"
-                android:layout_height="match_parent"
-                android:onClick="onMapSearch"
-                android:padding="5dp"
-                android:src="@drawable/sbaricon" />
-        </GridLayout>
-
-    </android.support.v7.widget.CardView>
-
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/FilterButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Filter Button"/>
-
-    </LinearLayout>
-
-
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        tools:context="com.example.w028006g.regnlogin.activity.MapsActivityNew" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:columnCount="4"
+            android:rowCount="2">
+
+            <fragment
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="610dp"
+                android:layout_weight="0.86"
+                android:layout_gravity="bottom"
+                tools:context="com.example.w028006g.regnlogin.activity.MapsActivityNew"
+                android:layout_alignParentStart="true" />
+
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/bg_login">
+
+            <ImageButton
+                android:id="@+id/FilterButton"
+                android:layout_width="85dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_alignTop="@+id/place_autocomplete_fragment"
+                android:layout_gravity="right"
+                android:layout_marginStart="26dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/bg_login"
+                android:tint="#fff"
+                app:srcCompat="@drawable/recbar" />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayout"
+                android:layout_width="198dp"
+                android:layout_height="match_parent"
+                android:weightSum="1">
+
+                <fragment
+                    android:id="@+id/place_autocomplete_fragment"
+                    android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+                    android:layout_width="413dp"
+                    android:layout_height="67dp"
+                    android:layout_alignTop="@+id/button_2"
+                    android:layout_toEndOf="@+id/FilterButton" />
+
+            </android.support.design.widget.TextInputLayout>
+
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
 
 
     <RelativeLayout
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:elevation="50dp">
+
 
         <android.support.design.widget.BottomNavigationView
             android:id="@+id/bottomNavView_Bar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/white_grey_border_top"
-            app:menu="@menu/bottom_navigation_menu">
+            android:background="@color/white"
+            app:menu="@menu/bottom_navigation_menu"
+            android:elevation="8dp"
+            app:elevation="8dp">
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_above="@id/bottomBar"
+                android:background="@drawable/shadow"/>
 
         </android.support.design.widget.BottomNavigationView>
+
     </RelativeLayout>
 
-</LinearLayout>
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:background="@android:drawable/dialog_frame"
+        android:backgroundTint="#e1f5fe"
+        android:clipToPadding="false"
+        android:elevation="16dp"
+        android:outlineProvider="bounds"
+        app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="550dp"
+            android:orientation="vertical"
+            android:columnCount="2"
+            android:rowCount="3">
+
+            <ImageView
+                android:id="@+id/pic"
+                android:layout_width="100dp"
+                android:layout_height="70dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/digilithcanarywharf"
+                android:padding="16dp"
+                android:text="Button 2"
+                android:layout_column="0"
+                android:textColor="@android:color/white" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_above="@id/bottomBar"
+                android:background="@drawable/shadow"/>
+            <TextView
+                android:id="@+id/desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Central Forest Park is in Hanley - stretching from the City Centre to Granville Avenue and Sneyd Street.  If you cross Town Road at the back of the Potteries Shopping Centre you are on the doorstep of the park, which is great respite to tired shoppers or a great family day out! "
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="230dp"
+                android:layout_height="80dp"
+                android:layout_column="0"
+                android:layout_row="0"
+                android:layout_weight="0.85"
+                android:padding="16dp"
+                android:text="Central Forest Park Totem"
+                android:textSize="16sp"
+                android:layout_marginLeft="130dp"/>
+            <TextView
+                android:id="@+id/direction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:layout_row="2"
+                android:layout_weight="0.85"
+                android:padding="16dp"
+                android:layout_marginTop="140dp"
+                android:layout_marginStart="260dp"
+                android:text="DIRECTIONS"
+                android:textSize="16sp"
+                android:textColor="@color/btn_login"
+                android:layout_marginLeft="130dp"/>
+
+            <Button
+                android:id="@+id/twittershare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Share"
+                android:layout_marginTop="140dp"
+                android:layout_marginLeft="20dp"
+                android:layout_row="2"
+                android:layout_column="0"/>
+
+        </GridLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.design.widget.CoordinatorLayout>

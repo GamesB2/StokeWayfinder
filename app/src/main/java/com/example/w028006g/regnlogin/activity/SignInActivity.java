@@ -149,6 +149,8 @@ public class SignInActivity extends AppCompatActivity implements
                 personPhoto = acct.getPhotoUrl();
                 AppController.personName = personName;
                 AppController.personEmail = personEmail;
+                MainActivity.userDetails.setEmail(personEmail);
+                MainActivity.userDetails.setName(personName);
             }
             handleSignInResult(result);
         }

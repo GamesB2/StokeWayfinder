@@ -216,14 +216,14 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
             }
         });
 
-        //Download user image
-        new DownloadImageTask((ImageView) findViewById(R.id.profilePic))
-
-                .execute("https://concussive-shirt.000webhostapp.com/uploads/" + MainActivity.userDetails.getU_id() + ".png");
-
-        // Displaying the user details on the screen
-        txtName.setText(MainActivity.userDetails.getName());
-        txtEmail.setText(MainActivity.userDetails.getEmail());
+//        //Download user image
+//        new DownloadImageTask((ImageView) findViewById(R.id.profilePic))
+//
+//                .execute("https://concussive-shirt.000webhostapp.com/uploads/" + MainActivity.userDetails.getU_id() + ".png");
+//
+//        // Displaying the user details on the screen
+//        txtName.setText(MainActivity.userDetails.getName());
+//        txtEmail.setText(MainActivity.userDetails.getEmail());
 
         btnView.setOnClickListener(new View.OnClickListener() {
 
@@ -265,50 +265,42 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
         SharedPreferences prefs = AppController.getInstance().getSharedPreferences("MYPREFS", Context.MODE_PRIVATE);
         networkId = prefs.getInt("SocialNet", -1);
 
-        if (networkId == -1) {
-            new DownloadImageTask((ImageView) findViewById(R.id.profilePic))
-                    .execute("https://concussive-shirt.000webhostapp.com/uploads/" + MainActivity.userDetails.getU_id() + ".png");
-            // Displaying the user details on the screen
-            txtName.setText(MainActivity.userDetails.getName());
-            txtEmail.setText(MainActivity.userDetails.getEmail());
+        switch (networkId) {
+            case -1:
+                new DownloadImageTask((ImageView) findViewById(R.id.profilePic))
+                        .execute("https://concussive-shirt.000webhostapp.com/uploads/" + MainActivity.userDetails.getU_id() + ".png");
+                // Displaying the user details on the screen
+                txtName.setText(MainActivity.userDetails.getName());
+                txtEmail.setText(MainActivity.userDetails.getEmail());
+                new Profile.AsyncLogin().execute(MainActivity.userDetails.getEmail());
+                break;
 
-            thread = new Thread() {
-                @Override
-                public void run() {
-                    while (!isInterrupted())
-                    {
-                        new Profile.AsyncLogin().execute(MainActivity.userDetails.getEmail());
+            case 3:
+                txtName.setText(AppController.getInstance().getGName());
+                txtEmail.setText(AppController.getInstance().getGEmail());
+                break;
+
+            case 4:
+                socialNetwork = LoginActivity.mSocialNetworkManager.getSocialNetwork(networkId);
+                socialNetwork.setOnRequestCurrentPersonCompleteListener(new OnRequestSocialPersonCompleteListener() {
+                    @Override
+                    public void onRequestSocialPersonSuccess(int socialNetworkId, SocialPerson socialPerson) {
+                        txtName.setText(socialPerson.name);
+                        txtEmail.setText(socialPerson.email);
+                        new DownloadImageTask((ImageView) findViewById(R.id.profilePic))
+                                .execute(socialPerson.avatarURL);
                     }
-                }
-            };
+
+                    @Override
+                    public void onError(int socialNetworkID, String requestID, String errorMessage, Object data) {
+                        Toast.makeText(getApplicationContext(), "something went oopsy", Toast.LENGTH_SHORT);
+                    }
+                });
+                socialNetwork.requestCurrentPerson();
+                break;
+
         }
-        if (networkId == 0 || networkId == 3)
-        {
-            txtName.setText(AppController.getInstance().getGName());
-            txtEmail.setText(AppController.getInstance().getGEmail());
-        } else
 
-            {
-            socialNetwork = LoginActivity.mSocialNetworkManager.getSocialNetwork(networkId);
-            socialNetwork.setOnRequestCurrentPersonCompleteListener(new OnRequestSocialPersonCompleteListener()
-            {
-                @Override
-                public void onRequestSocialPersonSuccess(int socialNetworkId, SocialPerson socialPerson)
-                {
-                    txtName.setText(socialPerson.name);
-                    txtEmail.setText(socialPerson.email);
-                    new DownloadImageTask((ImageView) findViewById(R.id.profilePic))
-                            .execute(socialPerson.avatarURL);
-                }
-
-                @Override
-                public void onError(int socialNetworkID, String requestID, String errorMessage, Object data)
-                {
-                    Toast.makeText(getApplicationContext(), "something went oopsy", Toast.LENGTH_SHORT);
-                }
-            });
-            socialNetwork.requestCurrentPerson();
-            }
     }
 
     @Override
@@ -471,42 +463,38 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
                         posts = c.getString("posts");
                     }
 
+                    if(!posts.equalsIgnoreCase("")) {
+                        posts = posts.substring(1);
+                        String[] postsParts = posts.split(",");
+                        ArrayList<Integer> post = new ArrayList<>();
 
-                    posts = posts.substring(1);
-                    String[] postsParts = posts.split(",");
-                    ArrayList<Integer> post = new ArrayList<>();
+                        //Now Sort
 
-                    //Now Sort
+                        Set<String> mySet = new HashSet<String>(Arrays.asList(postsParts));
+                        for (String s : mySet) {
+                            post.add(Integer.parseInt(s));
+                        }
 
-                    Set<String> mySet = new HashSet<String>(Arrays.asList(postsParts));
-                    for(String s : mySet)
-                    {
-                        post.add(Integer.parseInt(s));
-                    }
+                        for (int i = 0; i < post.size(); i++) {
+                            for (int j = 0; j < DatabaseRetrieval.postsAl.size(); j++) {
+                                Integer check = post.get(i);
 
-                    for(int i = 0; i< post.size(); i++)
-                    {
-                        for (int j = 0; j< DatabaseRetrieval.postsAl.size(); j++)
-                        {
-                            Integer check = post.get(i);
-
-                            if(check == DatabaseRetrieval.postsAl.get(j).getId())
-                            {
-                                //if(!post.contains(postsParts[i]))
-                                //{
-                                postist.add(DatabaseRetrieval.postsAl.get(j));
-                                //}
+                                if (check == DatabaseRetrieval.postsAl.get(j).getId()) {
+                                    //if(!post.contains(postsParts[i]))
+                                    //{
+                                    postist.add(DatabaseRetrieval.postsAl.get(j));
+                                    //}
+                                }
                             }
                         }
+
+                        mRecyclerView = (RecyclerView) findViewById(R.id.rvH);
+                        mRecyclerView.setLayoutManager(new LinearLayoutManager(Profile.this));
+                        adapter = new MyRecyclerViewAdapterPosts(Profile.this, postist);
+                        mRecyclerView.setAdapter(adapter);
+
+                        System.out.println(posts);
                     }
-
-                    mRecyclerView = (RecyclerView) findViewById(R.id.rvH);
-                    mRecyclerView.setLayoutManager(new LinearLayoutManager(Profile.this));
-                    adapter = new MyRecyclerViewAdapterPosts(Profile.this, postist);
-                    mRecyclerView.setAdapter(adapter);
-
-                    System.out.println(posts);
-
                     // Launch main activity
                 } else {
                     // Error in login. Get the error message
@@ -544,11 +532,13 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
                                 // [END_EXCLUDE]
                             }
                         });
+                db.deleteUsers();
                 break;
 
             default:
                 session.setLogin(false);
                 socialNetwork.logout();
+                db.deleteUsers();
                 break;
         }
 
