@@ -23,6 +23,7 @@ import com.example.w028006g.regnlogin.helper.MarkerClasses.Landmark;
 import com.example.w028006g.regnlogin.helper.MarkerClasses.POI;
 import com.example.w028006g.regnlogin.helper.MarkerClasses.Post;
 
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -163,6 +164,7 @@ public class DatabaseRetrieval  extends Service {
     @Override
     public void onCreate()  {
 
+        MapsInitializer.initialize(getApplicationContext());
         new GetAttractions().execute();
         dataList = new ArrayList<>();
     }
