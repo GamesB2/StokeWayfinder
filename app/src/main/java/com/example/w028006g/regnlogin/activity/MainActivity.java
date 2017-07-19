@@ -8,6 +8,8 @@ import com.example.w028006g.regnlogin.helper.DownloadImageTask;
 import com.example.w028006g.regnlogin.helper.SQLiteHandler;
 import com.example.w028006g.regnlogin.helper.SessionManager;
 import com.github.gorbin.asne.core.SocialNetwork;
+import com.github.gorbin.asne.core.listener.OnRequestSocialPersonCompleteListener;
+import com.github.gorbin.asne.core.persons.SocialPerson;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import com.example.w028006g.regnlogin.ClickActionHelper;
@@ -51,6 +53,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -87,13 +90,15 @@ public class MainActivity extends AppCompatActivity {
 
         userDetails = new Person();
 
-        txtName = (TextView) findViewById(R.id.name);
-        txtEmail = (TextView) findViewById(R.id.email);
+        txtName = (TextView) findViewById(R.id.uname);
+        //txtEmail = (TextView) findViewById(R.id.uemail);
         btnLogout = (Button) findViewById(R.id.btnLogout);
         btnMaps = (Button) findViewById(R.id.btnMaps);
         imgUser = (ImageView) findViewById(R.id.img_userprofile);
         // SqLite database handler
         db = new SQLiteHandler(getApplicationContext());
+
+
 
         // session manager
         session = new SessionManager(getApplicationContext());
@@ -215,6 +220,41 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+
+        SharedPreferences prefs = AppController.getInstance().getSharedPreferences("MYPREFS", Context.MODE_PRIVATE);
+        networkId = prefs.getInt("SocialNet", -1);
+
+        switch (networkId) {
+            case 0:
+                txtName.setText(MainActivity.userDetails.getName());
+                break;
+
+            case 3:
+                txtName.setText(AppController.getInstance().getGName());
+                MainActivity.userDetails.setName(AppController.getInstance().getGName());
+                MainActivity.userDetails.setEmail(AppController.getInstance().getGEmail());
+                break;
+
+            case 4:
+                socialNetwork = LoginActivity.mSocialNetworkManager.getSocialNetwork(networkId);
+                socialNetwork.setOnRequestCurrentPersonCompleteListener(new OnRequestSocialPersonCompleteListener() {
+                    @Override
+                    public void onRequestSocialPersonSuccess(int socialNetworkId, SocialPerson socialPerson) {
+                        txtName.setText(socialPerson.name);
+                        MainActivity.userDetails.setName(socialPerson.name);
+                        MainActivity.userDetails.setEmail(socialPerson.email);
+                    }
+
+                    @Override
+                    public void onError(int socialNetworkID, String requestID, String errorMessage, Object data) {
+                        Toast.makeText(getApplicationContext(), "something went oopsy", Toast.LENGTH_SHORT);
+                    }
+                });
+                socialNetwork.requestCurrentPerson();
+                break;
+
+        }
 
     }
 

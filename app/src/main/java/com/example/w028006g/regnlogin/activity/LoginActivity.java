@@ -296,6 +296,7 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
             }
         }
     }
+
     @Override
     public void onSocialNetworkManagerInitialized() {
         //when init SocialNetworks - get and setup login only for initialized SocialNetworks
@@ -427,7 +428,7 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
                         // user successfully logged in
                         // Create login session
                         session.setLogin(true);
-
+                        networkId = 10;
                         // Now store the user in SQLite
                         String uid = jObj.getString("uid");
 

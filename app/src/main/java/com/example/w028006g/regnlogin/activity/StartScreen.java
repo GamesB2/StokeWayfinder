@@ -62,7 +62,7 @@ public class StartScreen extends AppCompatActivity {
         userDetails = new Person();
 
         txtName = (TextView) findViewById(R.id.uname);
-        txtEmail = (TextView) findViewById(R.id.uemail);
+        //txtEmail = (TextView) findViewById(R.id.uemail);
         //btnLogout = (Button) findViewById(R.id.btnLogout);
         btnMap = (ImageView) findViewById(R.id.btnMap);
         //imgUser = (ImageView) findViewById(R.id.img_userprofile);

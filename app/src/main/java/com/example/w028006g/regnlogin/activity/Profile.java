@@ -259,7 +259,7 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
         networkId = prefs.getInt("SocialNet", -1);
 
         switch (networkId) {
-            case -1:
+            case 0:
                 new DownloadImageTask((ImageView) findViewById(R.id.profilePic))
                         .execute("https://concussive-shirt.000webhostapp.com/uploads/" + MainActivity.userDetails.getU_id() + ".png");
                 // Displaying the user details on the screen
@@ -271,6 +271,8 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
             case 3:
                 txtName.setText(AppController.getInstance().getGName());
                 txtEmail.setText(AppController.getInstance().getGEmail());
+                MainActivity.userDetails.setName(AppController.getInstance().getGName());
+                MainActivity.userDetails.setEmail(AppController.getInstance().getGEmail());
                 break;
 
             case 4:
@@ -282,6 +284,8 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
                         txtEmail.setText(socialPerson.email);
                         new DownloadImageTask((ImageView) findViewById(R.id.profilePic))
                                 .execute(socialPerson.avatarURL);
+                        MainActivity.userDetails.setName(socialPerson.name);
+                        MainActivity.userDetails.setEmail(socialPerson.email);
                     }
 
                     @Override

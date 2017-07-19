@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/bg_login">
+    android:background="@color/colorPrimaryDark">
 
 
 
@@ -25,9 +25,9 @@
             android:layout_height="55dp"
             android:background="@color/colorPrimary"
             android:text="Rewards"
-            android:textSize="30sp"
+            android:textSize="26sp"
             android:textColor="@color/white"
-            android:paddingLeft="145dp"
+            android:paddingLeft="155dp"
             android:paddingTop="10dp"/>
 
 

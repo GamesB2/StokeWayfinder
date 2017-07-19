@@ -30,41 +30,38 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="50dp"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:layout_height="50dp"
+                    android:orientation="horizontal"
+                    android:background="@color/colorPrimary"
+                    android:weightSum="1">
 
                     <TextView
                         android:id="@+id/textView9"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/welcome"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:text="Recomended for"
+                        android:paddingTop="12dp"
+                        android:layout_marginLeft="80dp"
                         android:textSize="18sp" />
 
                     <TextView
-                        android:id="@+id/uemail"
+                        android:id="@+id/uname"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textColor="@color/lbl_name"
+                        android:layout_marginLeft="5dp"
+                        android:textColor="@color/colorPrimaryDark"
                         android:textSize="18sp" />
 
                 </LinearLayout>
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/uname"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_vertical|center_horizontal|center"
-                android:textSize="18sp" />
 
             <ImageView
                 android:id="@+id/imageView6"
@@ -372,7 +369,11 @@
             android:background="@drawable/white_grey_border_top"
             app:menu="@menu/bottom_navigation_menu">
 
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_above="@id/bottomBar"
+                android:background="@drawable/shadow"/>
         </android.support.design.widget.BottomNavigationView>
     </RelativeLayout>
     </RelativeLayout>
