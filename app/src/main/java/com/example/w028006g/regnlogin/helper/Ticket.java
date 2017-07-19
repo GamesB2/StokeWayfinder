@@ -110,7 +110,7 @@ public class Ticket {
         {
 
             DecimalFormat df = new DecimalFormat("#.00");
-            p = "£" + df.format(price);
+            p = df.format(price) + " pts";
 
         }
         return p;
