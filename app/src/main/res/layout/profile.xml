@@ -55,14 +55,14 @@
                     android:textStyle="bold"
                     android:textSize="20sp"
                     android:layout_marginTop="8dp"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/colorPrimaryDark"/>
                 <TextView
                     android:id="@+id/txtUserEmail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
                     android:textStyle="bold"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/colorPrimaryDark"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -71,7 +71,7 @@
                     android:layout_gravity="center"
                     android:textStyle="bold"
                     android:layout_marginLeft="8dp"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/colorPrimaryDark" />
 
                 <Button
                     android:id="@+id/btnTickets"
@@ -79,9 +79,8 @@
                     android:layout_height="wrap_content"
                     android:text="My Purchases"
                     android:layout_marginTop="30dip"
-                    android:background="#0d80d9"
-
-                    android:textColor="@color/white"
+                    android:background="@color/colorPrimaryDark"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="15dp" />
 
                 <Button
@@ -89,11 +88,10 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:background="#0d80d9"
-
+                    android:background="@color/colorPrimaryDark"
                     android:text="@string/btn_logout"
                     android:textAllCaps="false"
-                    android:textColor="@color/white"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="15dp" />
 
 
@@ -123,7 +121,7 @@
                 android:layout_height="wrap_content"
                 android:text="Recent Activity"
                 android:layout_gravity="center"
-                android:textColor="#f14545"
+                android:textColor="@color/colorPrimaryDark"
                 android:textSize="24dp"
                 android:textStyle="bold"/>
         </LinearLayout>
@@ -197,7 +195,7 @@
                 android:layout_marginStart="91dp"
                 android:layout_marginTop="46dp"
                 android:src="@drawable/ic_place_black_24dp"
-                android:tint="@android:color/white"
+                android:tint="@color/colorPrimaryDark"
                 android:layout_below="@+id/activityTitle1"
                 android:layout_alignParentStart="true" />
 

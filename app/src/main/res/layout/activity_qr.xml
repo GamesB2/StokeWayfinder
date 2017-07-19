@@ -7,22 +7,33 @@
                 android:layout_height="match_parent"
                 >
 
-
-    <TextView
-        android:id="@+id/textView3"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:text="Recent Scans" />
+        android:layout_height="50dp"
+        android:weightSum="1"
+        android:id="@+id/linearLayout2">
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="Interactions"
+            android:paddingLeft="150dp"
+            android:textSize="24sp"
+            android:paddingTop="10dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:background="@color/colorPrimary"
+            android:layout_weight="1.00" />
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:weightSum="1"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true">
+        android:layout_below="@+id/linearLayout2"
+        android:layout_above="@+id/buttonScan">
 
 
         <TextView
@@ -43,17 +54,6 @@
             android:padding="15dp">
 
         </android.support.v7.widget.RecyclerView>
-
-        <Button
-            android:id="@+id/buttonScan"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:text="Scan QR Code"
-            android:layout_above="@+id/bottomBar"
-            android:layout_alignParentStart="true" />
-
-
 
 
     </RelativeLayout>
@@ -81,5 +81,15 @@
                 android:background="@drawable/shadow"/>
         </android.support.design.widget.BottomNavigationView>
     </RelativeLayout>
+
+    <Button
+        android:id="@+id/buttonScan"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:text="Scan QR Code"
+        android:textColor="@color/colorPrimary"
+        android:layout_above="@+id/bottomBar" />
 
 </RelativeLayout>
