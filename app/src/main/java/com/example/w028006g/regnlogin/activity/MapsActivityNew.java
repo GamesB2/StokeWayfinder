@@ -224,6 +224,8 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
                 Log.i(TAG, "Place: " + place.getName());
             }
 
+
+
             @Override
             public void onError(Status status) {
                 // TODO: Handle the error.

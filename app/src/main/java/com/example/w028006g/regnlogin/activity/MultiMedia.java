@@ -34,6 +34,7 @@ public class MultiMedia extends YouTubeBaseActivity implements
     private TextView txtName;
     private boolean open = false;
     private com.example.w028006g.regnlogin.helper.MarkerClasses.Post p;
+    private boolean qr = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +53,9 @@ public class MultiMedia extends YouTubeBaseActivity implements
 
 
         Intent mIntent1 = getIntent();
-
-        final int intValue = mIntent1.getIntExtra("locCode", 0);
+        int intValue = mIntent1.getIntExtra("id", 0);
         Intent qrIntent = getIntent();
-        final int qrValue = qrIntent.getIntExtra("locCode", 0);
+        int qrValue = qrIntent.getIntExtra("locCode", 0);
 
         if(intValue > 0)
         {
@@ -69,8 +69,14 @@ public class MultiMedia extends YouTubeBaseActivity implements
         }
         else
         {
-
-//            p = DatabaseRetrieval.postsAl.get(qrValue-1);
+            qr = true;
+            for(int i =0;i< DatabaseRetrieval.postsAl.size();i++)
+            {
+                if(DatabaseRetrieval.postsAl.get(i).getId() == qrValue)
+                {
+                    p = DatabaseRetrieval.postsAl.get(i);
+                }
+            }
         }
 
         if (p!= null) {
@@ -86,13 +92,18 @@ public class MultiMedia extends YouTubeBaseActivity implements
         btnClose.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                BackgroundTaskPosts backgroundTask=new BackgroundTaskPosts(MultiMedia.this);
 
-                backgroundTask.execute(method, MainActivity.userDetails.getEmail(), String.valueOf(p.getId()));
+                if(qr)
+                {
+                    BackgroundTaskPosts backgroundTask = new BackgroundTaskPosts(MultiMedia.this);
 
-                Toast.makeText(getApplicationContext(),
-                        "You Sucessfully Added This Post To Your Collection:\n" + p.getAddressInfo().getFeatureName(),
-                        Toast.LENGTH_LONG).show();
+                    backgroundTask.execute(method, MainActivity.userDetails.getEmail(), String.valueOf(p.getId()));
+
+                    Toast.makeText(getApplicationContext(),
+
+                            "You Sucessfully Added This Post To Your Collection:\n" + p.getAddressInfo().getFeatureName(),
+                            Toast.LENGTH_LONG).show();
+                }
                 finish();
             }
         });
