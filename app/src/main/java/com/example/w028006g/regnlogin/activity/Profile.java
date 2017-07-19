@@ -486,7 +486,7 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
                         }
 
                         mRecyclerView = (RecyclerView) findViewById(R.id.rvH);
-                        mRecyclerView.setLayoutManager(new LinearLayoutManager(Profile.this));
+                        mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                         adapter = new MyRecyclerViewAdapterPosts(Profile.this, postist);
                         mRecyclerView.setAdapter(adapter);
 

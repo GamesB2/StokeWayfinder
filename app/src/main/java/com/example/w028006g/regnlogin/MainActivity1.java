@@ -66,6 +66,7 @@ public class MainActivity1 extends AppCompatActivity implements FragmentManager.
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+
                 getSupportFragmentManager().popBackStack();
                 return true;
         }

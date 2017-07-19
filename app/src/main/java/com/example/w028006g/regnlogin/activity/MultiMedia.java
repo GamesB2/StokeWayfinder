@@ -15,6 +15,7 @@ import com.example.w028006g.regnlogin.app.AppConfig;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 
 
+import com.example.w028006g.regnlogin.helper.MarkerClasses.Post;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -33,8 +34,9 @@ public class MultiMedia extends YouTubeBaseActivity implements
     private TextView txtMoreInfo;
     private TextView txtName;
     private boolean open = false;
-    private com.example.w028006g.regnlogin.helper.MarkerClasses.Post p;
+    private Post p;
     private boolean qr = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
