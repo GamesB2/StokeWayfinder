@@ -65,7 +65,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     LocationManager locationManager;
     private ClusterManager<POI> clusterManager;
     private boolean pauseState = false;
-    private FilterManager;
+    private FilterManager filterManager;
 
     //Constant used as a request code for the location permissions
     final int MY_PERMISSIONS_REQUEST_LOCATION = 14;
@@ -94,7 +94,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         mapFragment.getMapAsync(this);
 
         //Landmarks, Attractions, and Events Stored in POI Array
-        poiArrayList = DatabaseRetrieval.getPoints();
+        poiArrayList = POI.getPoints();
         //Lat and Long from FireMSGService brought in here
         Bundle FireNotification = getIntent().getExtras();
         if (FireNotification != null) {
@@ -341,7 +341,6 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         if (clusterManager != null)
         {
             clusterManager.clearItems();
-            filterManager.popFilter();
             mMap.clear();
             fillCM();
         }
@@ -364,13 +363,6 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         clusterManager = new ClusterManager<>(this,mMap);
         mMap.setOnCameraIdleListener(clusterManager);
         mMap.setOnMarkerClickListener(clusterManager);
-
-        new FilterManager(mMap,DatabaseRetrieval.getPoints());
-
-
-
-
-
 
         //Calls function to display geofence circle
         displayGeofences();
@@ -425,8 +417,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
 
     public void fillCM()
     {
-        ArrayList<POI> points = new ArrayList<>();
-        points = FilterManager.getFilteredPoints();
+        ArrayList<POI> points = FilterManager.applyFilter();
         for(int i = 0; i < points.size(); i++)
         {
             clusterManager.addItem(points.get(i));

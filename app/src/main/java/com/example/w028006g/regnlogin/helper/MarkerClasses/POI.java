@@ -1,8 +1,10 @@
 package com.example.w028006g.regnlogin.helper.MarkerClasses;
 
 import android.location.Address;
+import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.nearby.messages.Distance;
 import com.google.maps.android.clustering.ClusterItem;
 
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import java.util.Locale;
 public abstract class POI implements ClusterItem
 {
     protected int id;
+    private static ArrayList<POI> allPOI = new ArrayList<>();
     protected Address aAddressInfo = new Address(Locale.getDefault());
     protected String sDescription;
     protected double dPrice = 0;
@@ -178,5 +181,42 @@ public abstract class POI implements ClusterItem
     public ArrayList<Tag> getTags()
     {
         return tags;
+    }
+
+    public Location getLocation()
+    {
+        Location location = new Location("");
+        location.setLatitude(aAddressInfo.getLatitude());
+        location.setLongitude(aAddressInfo.getLongitude());
+        return location;
+    }
+
+    public static void addPoint(POI point)
+    {
+        allPOI.add(point);
+    }
+
+    public static ArrayList<POI> getPoints()
+    {
+        return allPOI;
+    }
+    public static float getFurthest(Location anchor)
+    {
+        if(!allPOI.isEmpty())
+        {
+            POI furthest = allPOI.get(0);
+            Location location = furthest.getLocation();
+            float distance = location.distanceTo(anchor);
+            for (int i = 0; i < allPOI.size(); i++) {
+                POI compared = allPOI.get(i);
+                Location compLoc = compared.getLocation();
+                float compDist = compLoc.distanceTo(anchor);
+                if (compDist >= distance) {
+                    distance = compDist;
+                }
+            }
+            return distance;
+        }
+        return 0;
     }
 }

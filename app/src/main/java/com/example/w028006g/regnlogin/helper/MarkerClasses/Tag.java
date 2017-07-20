@@ -45,28 +45,29 @@ public class Tag
         return false;
     }
 
-    public static ArrayList<Tag> getAllTags()
+    public static ArrayList<Tag> getAllTags(ArrayList<POI> points)
     {
-        return existingTags;
-    }
-
-    //Returns all the tags associated with the passed list of points
-    public static ArrayList<Tag> getRelevantTags(ArrayList<POI> points)
-    {
-        ArrayList<Tag> relevantTags = points.get(0).getTags();
-        for(int i = 1; i < points.size(); i++)
+        if(points == null||points.isEmpty())
         {
-            ArrayList<Tag> tempTags =  points.get(i).getTags();
-            for(int ii = 0; ii < tempTags.size(); ii++)
+            return existingTags;
+        }
+        else
+        {
+            ArrayList<Tag> relevantTags = points.get(0).getTags();
+            for(int i = 1; i < points.size(); i++)
             {
-                Tag tempTag = tempTags.get(ii);
-                if(!relevantTags.contains(tempTag))
+                ArrayList<Tag> tempTags =  points.get(i).getTags();
+                for(int ii = 0; ii < tempTags.size(); ii++)
                 {
-                    relevantTags.add(tempTag);
+                    Tag tempTag = tempTags.get(ii);
+                    if(!relevantTags.contains(tempTag))
+                    {
+                        relevantTags.add(tempTag);
+                    }
                 }
             }
+            return relevantTags;
         }
-        return relevantTags;
     }
     public ArrayList<POI> getRelevant()
     {

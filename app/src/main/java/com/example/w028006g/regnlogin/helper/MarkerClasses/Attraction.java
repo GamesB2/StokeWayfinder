@@ -11,5 +11,6 @@ public class Attraction extends IconManager
         super.setName(sName);
         super.setLat(sLat);
         super.setLong(sLong);
+        POI.addPoint(this);
     }
 }
