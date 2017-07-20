@@ -246,7 +246,11 @@ public class NewFilterActivity extends AppCompatActivity
                         {
                             checkLoc = ii;
                         }
-
+                    }
+                    FilterManager.clearTypeFilter();
+                    if(checkBox.isChecked())
+                    {
+                        FilterManager.adjustTypeFilter(checkLoc,true);
                     }
                     updateActivity();
                 }
