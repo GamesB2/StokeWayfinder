@@ -377,6 +377,7 @@ public class DatabaseRetrieval  extends Service {
                         String website = c.getString("website");
                         String lat = c.getString("lat");
                         String lng = c.getString("lng");
+                        String cat = c.getString("cat");
 
 
                         lndmk = new Landmark(name, lat, lng);
@@ -386,6 +387,8 @@ public class DatabaseRetrieval  extends Service {
                         lndmk.setAddressLine(address);
                         lndmk.setPostCode(postcode);
                         lndmk.setWeb(website);
+                        lndmk.setTags(cat);
+
 
 
 

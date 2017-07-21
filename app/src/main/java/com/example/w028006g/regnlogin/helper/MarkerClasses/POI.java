@@ -191,7 +191,7 @@ public abstract class POI implements ClusterItem
         return location;
     }
 
-    public static void addPoint(POI point)
+    protected static void addPoint(POI point)
     {
         allPOI.add(point);
     }
@@ -200,6 +200,7 @@ public abstract class POI implements ClusterItem
     {
         return allPOI;
     }
+
     public static float getFurthest(Location anchor)
     {
         if(!allPOI.isEmpty())

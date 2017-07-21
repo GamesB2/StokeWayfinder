@@ -1,5 +1,6 @@
 package com.example.w028006g.regnlogin.activity;
 
+import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.helper.MarkerClasses.FilterManager;
 import com.example.w028006g.regnlogin.helper.MarkerClasses.Tag;
+import com.google.zxing.common.detector.MathUtils;
 
 import java.util.ArrayList;
 
@@ -31,8 +33,8 @@ public class NewFilterActivity extends AppCompatActivity
     private int[] typeCBID =
             {
                     R.id.attractions,
+                    R.id.landmarks,
                     R.id.events,
-                    R.id.landmarks
             };
 
     @Override
@@ -91,139 +93,99 @@ public class NewFilterActivity extends AppCompatActivity
 
     private void restoreRangeFilter()
     {
-//        int MAX = Math.round(FilterManager.getRangeFilterCap());
-//        int nRadius = Math.round(FilterManager.getRangeFilter());
-//
-//        final Switch swRadius = (Switch)findViewById(R.id.switch3);
-//        final EditText radius = (EditText)findViewById(R.id.radiusID);
-//        final SeekBar slider = (SeekBar)findViewById(R.id.seekBar);
-//        final TextView tv1 = (TextView)findViewById(R.id.textView);
-//        final TextView tv2 = (TextView)findViewById(R.id.textView2);
-//
-//        if(!FilterManager.isRangeFilterFlag())
-//        {
-//            swRadius.setChecked(true);
-//
-//            slider.setProgress(MAX);
-//            slider.setEnabled(false);
-//
-//            radius.setText(String.valueOf(MAX));
-//            radius.setEnabled(false);
-//
-//            tv1.setAlpha((float)0.5);
-//            tv2.setAlpha((float)0.5);
-//        }
-//        else
-//        {
-//            swRadius.setChecked(false);
-//
-//            slider.setProgress(nRadius);
-//            slider.setEnabled(true);
-//
-//            radius.setText(String.valueOf(nRadius));
-//            radius.setEnabled(true);
-//
-//            tv1.setAlpha(1);
-//            tv2.setAlpha(1);
-//        }
-//
-//        swRadius.setOnClickListener(new View.OnClickListener()
-//        {
-//            @Override
-//            public void onClick(View v)
-//            {
-//                if(swRadius.isChecked())
-//                {
-//                    slider.setProgress(MAX);
-//                    slider.setEnabled(false);
-//                    FilterManager.setRangeFilter(false);
-//
-//                    radius.setText(String.valueOf(MAX));
-//                    radius.setEnabled(false);
-//
-//                    tv1.setAlpha((float)0.5);
-//                    tv2.setAlpha((float)0.5);
-//                }
-//                else if(!swRadius.isChecked())
-//                {
-//                    FilterManager.setRangeFilter(true);
-//                    slider.setEnabled(true);
-//
-//                    radius.setText(String.valueOf(MAX));
-//                    radius.setEnabled(true);
-//
-//                    tv1.setAlpha(1);
-//                    tv2.setAlpha(1);
-//                }
-//            }
-//        });
-//
-//        slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
-//        {
-//            @Override
-//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
-//            {
-//                radius.setText(String.valueOf(progress));
-//                nRadius = progress;
-//            }
-//
-//            @Override
-//            public void onStartTrackingTouch(SeekBar seekBar)
-//            {
-//
-//            }
-//
-//            @Override
-//            public void onStopTrackingTouch(SeekBar seekBar)
-//            {
-//
-//            }
-//        });
-//
-//        radius.addTextChangedListener(new TextWatcher()
-//        {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after)
-//            {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count)
-//            {
-//                String input = s.toString();
-//                int nInput;
-//                char[] chars = input.toCharArray();
-//                boolean bIntFlag = false;
-//                if (chars.length == 0|| chars.length > 4)
-//                {
-//                    bIntFlag = true;
-//                }
-//                for(int i = 0; i<chars.length; i++)
-//                {
-//                    if(!Character.isDigit(chars[i]))
-//                    {
-//                        bIntFlag = true;
-//                    }
-//                }
-//                if(!bIntFlag)
-//                {
-//                    nInput = Integer.parseInt(input);
-//                    if(nInput >= 0 && nInput <= MAX)
-//                    {
-//                        slider.setProgress(nInput);
-//
-//                    }
-//                }
-//                radius.setSelection(chars.length);
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s)
-//            {
-//
-//            }
-//        });
+        final int MAX = Math.round(FilterManager.getRangeFilterCap());
+        int nRadius = Math.round(FilterManager.getRangeFilter());
+        int roundedNumber = (MAX + 500) / 1000 * 1000;
+
+        final Switch swRadius = (Switch)findViewById(R.id.switch3);
+        final EditText radius = (EditText)findViewById(R.id.radiusID);
+        radius.setFocusable(false);
+        radius.setClickable(false);
+        final SeekBar slider = (SeekBar)findViewById(R.id.seekBar);
+        slider.setMax(MAX);
+        final TextView tv1 = (TextView)findViewById(R.id.textView);
+        final TextView tv2 = (TextView)findViewById(R.id.textView2);
+
+        if(!FilterManager.isRangeFilterFlag())
+        {
+            swRadius.setChecked(true);
+
+            slider.setProgress(roundedNumber);
+            slider.setEnabled(false);
+
+            radius.setText(String.valueOf(roundedNumber));
+            radius.setEnabled(false);
+
+            tv1.setAlpha((float)0.5);
+            tv2.setAlpha((float)0.5);
+        }
+        else
+        {
+            swRadius.setChecked(false);
+
+            slider.setProgress(nRadius);
+            slider.setEnabled(true);
+
+            radius.setText(String.valueOf(nRadius));
+            radius.setEnabled(true);
+
+            tv1.setAlpha(1);
+            tv2.setAlpha(1);
+        }
+
+        swRadius.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if(swRadius.isChecked())
+                {
+                    slider.setProgress(MAX);
+                    slider.setEnabled(false);
+                    FilterManager.setRangeFilterFlag(false);
+
+                    radius.setText(String.valueOf(MAX));
+                    radius.setEnabled(false);
+
+                    tv1.setAlpha((float)0.5);
+                    tv2.setAlpha((float)0.5);
+                }
+                else if(!swRadius.isChecked())
+                {
+                    slider.setEnabled(true);
+                    FilterManager.setRangeFilter(MAX);
+
+                    radius.setText(String.valueOf(MAX));
+                    radius.setEnabled(true);
+
+                    tv1.setAlpha(1);
+                    tv2.setAlpha(1);
+                }
+            }
+        });
+
+        slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+        {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
+            {
+                radius.setText(String.valueOf(progress));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar)
+            {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar)
+            {
+                int nProgress = seekBar.getProgress();
+                FilterManager.setRangeFilter(nProgress);
+                updateActivity();
+            }
+        });
     }
 
     private void restoreTypeFilter()

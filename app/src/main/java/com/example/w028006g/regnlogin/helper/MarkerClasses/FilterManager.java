@@ -194,6 +194,21 @@ public class FilterManager
         return rangeFilter;
     }
 
+    public static void setRangeFilter(int num)
+    {
+        rangeFilter = num;
+        setRangeFilterFlag(true);
+    }
+
+    public static void setRangeFilterFlag(boolean b)
+    {
+        rangeFilterFlag = b;
+        if(!b)
+        {
+            rangeFilter = RANGEFILTERCAP;
+        }
+    }
+
     public static void adjustTypeFilter(int ii, boolean b)
     {
         typeFilter[ii] = b;

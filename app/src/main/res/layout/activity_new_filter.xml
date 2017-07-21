@@ -14,12 +14,12 @@
         android:orientation="vertical">
 
         <CheckBox
-            android:id="@+id/events"
+            android:id="@+id/attractions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:buttonTint="@color/bg_main"
             android:padding="10dip"
-            android:text="Events"
+            android:text="Attractions"
             android:textSize="16dip"
             android:textStyle="bold"/>
 
@@ -34,12 +34,12 @@
             android:textStyle="bold"/>
 
         <CheckBox
-            android:id="@+id/attractions"
+            android:id="@+id/events"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:buttonTint="@color/bg_main"
             android:padding="10dip"
-            android:text="Attractions"
+            android:text="Events"
             android:textSize="16dip"
             android:textStyle="bold"/>
 
@@ -79,8 +79,7 @@
                 android:layout_width="52dp"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:thumbTint="@color/bg_register"
-                />
+                android:thumbTint="@color/bg_register"/>
 
         </LinearLayout>
 
