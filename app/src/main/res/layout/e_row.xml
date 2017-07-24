@@ -24,7 +24,7 @@
                 android:layout_height="80dp"
                 android:cropToPadding="false"
                 android:scaleType="fitCenter"
-                android:src="@drawable/cup" />
+                android:src="@drawable/e_icon" />
 
             <LinearLayout
                 android:layout_width="match_parent"

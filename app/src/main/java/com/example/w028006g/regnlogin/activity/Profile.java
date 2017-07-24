@@ -31,6 +31,7 @@ import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.app.AppController;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 import com.example.w028006g.regnlogin.helper.DownloadImageTask;
+import com.example.w028006g.regnlogin.helper.MarkerClasses.POI;
 import com.example.w028006g.regnlogin.helper.MyRecyclerViewAdapterPosts;
 import com.example.w028006g.regnlogin.helper.MarkerClasses.Post;
 import com.example.w028006g.regnlogin.helper.SQLiteHandler;
@@ -156,7 +157,7 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
         }
         else
         {
-            mRecyclerView = (RecyclerView) findViewById(R.id.rvQR);
+            mRecyclerView = (RecyclerView) findViewById(R.id.rvH);
             mLayoutManager = new LinearLayoutManager(Profile.this);
             mRecyclerView.setLayoutManager(mLayoutManager);
             mAdapter = new MyRecyclerViewAdapterPosts(Profile.this, alPrevScan);
@@ -473,20 +474,20 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
                         }
 
                         for (int i = 0; i < post.size(); i++) {
-                            for (int j = 0; j < DatabaseRetrieval.postsAl.size(); j++) {
+                            for (int j = 0; j < POI.getAllPost().size(); j++) {
                                 Integer check = post.get(i);
 
-                                if (check == DatabaseRetrieval.postsAl.get(j).getId()) {
+                                if (check == POI.getAllPost().get(j).getId()) {
                                     //if(!post.contains(postsParts[i]))
                                     //{
-                                    postist.add(DatabaseRetrieval.postsAl.get(j));
+                                    postist.add(POI.getAllPost().get(j));
                                     //}
                                 }
                             }
                         }
 
                         mRecyclerView = (RecyclerView) findViewById(R.id.rvH);
-                        mRecyclerView.setLayoutManager(new LinearLayoutManager(Profile.this));
+                        mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                         adapter = new MyRecyclerViewAdapterPosts(Profile.this, postist);
                         mRecyclerView.setAdapter(adapter);
 

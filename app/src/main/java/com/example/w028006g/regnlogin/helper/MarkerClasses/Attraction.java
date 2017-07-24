@@ -11,6 +11,12 @@ public class Attraction extends IconManager
         super.setName(sName);
         super.setLat(sLat);
         super.setLong(sLong);
+        POI.storePoint(this);
+    }
+
+    public void setIcon(String string)
+    {
+        super.setIcon("0");
     }
 
     public void setIcon(String string)

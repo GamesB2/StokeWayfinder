@@ -51,6 +51,7 @@ import android.util.Log;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnMaps;
     private ImageView imgUser;
     private int networkId;
+    private ImageButton events;
 
     private SocialNetwork socialNetwork;
     private SQLiteHandler db;
@@ -95,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
         btnLogout = (Button) findViewById(R.id.btnLogout);
         btnMaps = (Button) findViewById(R.id.btnMaps);
         imgUser = (ImageView) findViewById(R.id.img_userprofile);
+        events = (ImageButton)findViewById(R.id.imgEvents);
         // SqLite database handler
         db = new SQLiteHandler(getApplicationContext());
 
@@ -123,6 +126,16 @@ public class MainActivity extends AppCompatActivity {
         // Displaying the user details on the screen
 //        txtName.setText(name);
 //        txtEmail.setText(email);
+
+        events.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                System.out.println("Test button 2");
+                Intent intent = new Intent(getApplicationContext(),ListEvents.class);
+                startActivity(intent);
+            }
+        });
 
 
 

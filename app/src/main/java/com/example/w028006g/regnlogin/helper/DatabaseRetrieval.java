@@ -66,13 +66,11 @@ public class DatabaseRetrieval  extends Service {
 
 
     public static IconManager iconManager;
-    public static ArrayList<POI> poiArrayList = new ArrayList<>();
+
     public static ArrayList<Ticket> ticketsAl = new ArrayList<>();
     //public static ArrayList<Events> eventsAl = new ArrayList(); //Main events list.
-    public static ArrayList<Post> postsAl = new ArrayList();
     public static ArrayList<Post> prevPost = new ArrayList<>();
 
-    public static ArrayList<Event> eventsAl = new ArrayList(); //Main events list.
 
     public static Attraction att;
     public static Landmark lndmk;
@@ -84,57 +82,6 @@ public class DatabaseRetrieval  extends Service {
 
 
 
-    //Event Stuff
-    private int events;
-    private boolean page11=false;
-    private boolean page12=false;
-    private boolean page13=false;
-    private boolean page21=false;
-    private boolean page22=false;
-    private boolean page23=false;
-    private boolean page31=false;
-    private boolean page32=false;
-    private boolean page33=false;
-
-
-    //Page 1
-    private ArrayList<String> evental1 = new ArrayList();
-    private ArrayList<String> eventalD1 = new ArrayList();
-    private ArrayList<String> eventalL1 = new ArrayList();
-
-    //Page 2
-    private ArrayList<String> evental2 = new ArrayList();
-    private ArrayList<String> eventalD2 = new ArrayList();
-    private ArrayList<String> eventalL2 = new ArrayList();
-
-    //Page 3
-    private ArrayList<String> evental3 = new ArrayList();
-    private ArrayList<String> eventalD3 = new ArrayList();
-    private ArrayList<String> eventalL3 = new ArrayList();
-
-    //Page 4
-    private ArrayList<String> evental4 = new ArrayList();
-    private ArrayList<String> eventalD4 = new ArrayList();
-    private ArrayList<String> eventalA4 = new ArrayList();
-    private ArrayList<String> eventalL4 = new ArrayList();
-
-    //Page 5
-    private ArrayList<String> evental45 = new ArrayList();
-    private ArrayList<String> eventalD5 = new ArrayList();
-    private ArrayList<String> eventalA5 = new ArrayList();
-    private ArrayList<String> eventalL5 = new ArrayList();
-
-    //Page 6
-    private ArrayList<String> evental6 = new ArrayList();
-    private ArrayList<String> eventalD6 = new ArrayList();
-    private ArrayList<String> eventalA6 = new ArrayList();
-    private ArrayList<String> eventalL6 = new ArrayList();
-
-    //ALL PAGES
-    private ArrayList<String> evental = new ArrayList();
-    private ArrayList<String> eventalD = new ArrayList();
-    private ArrayList<String> eventalA = new ArrayList();
-    private ArrayList<String> eventalL = new ArrayList();
 
 
 
@@ -240,7 +187,6 @@ public class DatabaseRetrieval  extends Service {
                     att.setPostCode(postcode);
                     att.setWeb(website);
                     att.setIcon(icon);
-                    poiArrayList.add(att);
 
                     Log.e(TAG, "Attractions Added OK!: ");
 
@@ -288,8 +234,7 @@ public class DatabaseRetrieval  extends Service {
                         post.setSummary(summary);
                         post.setQr(qr);
 
-                        postsAl.add(post);
-                        poiArrayList.add(post);
+
 
                         Log.e(TAG, "Posts Added OK!: ");
 
@@ -348,7 +293,6 @@ public class DatabaseRetrieval  extends Service {
                         event.setConName(cName);
                         event.setConNum(cNumber);
 
-                        poiArrayList.add(event);
 
                         Log.e(TAG, "Events Added OK!: ");
 
@@ -379,7 +323,7 @@ public class DatabaseRetrieval  extends Service {
                     for (int i = 0; i < dataRe.length(); i++)
                     {
                         JSONObject c = dataRe.getJSONObject(i);
-                        String id = c.getString("autoNum");
+                        String id = c.getString("id");
                         String name = c.getString("name");
                         String desc = c.getString("des");
                         String price = c.getString("price");
@@ -397,7 +341,6 @@ public class DatabaseRetrieval  extends Service {
                         lndmk.setAddressLine(address);
                         lndmk.setPostCode(postcode);
                         lndmk.setWeb(website);
-                        poiArrayList.add(lndmk);
 
 
 

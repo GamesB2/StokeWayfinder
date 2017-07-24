@@ -157,8 +157,8 @@
                             android:textSize="18sp" />
                     </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/imageView4"
+                    <ImageButton
+                        android:id="@+id/imgEvents"
                         android:layout_width="50dp"
                         android:layout_height="match_parent"
                         android:padding="5dp"

@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,6 +36,7 @@ public class StartScreen extends AppCompatActivity {
     private Button btnLogout;
     private ImageView btnMap;
     private ImageView imgUser;
+    private ImageButton events;
 
 
 
@@ -65,6 +67,7 @@ public class StartScreen extends AppCompatActivity {
         //txtEmail = (TextView) findViewById(R.id.uemail);
         //btnLogout = (Button) findViewById(R.id.btnLogout);
         btnMap = (ImageView) findViewById(R.id.btnMap);
+        events = (ImageButton)findViewById(R.id.imgEvents);
         //imgUser = (ImageView) findViewById(R.id.img_userprofile);
         // SqLite database handler
         db = new SQLiteHandler(getApplicationContext());
@@ -148,7 +151,18 @@ public class StartScreen extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),MapsActivityNew.class);
+                System.out.println("Test button");
+                Intent intent = new Intent(StartScreen.this,MapsActivityNew.class);
+                startActivity(intent);
+            }
+        });
+
+        events.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                System.out.println("Test button 2");
+                Intent intent = new Intent(StartScreen.this,ListEvents.class);
                 startActivity(intent);
             }
         });
