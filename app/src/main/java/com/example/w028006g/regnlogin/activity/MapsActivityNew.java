@@ -456,7 +456,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
             fillCM();
         }
 
-        startService(new Intent(this, DatabaseRetrieval.class));
+        //startService(new Intent(this, DatabaseRetrieval.class));
 
     }
 
