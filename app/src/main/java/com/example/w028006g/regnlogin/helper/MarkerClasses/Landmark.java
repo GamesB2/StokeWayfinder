@@ -13,5 +13,6 @@ public class Landmark extends POI
         super.setName(sName);
         super.setLat(sLat);
         super.setLong(sLong);
+        POI.storePoint(this);
     }
 }

@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 
+import com.example.w028006g.regnlogin.helper.MarkerClasses.POI;
 import com.example.w028006g.regnlogin.helper.MyRecyclerViewAdapterPosts;
 import com.example.w028006g.regnlogin.helper.MarkerClasses.Post;
 
@@ -184,15 +185,15 @@ public class History extends AppCompatActivity {
 
                     for(int i = 0; i< post.size(); i++)
                     {
-                    for (int j = 0; j< DatabaseRetrieval.postsAl.size(); j++)
+                    for (int j = 0; j< POI.getAllPost().size(); j++)
                     {
                         Integer check = post.get(i);
 
-                        if(check == DatabaseRetrieval.postsAl.get(j).getId())
+                        if(check == POI.getAllPost().get(j).getId())
                         {
                             //if(!post.contains(postsParts[i]))
                             //{
-                                postist.add(DatabaseRetrieval.postsAl.get(j));
+                                postist.add((Post)POI.getAllPost().get(j));
                             //}
                         }
                     }

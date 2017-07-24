@@ -7,19 +7,26 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.ClusterItem;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Locale;
 
-/**
- * Created by a025178g on 15/06/2017.
- */
+/* Created by a025178g on 15/06/2017.
+*/
 
 public abstract class POI implements ClusterItem
 {
     protected int id;
     protected Address aAddressInfo = new Address(Locale.getDefault());
     protected String sDescription;
-    protected double dPrice = 0;
+    protected String sPrice;
     protected BitmapDescriptor icon;
+    private static ArrayList<POI> allPoints = new ArrayList<>();
+
+    protected static void storePoint(POI point)
+    {
+        allPoints.add(point);
+    }
 
     public boolean setID(String sID)
     {
@@ -42,43 +49,52 @@ public abstract class POI implements ClusterItem
         return sDescription;
     }
 
-    public double getPrice()
+    public String getPrice()
     {
-        return dPrice;
+        return sPrice;
     }
 
     public boolean setWeb(String sWeb)
     {
-            aAddressInfo.setUrl(sWeb);
-            return true;
+        aAddressInfo.setUrl(sWeb);
+        return true;
     }
 
-    public boolean setPrice(String sPrice)
+    public boolean setPrice(String Price)
     {
-            Double.parseDouble(sPrice);
-            return true;
+        Double dPrice = Double.parseDouble(Price);
+        if(dPrice == 0)
+        {
+            sPrice = "Free";
+        }
+        else
+        {
+            DecimalFormat df = new DecimalFormat("#.00");
+            sPrice = "£" + df.format(dPrice);
+        }
+        return true;
 
     }
 
     public boolean setDesc(String sDesc)
     {
 
-            sDescription = sDesc;
-            return true;
+        sDescription = sDesc;
+        return true;
     }
 
     public boolean setAddressLine(String sALine)
     {
-            aAddressInfo.setAddressLine(0,sALine);
+        aAddressInfo.setAddressLine(0,sALine);
 
-            return true;
+        return true;
     }
 
     public boolean setPostCode(String sPC)
     {
 
-            aAddressInfo.setPostalCode(sPC);
-            return true;
+        aAddressInfo.setPostalCode(sPC);
+        return true;
 
     }
 
@@ -94,17 +110,17 @@ public abstract class POI implements ClusterItem
 
     public void setLat (String sLat)
     {
-            aAddressInfo.setLatitude(Double.parseDouble(sLat));
+        aAddressInfo.setLatitude(Double.parseDouble(sLat));
     }
 
     public void setLong (String sLong)
     {
-            aAddressInfo.setLongitude(Double.parseDouble(sLong));
+        aAddressInfo.setLongitude(Double.parseDouble(sLong));
     }
 
     public void setName (String sName)
     {
-            aAddressInfo.setFeatureName(sName);
+        aAddressInfo.setFeatureName(sName);
     }
 
     //Method used to extract the number from the address
@@ -141,7 +157,7 @@ public abstract class POI implements ClusterItem
     public String getTitle()
     {
         String title = aAddressInfo.getFeatureName();
-        return null;
+        return title;
     }
 
     @Override
@@ -156,5 +172,75 @@ public abstract class POI implements ClusterItem
                 .snippet(snippet)
                 .position(latLng)
                 .icon(getIconBMP());
+    }
+
+    public static ArrayList<POI> getAllPoints()
+    {
+        return allPoints;
+    }
+
+    public static ArrayList<Attraction> getAllAtt()
+    {
+        ArrayList<Attraction> allAtt = new ArrayList<>();
+        for (POI point:allPoints)
+        {
+            if(point instanceof Attraction)
+            {
+                allAtt.add((Attraction)point);
+            }
+        }
+        return allAtt;
+    }
+
+    public static ArrayList<Event> getAllEvent()
+    {
+        ArrayList<Event> allEvent = new ArrayList<>();
+        for (POI point:allPoints)
+        {
+            if(point instanceof Event)
+            {
+                allEvent.add((Event)point);
+            }
+        }
+        return allEvent;
+    }
+
+    public static ArrayList<Landmark> getAllLndmk()
+    {
+        ArrayList<Landmark> allLndmk = new ArrayList<>();
+        for (POI point:allPoints)
+        {
+            if(point instanceof Landmark)
+            {
+                allLndmk.add((Landmark)point);
+            }
+        }
+        return allLndmk;
+    }
+
+    public static ArrayList<Post> getAllPost()
+    {
+        ArrayList<Post> allPost = new ArrayList<>();
+        for (POI point:allPoints)
+        {
+            if(point instanceof Post)
+            {
+                allPost.add((Post)point);
+            }
+        }
+        return allPost;
+    }
+
+    public static ArrayList<UserPin> getAllUserPins()
+    {
+        ArrayList<UserPin> allUP = new ArrayList<>();
+        for (POI point:allPoints)
+        {
+            if(point instanceof UserPin)
+            {
+                allUP.add((UserPin)point);
+            }
+        }
+        return allUP;
     }
 }
