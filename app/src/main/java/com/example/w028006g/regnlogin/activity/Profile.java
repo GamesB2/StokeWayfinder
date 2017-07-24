@@ -157,7 +157,7 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
         }
         else
         {
-            mRecyclerView = (RecyclerView) findViewById(R.id.rvQR);
+            mRecyclerView = (RecyclerView) findViewById(R.id.rvH);
             mLayoutManager = new LinearLayoutManager(Profile.this);
             mRecyclerView.setLayoutManager(mLayoutManager);
             mAdapter = new MyRecyclerViewAdapterPosts(Profile.this, alPrevScan);

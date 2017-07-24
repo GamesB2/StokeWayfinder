@@ -75,14 +75,8 @@ public class MultiMedia extends YouTubeBaseActivity implements
         }
         else
         {
-            qr = true;
-            for(int i =0;i< DatabaseRetrieval.postsAl.size();i++)
-            {
-                if(DatabaseRetrieval.postsAl.get(i).getId() == qrValue)
-                {
-                    p = DatabaseRetrieval.postsAl.get(i);
-                }
-            }
+
+//            p = DatabaseRetrieval.postsAl.get(qrValue-1);
         }
 
         if (p!= null) {
@@ -90,6 +84,28 @@ public class MultiMedia extends YouTubeBaseActivity implements
             txtName.setText(p.getAddressInfo().getFeatureName());
         }
 
+        if(qrValue > 0)
+        {
+            ArrayList<Post> postsAl = POI.getAllPost();
+            for(int i =0;i< postsAl.size();i++)
+            {
+                if(postsAl.get(i).getId() == qrValue)
+                {
+                    p = postsAl.get(i);
+                    qr = true;
+                }
+            }
+        }
+        else
+        {
+
+//            p = DatabaseRetrieval.postsAl.get(qrValue-1);
+        }
+
+        if (p!= null) {
+            txtSummary.setText(p.getSummary());
+            txtName.setText(p.getAddressInfo().getFeatureName());
+        }
 
         // Initializing video player with developer key
         youTubeView.initialize(AppConfig.DEVELOPER_KEY, this);
@@ -107,7 +123,7 @@ public class MultiMedia extends YouTubeBaseActivity implements
 
                     Toast.makeText(getApplicationContext(),
 
-                            "You Sucessfully Added This Post To Your Collection:\n" + p.getAddressInfo().getFeatureName(),
+                            "You Added This Post To Your Collection:\n" + p.getAddressInfo().getFeatureName(),
                             Toast.LENGTH_LONG).show();
                 }
                 finish();
