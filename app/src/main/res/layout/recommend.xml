@@ -236,8 +236,8 @@
 
                     </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/imageView5"
+                    <ImageButton
+                        android:id="@+id/imgLandmarks"
                         android:layout_width="100dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -315,8 +315,8 @@
                             android:textSize="18sp" />
                     </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/imageView3"
+                    <ImageButton
+                        android:id="@+id/imgAttractions"
                         android:layout_width="100dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"

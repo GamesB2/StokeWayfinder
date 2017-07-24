@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imgUser;
     private int networkId;
     private ImageButton events;
+    private ImageButton land;
+    private ImageButton att;
 
     private SocialNetwork socialNetwork;
     private SQLiteHandler db;
@@ -98,6 +100,8 @@ public class MainActivity extends AppCompatActivity {
         btnMaps = (Button) findViewById(R.id.btnMaps);
         imgUser = (ImageView) findViewById(R.id.img_userprofile);
         events = (ImageButton)findViewById(R.id.imgEvents);
+        land = (ImageButton)findViewById(R.id.imgLandmarks);
+        att = (ImageButton)findViewById(R.id.imgAttractions);
         // SqLite database handler
         db = new SQLiteHandler(getApplicationContext());
 
@@ -134,6 +138,25 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("Test button 2");
                 Intent intent = new Intent(getApplicationContext(),ListEvents.class);
                 startActivity(intent);
+            }
+        });
+
+        land.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                System.out.println("Test button 2");
+                Intent intent1 = new Intent(getApplicationContext(),ListLandmarks.class);
+                startActivity(intent1);
+            }
+        });
+        att.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                System.out.println("Test button 2");
+                Intent intent2 = new Intent(getApplicationContext(),ListAttractions.class);
+                startActivity(intent2);
             }
         });
 
