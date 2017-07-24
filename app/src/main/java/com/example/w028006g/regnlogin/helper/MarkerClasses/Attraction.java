@@ -12,4 +12,9 @@ public class Attraction extends IconManager
         super.setLat(sLat);
         super.setLong(sLong);
     }
+
+    public void setIcon(String string)
+    {
+        super.setIcon("1");
+    }
 }

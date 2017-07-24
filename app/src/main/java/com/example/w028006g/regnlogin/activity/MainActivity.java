@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
         networkId = prefs.getInt("SocialNet", -1);
 
         switch (networkId) {
-            case 0:
+            case 10:
                 txtName.setText(MainActivity.userDetails.getName());
                 break;
 

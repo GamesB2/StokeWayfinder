@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -35,6 +36,7 @@ import android.widget.Toast;
 
 import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
 import com.example.w028006g.regnlogin.GeolocationService;
+import com.example.w028006g.regnlogin.app.AppController;
 import com.example.w028006g.regnlogin.helper.GMapV2Direction;
 import com.example.w028006g.regnlogin.helper.GMapV2DirectionAsyncTask;
 import com.example.w028006g.regnlogin.helper.MarkerClasses.FilterManager;
@@ -45,6 +47,8 @@ import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 import com.example.w028006g.regnlogin.helper.MarkerClasses.MarkerRenderer;
 import com.example.w028006g.regnlogin.helper.MarkerClasses.POI;
 import com.example.w028006g.regnlogin.helper.MarkerClasses.UserPin;
+import com.github.gorbin.asne.core.SocialNetwork;
+import com.github.gorbin.asne.core.listener.OnPostingCompleteListener;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
@@ -89,6 +93,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     private boolean pauseState = false;
     private FilterManager filterManager;
     public MarkerRenderer markerRenderer;
+    private int networkId;
 
     //Constant used as a request code for the location permissions
     final int MY_PERMISSIONS_REQUEST_LOCATION = 14;
@@ -231,6 +236,8 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
             }
         });
 
+
+
     }
 
 
@@ -330,6 +337,26 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
             mBottomSheetBehavior.setPeekHeight(300);
         }
+    }
+
+    private OnPostingCompleteListener postingComplete = new OnPostingCompleteListener() {
+        @Override
+        public void onPostSuccessfully(int socialNetworkID) {
+            Toast.makeText(MapsActivityNew.this, "Sent", Toast.LENGTH_LONG).show();
+        }
+
+
+        @Override
+        public void onError(int socialNetworkID, String requestID, String errorMessage, Object data) {
+            Toast.makeText(MapsActivityNew.this, "Error while sending: " + errorMessage, Toast.LENGTH_LONG).show();
+        }
+    };
+    private android.app.AlertDialog.Builder alertDialogInit(String title, String message) {
+        android.app.AlertDialog.Builder ad = new android.app.AlertDialog.Builder(MapsActivityNew.this);
+        ad.setTitle(title);
+        ad.setMessage(message);
+        ad.setCancelable(true);
+        return ad;
     }
 
     protected void route(LatLng sourcePosition, LatLng destPosition) {

@@ -150,7 +150,8 @@ public class DatabaseRetrieval  extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // Let it continue running until it is stopped.
-        Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
+        MapsInitializer.initialize(getApplicationContext());
         return START_STICKY;
     }
 
@@ -158,7 +159,7 @@ public class DatabaseRetrieval  extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();
     }
 
 
@@ -175,7 +176,7 @@ public class DatabaseRetrieval  extends Service {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Toast.makeText(DatabaseRetrieval.this,"Json Data is downloading",Toast.LENGTH_LONG).show();
+//            Toast.makeText(DatabaseRetrieval.this,"Json Data is downloading",Toast.LENGTH_LONG).show();
 
         }
 

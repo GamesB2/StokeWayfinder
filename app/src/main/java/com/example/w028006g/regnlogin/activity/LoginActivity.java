@@ -336,7 +336,7 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
                         socialNetwork.requestLogin();
                         MainActivity1.showProgress("Loading social person");
                     } else {
-                        Toast.makeText(getActivity(), "Wrong networkId", Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getActivity(), "Wrong networkId", Toast.LENGTH_LONG).show();
                     }
                 } else {
                     startProfile(socialNetwork.getID());
@@ -356,7 +356,7 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
     @Override
     public void onError(int networkId, String requestID, String errorMessage, Object data) {
         MainActivity1.hideProgress();
-        Toast.makeText(getActivity(), "ERROR: " + errorMessage, Toast.LENGTH_LONG).show();
+//        Toast.makeText(getActivity(), "ERROR: " + errorMessage, Toast.LENGTH_LONG).show();
 
     }
 
@@ -381,13 +381,13 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
                     BackgroundTaskSocial backgroundTask=new BackgroundTaskSocial(getApplicationContext());
                     backgroundTask.execute("register", socialPerson.email, encryptedPass, socialPerson.name, datestring);
                 } catch( Exception e ) {
-                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG);
+//                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG);
                 }
             }
 
             @Override
             public void onError(int socialNetworkID, String requestID, String errorMessage, Object data) {
-                Toast.makeText(getApplicationContext(), "something went oopsy", Toast.LENGTH_SHORT);
+//                Toast.makeText(getApplicationContext(), "something went oopsy", Toast.LENGTH_SHORT);
             }
         });
 
@@ -429,6 +429,10 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
                         // Create login session
                         session.setLogin(true);
                         networkId = 10;
+                        SharedPreferences prefs = AppController.getInstance().getSharedPreferences("MYPREFS", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putInt("SocialNet", networkId).apply();
+                        editor.commit();
                         // Now store the user in SQLite
                         String uid = jObj.getString("uid");
 
@@ -452,14 +456,14 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
 
                         // Error in login. Get the error message
                         String errorMsg = jObj.getString("error_msg");
-                        Toast.makeText(getApplicationContext(),
-                                errorMsg + " error message ", Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getApplicationContext(),
+//                                errorMsg + " error message ", Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e)
                 {
                     // JSON error
                     e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+//                    Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -468,8 +472,8 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "Login Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
+//                Toast.makeText(getApplicationContext(),
+//                        error.getMessage(), Toast.LENGTH_LONG).show();
                 hideDialog();
             }
         }) {
