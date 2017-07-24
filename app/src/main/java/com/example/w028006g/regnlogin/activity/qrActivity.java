@@ -18,6 +18,7 @@ import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
 
 import com.example.w028006g.regnlogin.R;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
+import com.example.w028006g.regnlogin.helper.MarkerClasses.POI;
 import com.example.w028006g.regnlogin.helper.MyRecyclerViewAdapterPosts;
 
 import com.example.w028006g.regnlogin.helper.MarkerClasses.Post;
@@ -43,7 +44,7 @@ public class qrActivity extends AppCompatActivity implements View.OnClickListene
     private String sResult;
     private final String URL = "http://www.examplesite.com";
     private ArrayList<Post> alPrevScan = new ArrayList<>();
-    private ArrayList<Post> postArrayList = DatabaseRetrieval.postsAl;
+    private ArrayList<Post> postArrayList = POI.getAllPost();
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;

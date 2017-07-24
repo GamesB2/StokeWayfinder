@@ -15,12 +15,15 @@ import com.example.w028006g.regnlogin.app.AppConfig;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 
 
+import com.example.w028006g.regnlogin.helper.MarkerClasses.POI;
 import com.example.w028006g.regnlogin.helper.MarkerClasses.Post;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayer.PlayerStyle;
 import com.google.android.youtube.player.YouTubePlayerView;
+
+import java.util.ArrayList;
 
 public class MultiMedia extends YouTubeBaseActivity implements
         YouTubePlayer.OnInitializedListener {
@@ -61,11 +64,12 @@ public class MultiMedia extends YouTubeBaseActivity implements
 
         if(intValue > 0)
         {
-            for(int i =0;i< DatabaseRetrieval.postsAl.size();i++)
+            ArrayList<Post> postsAl = POI.getAllPost();
+            for(int i =0;i< postsAl.size();i++)
             {
-                if(DatabaseRetrieval.postsAl.get(i).getId() == intValue)
+                if(postsAl.get(i).getId() == intValue)
                 {
-                    p = DatabaseRetrieval.postsAl.get(i);
+                    p = postsAl.get(i);
                 }
             }
         }

@@ -132,7 +132,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         mapFragment.getMapAsync(this);
 
         //Landmarks, Attractions, and Events Stored in POI Array
-        poiArrayList = DatabaseRetrieval.poiArrayList;
+        poiArrayList = POI.getAllPoints();
         //Lat and Long from FireMSGService brought in here
         Bundle FireNotification = getIntent().getExtras();
         if (FireNotification != null) {
@@ -458,7 +458,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
             fillCM();
         }
 
-        startService(new Intent(this, DatabaseRetrieval.class));
+        //startService(new Intent(this, DatabaseRetrieval.class));
 
     }
 

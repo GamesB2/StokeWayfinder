@@ -15,6 +15,7 @@ public class ClickActionHelper {
         }
         Intent i = new Intent(context, cls);
         i.putExtras(extras);
+
         context.startActivity(i);
     }
 }
