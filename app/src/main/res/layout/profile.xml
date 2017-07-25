@@ -15,21 +15,29 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|enterAlways"
-            >
+            app:layout_scrollFlags="scroll|enterAlways">
+
+
 
             <ImageView
                 android:layout_width="match_parent"
+                android:id="@+id/view"
                 android:layout_height="300dp"
                 android:layout_alignBottom="@+id/linearLayout"
                 android:scaleType="centerCrop"
-
                 android:src="@color/bg_login" />
 
 
             <android.support.v7.widget.Toolbar
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/view" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_alignTop="@id/view"
+                android:background="@drawable/shadowreversed"
+                android:id="@+id/view2" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -64,15 +72,30 @@
                     android:textStyle="bold"
                     android:textColor="@color/colorPrimaryDark"/>
 
-                <TextView
+                <GridLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Staffordshire, Stoke-ont-Trent"
-                    android:layout_gravity="center"
-                    android:textStyle="bold"
-                    android:layout_marginLeft="8dp"
-                    android:textColor="@color/colorPrimaryDark" />
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center">
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_place_black_24dp"
+                        android:tint="@color/colorPrimaryDark"
+                        android:layout_gravity="center" />
 
+                    <TextView
+                        android:id="@+id/Location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Staffordshire, Stoke-on-Trent"
+                        android:layout_gravity="center"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorPrimaryDark" />
+
+
+                </GridLayout>
                 <Button
                     android:id="@+id/btnTickets"
                     android:layout_width="match_parent"
@@ -173,11 +196,10 @@
 
 
         <RelativeLayout
-            android:layout_below="@+id/topBar"
-            android:layout_above="@+id/bottomBar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            >
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true">
 
             <TextView
                 android:layout_width="match_parent"
@@ -187,17 +209,6 @@
                 android:id="@+id/activityTitle1"
                 android:textAlignment="center"/>
 
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity=""
-                android:layout_marginStart="91dp"
-                android:layout_marginTop="46dp"
-                android:src="@drawable/ic_place_black_24dp"
-                android:tint="@color/colorPrimaryDark"
-                android:layout_below="@+id/activityTitle1"
-                android:layout_alignParentStart="true" />
 
         </RelativeLayout>
 

@@ -13,6 +13,29 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:weightSum="1">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp">
+
+        <TextView
+            android:id="@+id/imageView7"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@color/colorPrimary"
+            android:text="Refine Search"
+            android:textSize="26sp"
+            android:textColor="@color/white"
+            android:gravity="center_horizontal"
+            android:paddingTop="10dp" />
+            <ImageButton
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                android:layout_alignParentBottom="@id/imageView7"
+                android:background="@drawable/right_arrow1600"
+                android:layout_gravity="center_vertical"
+                android:layout_above="@id/imageView7"/>
+        </RelativeLayout>
+
 
         <Button
             android:id="@+id/clearFilter"

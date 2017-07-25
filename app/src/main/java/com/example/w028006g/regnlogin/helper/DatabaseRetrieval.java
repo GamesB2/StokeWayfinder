@@ -85,6 +85,12 @@ public class DatabaseRetrieval  extends Service {
 
     public static int ncount = 0;
 
+
+
+
+
+
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -96,7 +102,8 @@ public class DatabaseRetrieval  extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // Let it continue running until it is stopped.
-        //Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
+        MapsInitializer.initialize(getApplicationContext());
         return START_STICKY;
     }
 
@@ -104,9 +111,8 @@ public class DatabaseRetrieval  extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();
     }
-
 
 
     @Override
@@ -121,16 +127,14 @@ public class DatabaseRetrieval  extends Service {
         MapsInitializer.initialize(getApplicationContext());
         new GetAttractions().execute();
         dataList = new ArrayList<>();
-
     }
-
 
     private class GetAttractions extends AsyncTask<Void, Void, Void>
     {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            //Toast.makeText(DatabaseRetrieval.this,"Json Data is downloading",Toast.LENGTH_LONG).show();
+//            Toast.makeText(DatabaseRetrieval.this,"Json Data is downloading",Toast.LENGTH_LONG).show();
 
         }
 
