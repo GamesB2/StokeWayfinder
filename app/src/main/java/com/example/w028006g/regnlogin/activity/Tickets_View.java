@@ -50,7 +50,6 @@ public class Tickets_View extends AppCompatActivity {
     public int NetID;
     private int networkId;
     private ArrayList<Ticket> feedItemList = DatabaseRetrieval.ticketsAl;
-    private Context mContext;
     private Button btnBuy;
     private Ticket t;
     private Context mContext;
