@@ -15,12 +15,15 @@ import com.example.w028006g.regnlogin.app.AppConfig;
 import com.example.w028006g.regnlogin.helper.DatabaseRetrieval;
 
 
+import com.example.w028006g.regnlogin.helper.MarkerClasses.POI;
 import com.example.w028006g.regnlogin.helper.MarkerClasses.Post;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayer.PlayerStyle;
 import com.google.android.youtube.player.YouTubePlayerView;
+
+import java.util.ArrayList;
 
 public class MultiMedia extends YouTubeBaseActivity implements
         YouTubePlayer.OnInitializedListener {
@@ -61,24 +64,19 @@ public class MultiMedia extends YouTubeBaseActivity implements
 
         if(intValue > 0)
         {
-            for(int i =0;i< DatabaseRetrieval.postsAl.size();i++)
+            ArrayList<Post> postsAl = POI.getAllPost();
+            for(int i =0;i< postsAl.size();i++)
             {
-                if(DatabaseRetrieval.postsAl.get(i).getId() == intValue)
+                if(postsAl.get(i).getId() == intValue)
                 {
-                    p = DatabaseRetrieval.postsAl.get(i);
+                    p = postsAl.get(i);
                 }
             }
         }
         else
         {
-            qr = true;
-            for(int i =0;i< DatabaseRetrieval.postsAl.size();i++)
-            {
-                if(DatabaseRetrieval.postsAl.get(i).getId() == qrValue)
-                {
-                    p = DatabaseRetrieval.postsAl.get(i);
-                }
-            }
+
+//            p = DatabaseRetrieval.postsAl.get(qrValue-1);
         }
 
         if (p!= null) {
@@ -86,6 +84,28 @@ public class MultiMedia extends YouTubeBaseActivity implements
             txtName.setText(p.getAddressInfo().getFeatureName());
         }
 
+        if(qrValue > 0)
+        {
+            ArrayList<Post> postsAl = POI.getAllPost();
+            for(int i =0;i< postsAl.size();i++)
+            {
+                if(postsAl.get(i).getId() == qrValue)
+                {
+                    p = postsAl.get(i);
+                    qr = true;
+                }
+            }
+        }
+        else
+        {
+
+//            p = DatabaseRetrieval.postsAl.get(qrValue-1);
+        }
+
+        if (p!= null) {
+            txtSummary.setText(p.getSummary());
+            txtName.setText(p.getAddressInfo().getFeatureName());
+        }
 
         // Initializing video player with developer key
         youTubeView.initialize(AppConfig.DEVELOPER_KEY, this);
@@ -103,7 +123,7 @@ public class MultiMedia extends YouTubeBaseActivity implements
 
                     Toast.makeText(getApplicationContext(),
 
-                            "You Sucessfully Added This Post To Your Collection:\n" + p.getAddressInfo().getFeatureName(),
+                            "You Added This Post To Your Collection:\n" + p.getAddressInfo().getFeatureName(),
                             Toast.LENGTH_LONG).show();
                 }
                 finish();

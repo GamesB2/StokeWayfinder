@@ -7,6 +7,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.ClusterItem;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -19,7 +20,7 @@ public abstract class POI implements ClusterItem
     protected int id;
     protected Address aAddressInfo = new Address(Locale.getDefault());
     protected String sDescription;
-    protected double dPrice = 0;
+    protected String sPrice;
     protected BitmapDescriptor icon;
     private static ArrayList<POI> allPoints = new ArrayList<>();
 
@@ -49,9 +50,9 @@ public abstract class POI implements ClusterItem
         return sDescription;
     }
 
-    public double getPrice()
+    public String getPrice()
     {
-        return dPrice;
+        return sPrice;
     }
 
     public boolean setWeb(String sWeb)
@@ -60,10 +61,19 @@ public abstract class POI implements ClusterItem
             return true;
     }
 
-    public boolean setPrice(String sPrice)
+    public boolean setPrice(String Price)
     {
-            Double.parseDouble(sPrice);
-            return true;
+        Double dPrice = Double.parseDouble(Price);
+        if(dPrice == 0)
+        {
+            sPrice = "Free";
+        }
+        else
+        {
+            DecimalFormat df = new DecimalFormat("#.00");
+            sPrice = "£" + df.format(dPrice);
+        }
+        return true;
 
     }
 
@@ -148,7 +158,7 @@ public abstract class POI implements ClusterItem
     public String getTitle()
     {
         String title = aAddressInfo.getFeatureName();
-        return null;
+        return title;
     }
 
     @Override
@@ -170,69 +180,68 @@ public abstract class POI implements ClusterItem
         return allPoints;
     }
 
-    public static ArrayList<POI> getAllAtt()
+    public static ArrayList<Attraction> getAllAtt()
     {
-        ArrayList<POI> allAtt = new ArrayList<>();
+        ArrayList<Attraction> allAtt = new ArrayList<>();
         for (POI point:allPoints)
         {
             if(point instanceof Attraction)
             {
-                allAtt.add(point);
+                allAtt.add((Attraction)point);
             }
         }
         return allAtt;
     }
 
-    public static ArrayList<POI> getAllEvent()
+    public static ArrayList<Event> getAllEvent()
     {
-        ArrayList<POI> allEvent = new ArrayList<>();
+        ArrayList<Event> allEvent = new ArrayList<>();
         for (POI point:allPoints)
         {
             if(point instanceof Event)
             {
-                allEvent.add(point);
+                allEvent.add((Event)point);
             }
         }
         return allEvent;
     }
 
-    public static ArrayList<POI> getAllLndmk()
+    public static ArrayList<Landmark> getAllLndmk()
     {
-        ArrayList<POI> allLndmk = new ArrayList<>();
+        ArrayList<Landmark> allLndmk = new ArrayList<>();
         for (POI point:allPoints)
         {
             if(point instanceof Landmark)
             {
-                allLndmk.add(point);
+                allLndmk.add((Landmark)point);
             }
         }
         return allLndmk;
     }
 
-    public static ArrayList<POI> getAllPost()
+    public static ArrayList<Post> getAllPost()
     {
-        ArrayList<POI> allPost = new ArrayList<>();
+        ArrayList<Post> allPost = new ArrayList<>();
         for (POI point:allPoints)
         {
             if(point instanceof Post)
             {
-                allPost.add(point);
+                allPost.add((Post)point);
             }
         }
         return allPost;
     }
 
-    public static ArrayList<POI> getAllUserPins()
+    public static ArrayList<UserPin> getAllUserPins()
     {
-        ArrayList<POI> allUP = new ArrayList<>();
+        ArrayList<UserPin> allUP = new ArrayList<>();
         for (POI point:allPoints)
         {
             if(point instanceof UserPin)
             {
-                allUP.add(point);
+                allUP.add((UserPin)point);
             }
         }
         return allUP;
     }
-
 }

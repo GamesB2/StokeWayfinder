@@ -24,6 +24,7 @@ public class Event extends IconManager
         POI.storePoint(this);
         startCalendar = Calendar.getInstance();
         endCalendar = Calendar.getInstance();
+        POI.storePoint(this);
     }
 
     public void setStartDate(String date, String time)
