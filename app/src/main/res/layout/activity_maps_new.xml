@@ -123,7 +123,7 @@
                 android:padding="16dp"
                 android:layout_gravity="bottom"
                 android:text="Navigate"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/colorPrimary"
                 android:textSize="12sp"
                 android:background="@color/colorPrimaryDark"
                 android:layout_marginLeft="35dp" />
