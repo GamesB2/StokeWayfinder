@@ -147,10 +147,11 @@ public class SignInActivity extends AppCompatActivity implements
                 personEmail = acct.getEmail();
                 personId = acct.getId();
                 personPhoto = acct.getPhotoUrl();
-                AppController.personName = personName;
-                AppController.personEmail = personEmail;
-                MainActivity.userDetails.setEmail(personEmail);
-                MainActivity.userDetails.setName(personName);
+                SharedPreferences prefs = AppController.getInstance().getSharedPreferences("GoogleLogin", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("email", personEmail).apply();
+                editor.putString("name", personName).apply();
+                editor.commit();
             }
             handleSignInResult(result);
         }
