@@ -232,7 +232,7 @@ public class RegisterActivity extends AppCompatActivity {
                         unique_id = uid;
                         ImageUploadToServerFunction();
 
-                        Toast.makeText(getApplicationContext(), "You Have Successfully Registered. Please Try login now!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "You Have Successfully Registered. You May Login!", Toast.LENGTH_LONG).show();
 
                         // Launch login activity
 
@@ -256,8 +256,7 @@ public class RegisterActivity extends AppCompatActivity {
                         // Error occurred in registration. Get the error
                         // message
                         String errorMsg = jObj.getString("error_msg");
-                        Toast.makeText(getApplicationContext(),
-                                errorMsg, Toast.LENGTH_LONG).show();
+
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -268,9 +267,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Registration Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
+                Log.e(TAG, "Registration Error");
                 hideDialog();
             }
         }) {

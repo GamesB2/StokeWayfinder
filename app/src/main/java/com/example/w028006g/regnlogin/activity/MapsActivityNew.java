@@ -10,6 +10,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Handler;
 import android.os.Message;
@@ -50,6 +51,7 @@ import com.example.w028006g.regnlogin.helper.MarkerClasses.UserPin;
 import com.github.gorbin.asne.core.SocialNetwork;
 import com.github.gorbin.asne.core.listener.OnPostingCompleteListener;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
@@ -312,6 +314,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
                     route(stoke, location);
 
                 }
+
                 mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 mBottomSheetBehavior.setPeekHeight(300);
             }
@@ -358,7 +361,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
 
         @Override
         public void onError(int socialNetworkID, String requestID, String errorMessage, Object data) {
-            Toast.makeText(MapsActivityNew.this, "Error while sending: " + errorMessage, Toast.LENGTH_LONG).show();
+            Toast.makeText(MapsActivityNew.this, "Post Has Not shared", Toast.LENGTH_SHORT).show();
         }
     };
     private android.app.AlertDialog.Builder alertDialogInit(String title, String message) {

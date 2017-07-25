@@ -155,7 +155,7 @@ public class qrActivity extends AppCompatActivity implements View.OnClickListene
             //if qrcode has nothing in it
             if (result.getContents() == null)
             {
-                Toast.makeText(this, "Result Not Found", Toast.LENGTH_LONG).show();
+
             } else
                 {
                 //if qr contains data
@@ -175,7 +175,7 @@ public class qrActivity extends AppCompatActivity implements View.OnClickListene
                     Post found = FindPost(nResult);
                     if(found.getScanCount() != 0)
                     {
-                        Toast.makeText(this,"You've already scanned " + found.getAddressInfo().getFeatureName() ,Toast.LENGTH_LONG).show();
+                        //Toast.makeText(this,"You've already scanned " + found.getAddressInfo().getFeatureName() ,Toast.LENGTH_LONG).show();
                     }
                     RecordPost(found);
                     startActivity(info);
@@ -188,7 +188,7 @@ public class qrActivity extends AppCompatActivity implements View.OnClickListene
                     //that means the encoded format not matches
                     //in this case you can display whatever data is available on the qrcode
                     //to a toast
-                    Toast.makeText(this,"Unrecognisable QR code" + result.getContents() ,Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Unrecognisable QR Code" + result.getContents() ,Toast.LENGTH_LONG).show();
                 }
             }
         } else
