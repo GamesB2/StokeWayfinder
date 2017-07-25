@@ -96,6 +96,10 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     public MarkerRenderer markerRenderer;
     private int networkId;
 
+    private String link = "";
+    private String message = "";
+    private SocialNetwork socialNetwork;
+
     //Constant used as a request code for the location permissions
     final int MY_PERMISSIONS_REQUEST_LOCATION = 14;
 
@@ -109,11 +113,10 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     public Button btnQR;
 
     public ImageButton btnFilter;
-
+    public ImageButton share;
     private TextView Title;
     private ImageView Picture;
     private TextView Descritption;
-
     private BottomSheetBehavior mBottomSheetBehavior;
 
 
@@ -128,7 +131,20 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
 
         //Bottom Sheet stuff
         //-------------------------END Sheets
+        SharedPreferences prefs = AppController.getInstance().getSharedPreferences("MYPREFS", Context.MODE_PRIVATE);
+        networkId  = prefs.getInt("SocialNet", -1);
 
+        if (networkId == -1){
+
+        } else {
+            if (networkId == 4) {
+                socialNetwork = LoginActivity.mSocialNetworkManager.getSocialNetwork(networkId);
+                //socialNetwork.setOnRequestCurrentPersonCompleteListener(this);
+                socialNetwork.requestCurrentPerson();
+            } else {
+
+            }
+        }
 
         MapsInitializer.initialize(getApplicationContext());
 
@@ -214,6 +230,38 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
             }
         });
 
+        share = (ImageButton) findViewById(R.id.share);
+
+        share.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick (View v) {
+                if (networkId == 10 || networkId == -1) {
+                    android.app.AlertDialog.Builder ad = alertDialogInit("You must be logged in via FaceBook or Google", link);
+                    ad.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+
+                        }
+                    });
+                    ad.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int i) {
+                            dialog.cancel();
+                        }
+                    });
+                    ad.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        public void onCancel(DialogInterface dialog) {
+                            dialog.cancel();
+                        }
+                    });
+                    ad.create().show();
+                } else {
+                    shareClick();
+                }
+            }
+        });
+
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         autocompleteFragment.setBoundsBias(StokeBounds);
@@ -236,10 +284,9 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
                 Log.i(TAG, "An error occurred: " + status);
             }
         });
-
-
-
     }
+
+
 
 
 //    public void onClick()
@@ -349,6 +396,35 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         }
     }
 
+    private void shareClick() {
+        android.app.AlertDialog.Builder ad = alertDialogInit("Would you like to post about:", link);
+        ad.setPositiveButton("Post", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Bundle postParams = new Bundle();
+                postParams.putString(SocialNetwork.BUNDLE_NAME, "Share Social Network");
+                postParams.putString(SocialNetwork.BUNDLE_CAPTION, message);
+                postParams.putString(SocialNetwork.BUNDLE_LINK, link);
+                socialNetwork.requestPostDialog(postParams);
+
+
+
+            }
+        });
+        ad.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                dialog.cancel();
+            }
+        });
+        ad.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            public void onCancel(DialogInterface dialog) {
+                dialog.cancel();
+            }
+        });
+        ad.create().show();
+
+    };
+
     private OnPostingCompleteListener postingComplete = new OnPostingCompleteListener() {
         @Override
         public void onPostSuccessfully(int socialNetworkID) {
@@ -361,6 +437,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
             Toast.makeText(MapsActivityNew.this, "Error while sending: " + errorMessage, Toast.LENGTH_LONG).show();
         }
     };
+
     private android.app.AlertDialog.Builder alertDialogInit(String title, String message) {
         android.app.AlertDialog.Builder ad = new android.app.AlertDialog.Builder(MapsActivityNew.this);
         ad.setTitle(title);
@@ -368,7 +445,6 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         ad.setCancelable(true);
         return ad;
     }
-
     protected void route(LatLng sourcePosition, LatLng destPosition) {
         final Handler handler = new Handler() {
             public void handleMessage(Message msg) {
@@ -541,7 +617,8 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
                                 Descritption = (TextView) findViewById(R.id.desc);
                                 Title.setText(PointOfInt.getAddressInfo().getFeatureName());
                                 Descritption.setText(PointOfInt.getDescription());
-
+                                message = "Day out at "+PointOfInt.getAddressInfo().getFeatureName();
+                                link = PointOfInt.getAddressInfo().getUrl();
 
                                 pullBottomSheet(poiLocation);
                             }

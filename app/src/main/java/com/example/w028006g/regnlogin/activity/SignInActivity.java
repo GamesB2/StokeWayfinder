@@ -253,8 +253,6 @@ public class SignInActivity extends AppCompatActivity implements
             Date date = new Date();
             final String datestring = (dateFormat.format(date)); //2016/11/16 12:08:43
             session.setLogin(true);
-            MainActivity.userDetails.setName(personName);
-            MainActivity.userDetails.setEmail(personEmail);
 
             try {
                 String encryptedPass = AESCrypt.encrypt("wayfinder", personEmail);

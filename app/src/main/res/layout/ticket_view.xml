@@ -44,11 +44,7 @@
                         android:src="@drawable/middleport" />
 
 
-                    <Button
-                        android:id="@+id/btnBuy"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Buy Ticket(s)" />
+
 
                     <TextView
                         android:id="@+id/title"
@@ -65,14 +61,16 @@
                         <GridLayout
                             android:layout_width="230dp"
                             android:layout_height="match_parent"
-                            android:columnCount="3">
+                            android:columnCount="3"
+                            android:rowCount="2">
 
                             <com.inthecheesefactory.lib.fblike.widget.FBLikeView
                                 android:id="@+id/fbLikeView"
-                                android:layout_width="match_parent"
+                                android:layout_width="230dp"
                                 android:layout_height="match_parent"
                                 android:padding="2dp"
                                 android:paddingStart="20dp" />
+
 
                         </GridLayout>
 
@@ -87,6 +85,20 @@
                             app:srcCompat="@drawable/ic_menu_share" />
 
                     </LinearLayout>
+                    <GridLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center">
+                    <Button
+                        android:id="@+id/btnBuy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Buy Ticket(s)"
+                        android:background="@color/colorPrimaryDark"
+                        android:textColor="@color/colorPrimary"
+                        android:padding="15dp"
+                        android:gravity="center"/>
+                    </GridLayout>
 
                     <TextView
                         android:id="@+id/event_time"
@@ -123,11 +135,7 @@ Middleport Pottery was described as ‘The Model Pottery of the Staffordshire Po
 
 The passageways between the ranges were just wide enough for a cart to get through, and for the easy movement of workers and pottery." />
 
-                    <Button
-                        android:id="@+id/twittershare"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Share" />
+
 
                 </GridLayout>
 

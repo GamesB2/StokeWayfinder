@@ -13,6 +13,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 
 import com.example.w028006g.regnlogin.BottomNavigationViewHelper;
 import com.example.w028006g.regnlogin.Person;
@@ -56,6 +58,7 @@ public class Tickets_My extends AppCompatActivity {
     private Person p;
     private String tickets="";
     private ArrayList<Ticket> tickList = new ArrayList<>();
+    private ImageButton back;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -118,11 +121,17 @@ public class Tickets_My extends AppCompatActivity {
             }
         });
 
+        back = (ImageButton) findViewById(R.id.backbutton);
 
-
-
-
-
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    Intent intent = new Intent(getApplicationContext(), Profile.class);
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
+                    finish();
+            }
+        });
 
 
 
