@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/edittextboarder"
-                android:hint="Full Name"
+                android:hint="@string/fullName"
                 android:inputType="textCapWords"
                 android:padding="10dp"
                 android:textColor="@color/input_register"
@@ -76,7 +76,7 @@
                 android:layout_height="50dip"
                 android:layout_marginTop="20dip"
                 android:background="@color/colorPrimaryDark"
-                android:text="Select Photo"
+                android:text="@string/selectPhoto"
                 android:textColor="@color/colorPrimary" />
             <!-- Login Button -->
 
@@ -90,18 +90,6 @@
                 android:textColor="@color/colorPrimary" />
 
             <!-- Link to Login Screen -->
-
-            <Button
-                android:id="@+id/btnLinkToLoginScreen"
-                android:layout_width="fill_parent"
-                android:layout_height="40dip"
-                android:layout_marginTop="40dip"
-                android:background="@null"
-                android:text="@string/btn_link_to_login"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="15dp" />
-
 
         </LinearLayout>
     </ScrollView>

@@ -101,7 +101,7 @@ public class RegisterActivity extends AppCompatActivity {
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.password);
         btnRegister = (Button) findViewById(R.id.btnRegister);
-        btnLinkToLogin = (Button) findViewById(R.id.btnLinkToLoginScreen);
+        //btnLinkToLogin = (Button) findViewById(R.id.btnLinkToLoginScreen);
         btnSelPhoto = (Button) findViewById(R.id.btnSelectImage);
         img_user_photo = (ImageView) findViewById(R.id.img_reg_userphoto);
 

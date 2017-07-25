@@ -100,7 +100,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyB7zA99DJ2oa_dbQPJRrzuIXdkqEiCWUXc" />
+            android:value="AIzaSyB7zA99DJ2oa_dbQPJRrzuIXdkqEiCWUXc"/>
 
         <service
             android:name=".GeolocationService"

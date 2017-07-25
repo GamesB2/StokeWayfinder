@@ -51,9 +51,10 @@
                     android:id="@+id/profilePic"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
+                    android:clickable="true"
                     android:src="@drawable/noppic"
-                    app:civ_border_width="4dp"
-                    app:civ_border_color="@android:color/white"/>
+                    app:civ_border_color="@android:color/white"
+                    app:civ_border_width="4dp"/>
 
                 <TextView
                     android:id="@+id/txtName"
@@ -127,7 +128,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Recent Activity"
+                android:text="@string/RecentActivity"
                 android:layout_gravity="center"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="24dp"
@@ -155,7 +156,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="false"
                 android:layout_centerInParent="true"
-                android:text="You haven't scanned any points today."
+                android:text="@string/noPointsScanned"
                 android:textSize="18sp"
                 android:visibility="invisible" />
 
