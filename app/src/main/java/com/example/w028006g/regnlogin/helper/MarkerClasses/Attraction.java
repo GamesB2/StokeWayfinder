@@ -18,9 +18,4 @@ public class Attraction extends IconManager
     {
         super.setIcon("0");
     }
-
-    public void setIcon(String string)
-    {
-        super.setIcon("1");
-    }
 }

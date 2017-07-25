@@ -335,7 +335,6 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
             }
         });
 
-
         if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
             mBottomSheetBehavior.setPeekHeight(300);
         }

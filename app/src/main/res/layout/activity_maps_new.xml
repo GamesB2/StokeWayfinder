@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,21 +18,20 @@
             android:columnCount="4"
             android:rowCount="2">
 
-            <fragment
-                android:id="@+id/map"
-                android:name="com.google.android.gms.maps.SupportMapFragment"
-                android:layout_width="match_parent"
-                android:layout_height="610dp"
-                android:layout_weight="0.86"
-                android:layout_gravity="bottom"
-                tools:context="com.example.w028006g.regnlogin.activity.MapsActivityNew"
-                android:layout_alignParentStart="true" />
-
 
         </RelativeLayout>
     </ScrollView>
 
 
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="610dp"
+        android:layout_weight="0.86"
+        android:layout_gravity="bottom"
+        tools:context="com.example.w028006g.regnlogin.activity.MapsActivityNew"
+        android:layout_alignParentStart="true" />
     <RelativeLayout
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
