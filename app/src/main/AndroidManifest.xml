@@ -79,10 +79,15 @@
             android:launchMode="singleTop" />
 
         <activity android:name=".activity.ListEvents"></activity>
+        <activity android:name=".activity.ListAttractions"></activity>
+        <activity android:name=".activity.ListLandmarks"></activity>
 
 
         <activity
             android:name=".activity.MapsActivityNew"/>
+
+        <activity android:name=".activity.MyDialog"
+            android:theme="@android:style/Theme.Dialog"></activity>
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

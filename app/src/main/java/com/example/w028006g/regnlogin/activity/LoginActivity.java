@@ -433,6 +433,8 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.putInt("SocialNet", networkId).apply();
                         editor.commit();
+
+
                         // Now store the user in SQLite
                         String uid = jObj.getString("uid");
 
@@ -442,6 +444,13 @@ public class LoginActivity extends Fragment implements SocialNetworkManager.OnIn
                         String created_at = user.getString("created_at");
 
                         // Inserting row in users table
+
+                        SharedPreferences emaillogin = AppController.getInstance().getSharedPreferences("EmailLogin", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor emaileditor = emaillogin.edit();
+                        emaileditor.putString("email", name).apply();
+                        emaileditor.putString("name", email).apply();
+                        emaileditor.commit();
+
                         db.addUser(name, email, uid, created_at);
 
                         // Launch main activity

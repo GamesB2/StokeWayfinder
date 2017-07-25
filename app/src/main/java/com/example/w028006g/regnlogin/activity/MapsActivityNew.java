@@ -67,6 +67,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
 
@@ -224,7 +225,6 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
                 LatLng latlng = place.getLatLng();
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
                 UserPin userPin = new UserPin(place);
-                poiArrayList.add(userPin);
                 Log.i(TAG, "Place: " + place.getName());
             }
 
@@ -303,7 +303,17 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         Directions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                route(stoke, location);
+                try{
+                    route(GeolocationService.getLatLng(), location);
+                }
+                catch (Exception e)
+                {
+                    Log.d(TAG, e.getMessage());
+                    route(stoke, location);
+
+                }
+                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                mBottomSheetBehavior.setPeekHeight(300);
             }
         });
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
@@ -540,6 +550,14 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
                         runOnUiThread(test);
                     }
                 });
+                return false;
+            }
+        });
+
+        clusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<POI>() {
+            @Override
+            public boolean onClusterClick(Cluster<POI> cluster) {
+                mBottomSheetBehavior.setPeekHeight(0);
                 return false;
             }
         });

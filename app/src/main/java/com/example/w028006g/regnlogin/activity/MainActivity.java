@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imgUser;
     private int networkId;
     private ImageButton events;
+    private ImageButton land;
+    private ImageButton att;
 
     private SocialNetwork socialNetwork;
     private SQLiteHandler db;
@@ -75,6 +77,11 @@ public class MainActivity extends AppCompatActivity {
     String email;
     String u_id;
     String tickets;
+
+    private String personName;
+    private String personGivenName;
+    private String personFamilyName;
+    private String personEmail;
 
     int numMessages = 0;
 
@@ -98,6 +105,8 @@ public class MainActivity extends AppCompatActivity {
         btnMaps = (Button) findViewById(R.id.btnMaps);
         imgUser = (ImageView) findViewById(R.id.img_userprofile);
         events = (ImageButton)findViewById(R.id.imgEvents);
+        land = (ImageButton)findViewById(R.id.imgLandmarks);
+        att = (ImageButton)findViewById(R.id.imgAttractions);
         // SqLite database handler
         db = new SQLiteHandler(getApplicationContext());
 
@@ -117,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         email = user.get("email");
         u_id = user.get("uid");
         tickets = user.get("tickets");
-        userDetails.setName(name);
+        userDetails.setName(AppController.personName);
         userDetails.setEmail(email);
         userDetails.setU_id(u_id);
         userDetails.setTickets(tickets);
@@ -134,6 +143,25 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("Test button 2");
                 Intent intent = new Intent(getApplicationContext(),ListEvents.class);
                 startActivity(intent);
+            }
+        });
+
+        land.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                System.out.println("Test button 2");
+                Intent intent1 = new Intent(getApplicationContext(),ListLandmarks.class);
+                startActivity(intent1);
+            }
+        });
+        att.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                System.out.println("Test button 2");
+                Intent intent2 = new Intent(getApplicationContext(),ListAttractions.class);
+                startActivity(intent2);
             }
         });
 
@@ -240,13 +268,17 @@ public class MainActivity extends AppCompatActivity {
 
         switch (networkId) {
             case 10:
-                txtName.setText(MainActivity.userDetails.getName());
+                SharedPreferences emaillogin = AppController.getInstance().getSharedPreferences("EmailLogin", Context.MODE_PRIVATE);
+                personEmail = emaillogin.getString("email", "WrongName");
+                personName = emaillogin.getString("name", "WrongName");
+                txtName.setText(personName);
                 break;
 
             case 3:
-                txtName.setText(AppController.getInstance().getGName());
-                MainActivity.userDetails.setName(AppController.getInstance().getGName());
-                MainActivity.userDetails.setEmail(AppController.getInstance().getGEmail());
+                SharedPreferences login = AppController.getInstance().getSharedPreferences("GoogleLogin", Context.MODE_PRIVATE);
+                personEmail = login.getString("email", "WrongName");
+                personName = login.getString("name", "WrongName");
+                txtName.setText(personName);
                 break;
 
             case 4:
