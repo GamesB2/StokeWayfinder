@@ -6,8 +6,8 @@
 
     <item>
         <bitmap
-            android:src="@drawable/splashscreen"
-            android:gravity="fill_horizontal"
+            android:src="@drawable/spalsh_screen"
+            android:gravity="center"
             />
 
 
