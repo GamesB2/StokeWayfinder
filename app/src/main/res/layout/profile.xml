@@ -74,28 +74,13 @@
 
                 <GridLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_gravity="center">
-                    <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_place_black_24dp"
-                        android:tint="@color/colorPrimaryDark"
-                        android:layout_gravity="center" />
+                    android:layout_height="wrap_content"
+                    android:text="@string/locationPlaceHolder"
+                    android:layout_gravity="center"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="8dp"
+                    android:textColor="@color/colorPrimaryDark" />
 
-                    <TextView
-                        android:id="@+id/Location"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Staffordshire, Stoke-on-Trent"
-                        android:layout_gravity="center"
-                        android:textStyle="bold"
-                        android:textColor="@color/colorPrimaryDark" />
-
-
-                </GridLayout>
                 <Button
                     android:id="@+id/btnTickets"
                     android:layout_width="match_parent"
@@ -208,7 +193,6 @@
                 android:textSize="30sp"
                 android:id="@+id/activityTitle1"
                 android:textAlignment="center"/>
-
 
         </RelativeLayout>
 

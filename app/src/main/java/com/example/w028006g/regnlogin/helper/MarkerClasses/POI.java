@@ -11,8 +11,9 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
-/* Created by a025178g on 15/06/2017.
-*/
+/**
+ * Created by a025178g on 15/06/2017.
+ */
 
 public abstract class POI implements ClusterItem
 {
@@ -56,8 +57,8 @@ public abstract class POI implements ClusterItem
 
     public boolean setWeb(String sWeb)
     {
-        aAddressInfo.setUrl(sWeb);
-        return true;
+            aAddressInfo.setUrl(sWeb);
+            return true;
     }
 
     public boolean setPrice(String Price)
@@ -79,22 +80,22 @@ public abstract class POI implements ClusterItem
     public boolean setDesc(String sDesc)
     {
 
-        sDescription = sDesc;
-        return true;
+            sDescription = sDesc;
+            return true;
     }
 
     public boolean setAddressLine(String sALine)
     {
-        aAddressInfo.setAddressLine(0,sALine);
+            aAddressInfo.setAddressLine(0,sALine);
 
-        return true;
+            return true;
     }
 
     public boolean setPostCode(String sPC)
     {
 
-        aAddressInfo.setPostalCode(sPC);
-        return true;
+            aAddressInfo.setPostalCode(sPC);
+            return true;
 
     }
 
@@ -110,17 +111,17 @@ public abstract class POI implements ClusterItem
 
     public void setLat (String sLat)
     {
-        aAddressInfo.setLatitude(Double.parseDouble(sLat));
+            aAddressInfo.setLatitude(Double.parseDouble(sLat));
     }
 
     public void setLong (String sLong)
     {
-        aAddressInfo.setLongitude(Double.parseDouble(sLong));
+            aAddressInfo.setLongitude(Double.parseDouble(sLong));
     }
 
     public void setName (String sName)
     {
-        aAddressInfo.setFeatureName(sName);
+            aAddressInfo.setFeatureName(sName);
     }
 
     //Method used to extract the number from the address

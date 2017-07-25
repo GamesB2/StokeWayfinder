@@ -51,7 +51,7 @@ public class GeofenceNotification {
 
 		NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(
 				context)
-				.setSmallIcon(R.drawable.ic_menu_send)
+				.setSmallIcon(R.drawable.ic_action_name)
 				.setContentTitle(context.getString(R.string.app_name))
 				.setContentText(notificationText).setAutoCancel(true);
 

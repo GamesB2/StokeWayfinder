@@ -40,7 +40,9 @@ import com.github.gorbin.asne.core.SocialNetwork;
 import com.github.gorbin.asne.core.listener.OnRequestSocialPersonCompleteListener;
 import com.github.gorbin.asne.core.persons.SocialPerson;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -117,6 +119,13 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
     //flag to swap between scenes
     private boolean start;
 
+
+    private String personName;
+    private String personGivenName;
+    private String personFamilyName;
+    private String personEmail;
+    private String personId;
+    private Uri personPhoto;
 
     private ArrayList<Integer> post = new ArrayList<>();
 
@@ -264,16 +273,25 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
                 new DownloadImageTask((ImageView) findViewById(R.id.profilePic))
                         .execute("https://concussive-shirt.000webhostapp.com/uploads/" + MainActivity.userDetails.getU_id() + ".png");
                 // Displaying the user details on the screen
-                txtName.setText(MainActivity.userDetails.getName());
-                txtEmail.setText(MainActivity.userDetails.getEmail());
-                new Profile.AsyncLogin().execute(MainActivity.userDetails.getEmail());
+                SharedPreferences emaillogin = AppController.getInstance().getSharedPreferences("EmailLogin", Context.MODE_PRIVATE);
+                personEmail = emaillogin.getString("email", "WrongName");
+                personName = emaillogin.getString("name", "WrongName");
+                txtName.setText(personName);
+                txtEmail.setText(personEmail);
                 break;
 
             case 3:
-                txtName.setText(AppController.getInstance().getGName());
-                txtEmail.setText(AppController.getInstance().getGEmail());
-                MainActivity.userDetails.setName(AppController.getInstance().getGName());
-                MainActivity.userDetails.setEmail(AppController.getInstance().getGEmail());
+
+//                MainActivity.userDetails.setName(AppController.getInstance().getGName());
+//                MainActivity.userDetails.setEmail(AppController.getInstance().getGEmail());
+
+
+                // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+                SharedPreferences login = AppController.getInstance().getSharedPreferences("GoogleLogin", Context.MODE_PRIVATE);
+                personEmail = login.getString("email", "WrongName");
+                personName = login.getString("name", "WrongName");
+                txtName.setText(personName);
+                txtEmail.setText(personEmail);
                 break;
 
             case 4:

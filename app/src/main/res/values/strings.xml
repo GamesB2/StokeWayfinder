@@ -173,6 +173,8 @@
          from https://console.developers.google.com/ -->
     <string name="server_client_id">YOUR_SERVER_CLIENT_ID</string>
     <string name="skip"><u>Skip for now! Sign up later...</u></string>
+    <string name="locationPlaceHolder">Stoke-on-Trent, Staffordshire</string>
+    <string name="noPointsScanned">You can see your scanned points here but, you haven\'t scanned any points yet.</string>
 
 </resources>
 

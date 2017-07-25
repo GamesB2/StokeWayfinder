@@ -37,6 +37,7 @@ public class qrActivity extends AppCompatActivity implements View.OnClickListene
     //View Objects
     private Button buttonScan;
     private TextView emptyText;
+    private Boolean firstTimeFlag = true;
 
     //qr code scanner object
     private IntentIntegrator qrScan;
@@ -54,26 +55,6 @@ public class qrActivity extends AppCompatActivity implements View.OnClickListene
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qr);
-
-        for(int i = 0; i < DatabaseRetrieval.prevPost.size(); i++)
-        {
-            alPrevScan.add(DatabaseRetrieval.prevPost.get(i));
-        }
-
-        if(alPrevScan.size()==0)
-        {
-            emptyText = (TextView) findViewById(R.id.emptyText);
-            emptyText.setVisibility(View.VISIBLE);
-        }
-        else
-        {
-            mRecyclerView = (RecyclerView) findViewById(R.id.rvQR);
-            mLayoutManager = new LinearLayoutManager(qrActivity.this);
-            mRecyclerView.setLayoutManager(mLayoutManager);
-            mAdapter = new MyRecyclerViewAdapterPosts(qrActivity.this, alPrevScan);
-            mRecyclerView.setAdapter(mAdapter);
-        }
-
 
         //View objects
         buttonScan = (Button) findViewById(R.id.buttonScan);
@@ -141,6 +122,27 @@ public class qrActivity extends AppCompatActivity implements View.OnClickListene
                 return false;
             }
         });
+
+        for(int i = 0; i < DatabaseRetrieval.prevPost.size(); i++)
+        {
+            alPrevScan.add(DatabaseRetrieval.prevPost.get(i));
+        }
+
+        if(alPrevScan.size()==0 && firstTimeFlag)
+        {
+            emptyText = (TextView) findViewById(R.id.emptyText);
+            emptyText.setVisibility(View.VISIBLE);
+//            firstTimeFlag = false;
+//            qrScan.initiateScan();
+        }
+        else
+        {
+            mRecyclerView = (RecyclerView) findViewById(R.id.rvQR);
+            mLayoutManager = new LinearLayoutManager(qrActivity.this);
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            mAdapter = new MyRecyclerViewAdapterPosts(qrActivity.this, alPrevScan);
+            mRecyclerView.setAdapter(mAdapter);
+        }
     }
 
     //Getting the scan results
