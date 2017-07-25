@@ -260,7 +260,7 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
         networkId = prefs.getInt("SocialNet", -1);
 
         switch (networkId) {
-            case 0:
+            case 10:
                 new DownloadImageTask((ImageView) findViewById(R.id.profilePic))
                         .execute("https://concussive-shirt.000webhostapp.com/uploads/" + MainActivity.userDetails.getU_id() + ".png");
                 // Displaying the user details on the screen
@@ -291,7 +291,7 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
 
                     @Override
                     public void onError(int socialNetworkID, String requestID, String errorMessage, Object data) {
-                        Toast.makeText(getApplicationContext(), "something went oopsy", Toast.LENGTH_SHORT);
+//                        Toast.makeText(getApplicationContext(), "something went oopsy", Toast.LENGTH_SHORT);
                     }
                 });
                 socialNetwork.requestCurrentPerson();
@@ -514,7 +514,7 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
     private void logoutUser() {
 
         switch (networkId) {
-            case -1:
+            case 10:
                 session.setLogin(false);
                 db.deleteUsers();
                 break;
@@ -532,15 +532,13 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
                         });
                 db.deleteUsers();
                 break;
-
-            default:
+            case 4:
                 session.setLogin(false);
                 socialNetwork.logout();
                 db.deleteUsers();
                 break;
+
         }
-
-
         // Launching the login activity
         Intent intent = new Intent(Profile.this, MainActivity1.class);
         startActivity(intent);

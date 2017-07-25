@@ -37,7 +37,7 @@ public class GeofenceNotification {
 
 		case Geofence.GEOFENCE_TRANSITION_ENTER:
 			notificationText = String.format(
-					"You are entering ",
+					"You are near a totem! ",
 					notificationTextParams);
 			break;
 

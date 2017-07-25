@@ -60,7 +60,7 @@ public class Tickets_My extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.tickets);
+        setContentView(R.layout.my_tickets);
 
 
         new Tickets_My.AsyncLogin().execute(MainActivity.userDetails.getEmail());
