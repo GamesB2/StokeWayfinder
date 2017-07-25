@@ -225,7 +225,6 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
                 LatLng latlng = place.getLatLng();
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
                 UserPin userPin = new UserPin(place);
-                poiArrayList.add(userPin);
                 Log.i(TAG, "Place: " + place.getName());
             }
 

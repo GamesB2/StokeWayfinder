@@ -78,6 +78,11 @@ public class MainActivity extends AppCompatActivity {
     String u_id;
     String tickets;
 
+    private String personName;
+    private String personGivenName;
+    private String personFamilyName;
+    private String personEmail;
+
     int numMessages = 0;
 
     @Override
@@ -121,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         email = user.get("email");
         u_id = user.get("uid");
         tickets = user.get("tickets");
-        userDetails.setName(name);
+        userDetails.setName(AppController.personName);
         userDetails.setEmail(email);
         userDetails.setU_id(u_id);
         userDetails.setTickets(tickets);
@@ -263,13 +268,17 @@ public class MainActivity extends AppCompatActivity {
 
         switch (networkId) {
             case 10:
-                txtName.setText(MainActivity.userDetails.getName());
+                SharedPreferences emaillogin = AppController.getInstance().getSharedPreferences("EmailLogin", Context.MODE_PRIVATE);
+                personEmail = emaillogin.getString("email", "WrongName");
+                personName = emaillogin.getString("name", "WrongName");
+                txtName.setText(personName);
                 break;
 
             case 3:
-                txtName.setText(AppController.getInstance().getGName());
-                MainActivity.userDetails.setName(AppController.getInstance().getGName());
-                MainActivity.userDetails.setEmail(AppController.getInstance().getGEmail());
+                SharedPreferences login = AppController.getInstance().getSharedPreferences("GoogleLogin", Context.MODE_PRIVATE);
+                personEmail = login.getString("email", "WrongName");
+                personName = login.getString("name", "WrongName");
+                txtName.setText(personName);
                 break;
 
             case 4:
