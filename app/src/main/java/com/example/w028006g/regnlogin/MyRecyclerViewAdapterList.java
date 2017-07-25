@@ -55,7 +55,7 @@ public class MyRecyclerViewAdapterList extends RecyclerView.Adapter<MyRecyclerVi
                 //if (v.getId() == feedItem.getId()){
                     //Toast.makeText(v.getContext(), "ITEM PRESSED = " + String.valueOf(customViewHolder.getAdapterPosition()), Toast.LENGTH_SHORT).show();
                 //} else {
-                Toast.makeText(v.getContext(), "ROW PRESSED = " + String.valueOf(customViewHolder.getAdapterPosition()), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(v.getContext(), "ROW PRESSED = " + String.valueOf(customViewHolder.getAdapterPosition()), Toast.LENGTH_SHORT).show();
                 Intent myIntent = new Intent(v.getContext(), Tickets_View.class);
                 myIntent.putExtra("id", customViewHolder.getAdapterPosition());
                 mContext.startActivity(myIntent);

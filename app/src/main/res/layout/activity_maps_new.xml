@@ -44,93 +44,6 @@
 
     </RelativeLayout>
 
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/bottom_sheet"
-        android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:background="@android:drawable/dialog_frame"
-        android:backgroundTint="#e1f5fe"
-        android:clipToPadding="false"
-        android:elevation="16dp"
-        android:outlineProvider="bounds"
-        app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
-
-        <GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="550dp"
-            android:orientation="vertical"
-            android:columnCount="2"
-            android:rowCount="4">
-
-            <ImageView
-                android:id="@+id/pic"
-                android:layout_width="100dp"
-                android:layout_height="70dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="17dp"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/digilithcanarywharf"
-                android:padding="16dp"
-                android:text="Button 2"
-                android:layout_column="0"
-                android:textColor="@android:color/white" />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="4dp"
-                android:layout_above="@id/bottomBar"
-                android:background="@drawable/shadow"/>
-            <TextView
-                android:id="@+id/desc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:text="Central Forest Park is in Hanley - stretching from the City Centre to Granville Avenue and Sneyd Street.  If you cross Town Road at the back of the Potteries Shopping Centre you are on the doorstep of the park, which is great respite to tired shoppers or a great family day out! "
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="230dp"
-                android:layout_height="80dp"
-                android:layout_column="0"
-                android:layout_row="0"
-                android:padding="25dp"
-                android:text="Central Forest Park Totem"
-                android:textSize="15sp"
-                android:layout_marginLeft="130dp"/>
-
-            <ImageButton
-                android:id="@+id/share"
-                android:layout_width="52dp"
-                android:layout_height="46dp"
-                android:clickable="true"
-                android:layout_column="0"
-                android:layout_row="3"
-                android:onClick="shareIt"
-                android:layout_gravity="bottom"
-                android:layout_marginLeft="275dp"
-                android:background="@color/colorPrimaryDark"
-                app:srcCompat="@drawable/ic_menu_share" />
-
-            <Button
-                android:id="@+id/direction"
-                android:layout_width="114dp"
-                android:layout_height="wrap_content"
-                android:layout_column="0"
-                android:layout_row="3"
-                android:padding="16dp"
-                android:layout_gravity="bottom"
-                android:text="Navigate"
-                android:textColor="@color/colorPrimary"
-                android:textSize="12sp"
-                android:background="@color/colorPrimaryDark"
-                android:layout_marginLeft="35dp" />
-
-        </GridLayout>
-    </android.support.v4.widget.NestedScrollView>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -177,9 +90,7 @@
                 android:layout_gravity="right"
                 android:layout_marginEnd="65dp"
                 android:layout_weight="0"
-                android:background="@color/colorPrimaryDark"
-
-                />
+                android:background="@color/colorPrimaryDark" />
 
         </android.support.v7.widget.CardView>
 
@@ -189,5 +100,94 @@
             android:layout_below="@id/topBar"
             android:background="@drawable/shadowreversed"/>
     </LinearLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:background="@android:drawable/dialog_frame"
+        android:backgroundTint="#e1f5fe"
+        android:clipToPadding="false"
+        android:elevation="16dp"
+        android:outlineProvider="bounds"
+        app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="550dp"
+            android:columnCount="2"
+            android:orientation="vertical"
+            android:rowCount="4">
+
+            <ImageView
+                android:id="@+id/pic"
+                android:layout_width="100dp"
+                android:layout_height="70dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_column="0"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/digilithcanarywharf"
+                android:padding="16dp"
+                android:text="Button 2"
+                android:textColor="@android:color/white" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_above="@id/bottomBar"
+                android:background="@drawable/shadow" />
+
+            <TextView
+                android:id="@+id/desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Central Forest Park is in Hanley - stretching from the City Centre to Granville Avenue and Sneyd Street.  If you cross Town Road at the back of the Potteries Shopping Centre you are on the doorstep of the park, which is great respite to tired shoppers or a great family day out! "
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="230dp"
+                android:layout_height="80dp"
+                android:layout_column="0"
+                android:layout_marginLeft="130dp"
+                android:layout_row="0"
+                android:padding="25dp"
+                android:text="Central Forest Park Totem"
+                android:textSize="15sp" />
+
+            <ImageButton
+                android:id="@+id/share"
+                android:layout_width="52dp"
+                android:layout_height="46dp"
+                android:layout_column="0"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="275dp"
+                android:layout_row="3"
+                android:background="@color/colorPrimaryDark"
+                android:clickable="true"
+                android:onClick="shareIt"
+                app:srcCompat="@drawable/ic_menu_share" />
+
+            <Button
+                android:id="@+id/direction"
+                android:layout_width="114dp"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="35dp"
+                android:layout_row="3"
+                android:background="@color/colorPrimaryDark"
+                android:padding="16dp"
+                android:text="Navigate"
+                android:textColor="@color/colorPrimary"
+                android:textSize="12sp" />
+
+        </GridLayout>
+    </android.support.v4.widget.NestedScrollView>
 
 </android.support.design.widget.CoordinatorLayout>

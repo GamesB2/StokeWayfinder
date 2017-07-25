@@ -14,8 +14,8 @@ public class Attraction extends IconManager
         POI.storePoint(this);
     }
 
-    public void setIcon(String string)
-    {
-        super.setIcon("0");
-    }
+//    public void setIcon(String string)
+//    {
+//        super.setIcon("0");
+//    }
 }

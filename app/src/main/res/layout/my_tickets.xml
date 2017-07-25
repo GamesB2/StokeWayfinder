@@ -33,8 +33,10 @@
             android:textSize="26sp" />
 
         <ImageButton
-            android:layout_width="70dp"
-            android:layout_height="40dp"
+            android:layout_width="35dp"
+            android:layout_height="30dp"
+            android:id="@+id/backbutton"
+            android:layout_marginStart="15dp"
             android:layout_alignParentBottom="@id/imageView7"
             android:background="@drawable/right_arrow1600"
             android:layout_gravity="center_vertical"/>
@@ -48,9 +50,10 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:layout_alignStart="@id/bar"
-        android:layout_alignParentBottom="@id/bar"
+        android:layout_alignBottom="@id/bottomNavView_Bar"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/bar" />
+        android:layout_below="@+id/bar"
+        android:layout_above="@+id/bottomBar" />
 
     <RelativeLayout
         android:id="@+id/bottomBar"
