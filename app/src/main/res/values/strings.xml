@@ -173,6 +173,7 @@
          from https://console.developers.google.com/ -->
     <string name="server_client_id">YOUR_SERVER_CLIENT_ID</string>
     <string name="skip"><u>Skip for now! Sign up later...</u></string>
+    <string name="locationPlaceHolder">Stoke-on-Trent, Staffordshire</string>
 
 </resources>
 
