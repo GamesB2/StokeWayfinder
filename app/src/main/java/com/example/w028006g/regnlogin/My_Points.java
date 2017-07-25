@@ -254,7 +254,7 @@ public class My_Points extends AppCompatActivity {
                             alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
                                         public void onClick(DialogInterface dialog, int which) {
-                                            Toast.makeText(My_Points.this,"You clicked yes",Toast.LENGTH_LONG).show();
+                                            Toast.makeText(My_Points.this,"Purchased",Toast.LENGTH_LONG).show();
                                         }
                                     });
 
