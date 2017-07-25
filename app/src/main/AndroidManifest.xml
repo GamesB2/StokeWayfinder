@@ -95,7 +95,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDMEywX029E_FyBPJ6qkQmcShd-yKUXkZI" />
+            android:value="AIzaSyB7zA99DJ2oa_dbQPJRrzuIXdkqEiCWUXc" />
 
         <service
             android:name=".GeolocationService"

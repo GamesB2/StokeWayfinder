@@ -8,28 +8,31 @@
                 >
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:weightSum="1"
         android:id="@+id/linearLayout2"
-        android:orientation="vertical">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:weightSum="1">
+
         <TextView
             android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:text="Interactions"
-            android:gravity="center_horizontal"
-            android:textSize="24sp"
-            android:paddingTop="10dp"
-            android:textColor="@color/colorPrimaryDark"
+            android:layout_weight="1.00"
             android:background="@color/colorPrimary"
-            android:layout_weight="1.00" />
+            android:gravity="center_horizontal"
+            android:paddingTop="10dp"
+            android:text="Interactions"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="24sp"/>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="4dp"
             android:background="@drawable/shadowreversed"/>
+
     </LinearLayout>
 
     <RelativeLayout
@@ -37,8 +40,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:weightSum="1"
-        android:layout_below="@+id/linearLayout2"
-        android:layout_above="@+id/buttonScan">
+        android:layout_below="@+id/linearLayout2">
 
 
         <TextView
@@ -47,9 +49,10 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="false"
             android:layout_centerInParent="true"
-            android:text="You haven't scanned any points today."
+            android:layout_margin="10dp"
+            android:text="@string/noPointsScanned"
             android:textSize="18sp"
-            android:visibility="invisible" />
+            android:visibility="invisible"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvQR"
@@ -62,6 +65,18 @@
 
 
     </RelativeLayout>
+
+    <Button
+        android:id="@+id/buttonScan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bottomBar"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:layout_weight="1.00"
+        android:background="@color/colorPrimaryDark"
+        android:text="Scan QR Code"
+        android:textColor="@color/colorPrimary"/>
 
     <RelativeLayout
         android:id="@+id/bottomBar"
@@ -86,15 +101,5 @@
                 android:background="@drawable/shadow"/>
         </android.support.design.widget.BottomNavigationView>
     </RelativeLayout>
-
-    <Button
-        android:id="@+id/buttonScan"
-        android:layout_width="match_parent"
-        android:layout_marginBottom="10dp"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
-        android:text="Scan QR Code"
-        android:textColor="@color/colorPrimary"
-        android:layout_above="@+id/bottomBar" />
 
 </RelativeLayout>

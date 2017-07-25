@@ -215,7 +215,6 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
 
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-
         autocompleteFragment.setBoundsBias(StokeBounds);
 
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
