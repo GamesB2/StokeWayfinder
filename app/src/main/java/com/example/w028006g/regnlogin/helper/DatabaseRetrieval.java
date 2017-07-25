@@ -1,5 +1,6 @@
 package com.example.w028006g.regnlogin.helper;
 
+import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -7,15 +8,19 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.w028006g.regnlogin.activity.ListEvents;
+import com.example.w028006g.regnlogin.activity.MainActivity;
 import com.example.w028006g.regnlogin.activity.MapsActivityNew;
 
 import android.widget.Toast;
 
 import com.example.w028006g.regnlogin.activity.MapsActivityNew;
+import com.example.w028006g.regnlogin.activity.MyDialog;
 import com.example.w028006g.regnlogin.helper.MarkerClasses.Attraction;
 import com.example.w028006g.regnlogin.helper.MarkerClasses.Event;
 import com.example.w028006g.regnlogin.helper.MarkerClasses.IconManager;
@@ -97,7 +102,8 @@ public class DatabaseRetrieval  extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // Let it continue running until it is stopped.
-        Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
+        MapsInitializer.initialize(getApplicationContext());
         return START_STICKY;
     }
 
@@ -105,12 +111,18 @@ public class DatabaseRetrieval  extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();
     }
 
 
     @Override
     public void onCreate()  {
+
+
+
+        Intent intent = new Intent(getApplicationContext(),MyDialog.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
 
         MapsInitializer.initialize(getApplicationContext());
         new GetAttractions().execute();
@@ -122,7 +134,7 @@ public class DatabaseRetrieval  extends Service {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Toast.makeText(DatabaseRetrieval.this,"Json Data is downloading",Toast.LENGTH_LONG).show();
+//            Toast.makeText(DatabaseRetrieval.this,"Json Data is downloading",Toast.LENGTH_LONG).show();
 
         }
 
@@ -425,8 +437,8 @@ public class DatabaseRetrieval  extends Service {
                 //intent.putExtra("DatabaseRetrieval" , att);
             //test();
 
-
-
+            MyDialog.getInstance().finish();
+            //MyDialog.hide();
         }
 
         public void test () {

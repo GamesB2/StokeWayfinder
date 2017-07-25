@@ -66,7 +66,6 @@ public class StartScreen extends AppCompatActivity {
         txtName = (TextView) findViewById(R.id.uname);
         //txtEmail = (TextView) findViewById(R.id.uemail);
         //btnLogout = (Button) findViewById(R.id.btnLogout);
-        btnMap = (ImageView) findViewById(R.id.btnMap);
         events = (ImageButton)findViewById(R.id.imgEvents);
         //imgUser = (ImageView) findViewById(R.id.img_userprofile);
         // SqLite database handler
