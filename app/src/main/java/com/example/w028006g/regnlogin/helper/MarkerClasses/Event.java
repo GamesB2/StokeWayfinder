@@ -21,6 +21,7 @@ public class Event extends IconManager
         super.setName(sName);
         super.setLat(sLat);
         super.setLong(sLong);
+        POI.storePoint(this);
         startCalendar = Calendar.getInstance();
         endCalendar = Calendar.getInstance();
     }

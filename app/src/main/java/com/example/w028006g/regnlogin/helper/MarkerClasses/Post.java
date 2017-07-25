@@ -26,6 +26,7 @@ public class Post extends POI
         super.setID(id);
         super.setLat(lat);
         super.setLong(lng);
+        POI.storePoint(this);
     }
 
     public String getVideo() {

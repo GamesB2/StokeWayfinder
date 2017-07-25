@@ -7,6 +7,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.ClusterItem;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 /**
@@ -20,6 +21,12 @@ public abstract class POI implements ClusterItem
     protected String sDescription;
     protected double dPrice = 0;
     protected BitmapDescriptor icon;
+    private static ArrayList<POI> allPoints = new ArrayList<>();
+
+    protected static void storePoint(POI point)
+    {
+        allPoints.add(point);
+    }
 
     public boolean setID(String sID)
     {
@@ -157,4 +164,75 @@ public abstract class POI implements ClusterItem
                 .position(latLng)
                 .icon(getIconBMP());
     }
+
+    public static ArrayList<POI> getAllPoints()
+    {
+        return allPoints;
+    }
+
+    public static ArrayList<POI> getAllAtt()
+    {
+        ArrayList<POI> allAtt = new ArrayList<>();
+        for (POI point:allPoints)
+        {
+            if(point instanceof Attraction)
+            {
+                allAtt.add(point);
+            }
+        }
+        return allAtt;
+    }
+
+    public static ArrayList<POI> getAllEvent()
+    {
+        ArrayList<POI> allEvent = new ArrayList<>();
+        for (POI point:allPoints)
+        {
+            if(point instanceof Event)
+            {
+                allEvent.add(point);
+            }
+        }
+        return allEvent;
+    }
+
+    public static ArrayList<POI> getAllLndmk()
+    {
+        ArrayList<POI> allLndmk = new ArrayList<>();
+        for (POI point:allPoints)
+        {
+            if(point instanceof Landmark)
+            {
+                allLndmk.add(point);
+            }
+        }
+        return allLndmk;
+    }
+
+    public static ArrayList<POI> getAllPost()
+    {
+        ArrayList<POI> allPost = new ArrayList<>();
+        for (POI point:allPoints)
+        {
+            if(point instanceof Post)
+            {
+                allPost.add(point);
+            }
+        }
+        return allPost;
+    }
+
+    public static ArrayList<POI> getAllUserPins()
+    {
+        ArrayList<POI> allUP = new ArrayList<>();
+        for (POI point:allPoints)
+        {
+            if(point instanceof UserPin)
+            {
+                allUP.add(point);
+            }
+        }
+        return allUP;
+    }
+
 }
