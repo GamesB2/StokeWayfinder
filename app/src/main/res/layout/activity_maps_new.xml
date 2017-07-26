@@ -77,6 +77,16 @@
                 android:text="Button 2"
                 android:layout_column="0"
                 android:textColor="@android:color/white" />
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="230dp"
+                android:layout_height="80dp"
+                android:layout_column="0"
+                android:layout_row="0"
+                android:padding="25dp"
+                android:text="Central Forest Park Totem"
+                android:textSize="15sp"
+                android:layout_marginLeft="130dp"/>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="4dp"
@@ -89,30 +99,6 @@
                 android:padding="16dp"
                 android:text="Central Forest Park is in Hanley - stretching from the City Centre to Granville Avenue and Sneyd Street.  If you cross Town Road at the back of the Potteries Shopping Centre you are on the doorstep of the park, which is great respite to tired shoppers or a great family day out! "
                 android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="230dp"
-                android:layout_height="80dp"
-                android:layout_column="0"
-                android:layout_row="0"
-                android:padding="25dp"
-                android:text="Central Forest Park Totem"
-                android:textSize="15sp"
-                android:layout_marginLeft="130dp"/>
-
-            <ImageButton
-                android:id="@+id/share"
-                android:layout_width="52dp"
-                android:layout_height="46dp"
-                android:clickable="true"
-                android:layout_column="0"
-                android:layout_row="3"
-                android:onClick="shareIt"
-                android:layout_gravity="bottom"
-                android:layout_marginLeft="275dp"
-                android:background="@color/colorPrimaryDark"
-                app:srcCompat="@drawable/ic_menu_share" />
 
             <Button
                 android:id="@+id/direction"
@@ -127,6 +113,21 @@
                 android:textSize="12sp"
                 android:background="@color/colorPrimaryDark"
                 android:layout_marginLeft="35dp" />
+
+            <ImageButton
+                android:id="@+id/share"
+                android:layout_width="52dp"
+                android:layout_height="46dp"
+                android:clickable="true"
+                android:layout_column="0"
+                android:layout_row="3"
+                android:onClick="shareIt"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="275dp"
+                android:background="@color/colorPrimaryDark"
+                app:srcCompat="@drawable/ic_menu_share" />
+
+
 
         </GridLayout>
     </android.support.v4.widget.NestedScrollView>
