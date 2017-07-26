@@ -65,76 +65,63 @@
                     android:textSize="20sp"
                     android:layout_marginTop="8dp"
                     android:textColor="@color/colorPrimaryDark"/>
+
                 <TextView
                     android:id="@+id/txtUserEmail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
                     android:text=""
-                    android:textStyle="bold"
-                    android:textColor="@color/colorPrimaryDark"/>
-
-                <GridLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/locationPlaceHolder"
-                    android:layout_gravity="center"
-                    android:textStyle="bold"
-                    android:layout_marginLeft="8dp"
-                    android:textColor="@color/colorPrimaryDark" />
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textStyle="bold"/>
 
                 <Button
                     android:id="@+id/btnTickets"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="My Purchases"
-                    android:layout_marginTop="30dip"
+                    android:layout_marginTop="8dp"
                     android:background="@color/colorPrimaryDark"
+                    android:text="@string/myPurchases"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="15dp" />
+                    android:textSize="15dp"/>
+
+                <Button
+                    android:id="@+id/settings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:text="@string/settings"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="15dp"/>
 
                 <Button
                     android:id="@+id/btnLogout"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="8dp"
                     android:background="@color/colorPrimaryDark"
                     android:text="@string/btn_logout"
                     android:textAllCaps="false"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="15dp" />
+                    android:textSize="15dp"/>
+
+                <TextView
+                    android:id="@+id/textView12"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/RecentActivity"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="24dp"
+                    android:textStyle="bold"/>
 
 
             </LinearLayout>
 
         </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="#ec2d3b"
-            android:gravity="center"
-            app:layout_scrollFlags="scroll|enterAlways">
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@color/white"
-            android:padding="16dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/RecentActivity"
-                android:layout_gravity="center"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="24dp"
-                android:textStyle="bold"/>
-        </LinearLayout>
-
 
 
     </android.support.design.widget.AppBarLayout>
@@ -148,7 +135,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="16dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:weightSum="1">
 
             <TextView
                 android:id="@+id/emptyText"
@@ -164,8 +152,9 @@
                 android:id="@+id/rvH"
                 android:layout_width="match_parent"
                 android:layout_height="400dp"
-                android:scrollbars="vertical"
-                android:padding="15dp">
+                android:layout_weight="1.28"
+                android:padding="15dp"
+                android:scrollbars="vertical">
 
             </android.support.v7.widget.RecyclerView>
 
