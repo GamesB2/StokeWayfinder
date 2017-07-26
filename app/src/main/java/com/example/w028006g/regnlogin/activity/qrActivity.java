@@ -1,6 +1,8 @@
 package com.example.w028006g.regnlogin.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -37,8 +39,8 @@ public class qrActivity extends AppCompatActivity implements View.OnClickListene
     //View Objects
     private Button buttonScan;
     private TextView emptyText;
-    private Boolean firstTimeFlag = true;
-
+    private boolean firstScanFlag = true;
+    private SharedPreferences.Editor edit;
     //qr code scanner object
     private IntentIntegrator qrScan;
     private BeepManager beepManager;
@@ -69,7 +71,18 @@ public class qrActivity extends AppCompatActivity implements View.OnClickListene
         buttonScan.setOnClickListener(this);
 
 
+        SharedPreferences prefs = this.getPreferences(Context.MODE_PRIVATE);
+        edit = prefs.edit();
 
+        if (!prefs.contains("first"))
+        {
+            edit.putBoolean("first",true);
+            edit.commit();
+        }
+        else
+        {
+            firstScanFlag = prefs.getBoolean("first", true);
+        }
 
         //Menu bar at the bottom
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView_Bar);
@@ -128,12 +141,16 @@ public class qrActivity extends AppCompatActivity implements View.OnClickListene
             alPrevScan.add(DatabaseRetrieval.prevPost.get(i));
         }
 
-        if(alPrevScan.size()==0 && firstTimeFlag)
+        if(alPrevScan.size()==0)
         {
+            if(firstScanFlag)
+            {
+                edit.putBoolean("first", false);
+                edit.commit();
+                qrScan.initiateScan();
+            }
             emptyText = (TextView) findViewById(R.id.emptyText);
             emptyText.setVisibility(View.VISIBLE);
-//            firstTimeFlag = false;
-//            qrScan.initiateScan();
         }
         else
         {
@@ -155,7 +172,7 @@ public class qrActivity extends AppCompatActivity implements View.OnClickListene
             //if qrcode has nothing in it
             if (result.getContents() == null)
             {
-                Toast.makeText(this, "Result Not Found", Toast.LENGTH_LONG).show();
+
             } else
                 {
                 //if qr contains data
@@ -175,7 +192,7 @@ public class qrActivity extends AppCompatActivity implements View.OnClickListene
                     Post found = FindPost(nResult);
                     if(found.getScanCount() != 0)
                     {
-                        Toast.makeText(this,"You've already scanned " + found.getAddressInfo().getFeatureName() ,Toast.LENGTH_LONG).show();
+                        //Toast.makeText(this,"You've already scanned " + found.getAddressInfo().getFeatureName() ,Toast.LENGTH_LONG).show();
                     }
                     RecordPost(found);
                     startActivity(info);
@@ -188,13 +205,19 @@ public class qrActivity extends AppCompatActivity implements View.OnClickListene
                     //that means the encoded format not matches
                     //in this case you can display whatever data is available on the qrcode
                     //to a toast
-                    Toast.makeText(this,"Unrecognisable QR code" + result.getContents() ,Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Unrecognisable QR Code" + result.getContents() ,Toast.LENGTH_LONG).show();
                 }
             }
         } else
         {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
     }
 
     @Override
@@ -224,7 +247,10 @@ public class qrActivity extends AppCompatActivity implements View.OnClickListene
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed()
+    {
+        edit.putBoolean("first", true);
+        edit.commit();
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
         overridePendingTransition(0, 0);

@@ -71,6 +71,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 import static com.example.w028006g.regnlogin.app.AppConfig.CONNECTION_TIMEOUT;
 import static com.example.w028006g.regnlogin.app.AppConfig.READ_TIMEOUT;
 
@@ -82,6 +84,7 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
     private Button btnView;
     private Button btnHistory;
     private Button btnPoints;
+    private Button btnSelPhoto;
     private RecyclerView mRecyclerView;
     private MyRecyclerViewAdapterPosts adapter;
     private ArrayList<Post> postist = new ArrayList<>();
@@ -89,7 +92,7 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
 
     private Button btnLogout;
     private Button btnMaps;
-    private ImageView imgUser;
+    private CircleImageView imgUser;
 
     private GoogleApiClient mGoogleApiClient;
 
@@ -146,6 +149,18 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
         btnView = (Button) findViewById(R.id.btnTickets);
         //btnHistory = (Button) findViewById(R.id.btnHistory);
         btnLogout = (Button) findViewById(R.id.btnLogout);
+        imgUser = (CircleImageView) findViewById(R.id.profilePic);
+        imgUser.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent = new Intent();
+                intent.setType("image*//*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Image From Gallery"), 1);
+            }
+        });
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView_Bar);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
@@ -172,7 +187,6 @@ public class Profile extends AppCompatActivity implements GoogleApiClient.OnConn
             mAdapter = new MyRecyclerViewAdapterPosts(Profile.this, alPrevScan);
             mRecyclerView.setAdapter(mAdapter);
         }
-
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override

@@ -293,7 +293,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(int socialNetworkID, String requestID, String errorMessage, Object data) {
-                        Toast.makeText(getApplicationContext(), "something went oopsy", Toast.LENGTH_SHORT);
+                        Toast.makeText(getApplicationContext(), "Unable To Load Profile", Toast.LENGTH_SHORT);
                     }
                 });
                 socialNetwork.requestCurrentPerson();

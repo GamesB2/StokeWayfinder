@@ -63,7 +63,7 @@ public class MyRecyclerViewAdapterList extends RecyclerView.Adapter<MyRecyclerVi
                 //}
             }
         };
-        //customViewHolder.imageView.setOnClickListener(listener);
+        customViewHolder.imageView.setOnClickListener(listener);
         //customViewHolder.textViewE.setOnClickListener(listener);
     }
 

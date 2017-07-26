@@ -200,8 +200,6 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
 		} else {
 			MapsActivityNew.geofencesAlreadyRegistered = false;
 			String errorMessage = getErrorString(this, status.getStatusCode());
-			Toast.makeText(getApplicationContext(), errorMessage,
-					Toast.LENGTH_LONG).show();
 		}
 	}
 

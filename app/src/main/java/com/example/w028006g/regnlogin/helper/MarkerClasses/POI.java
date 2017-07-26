@@ -25,11 +25,34 @@ public abstract class POI implements ClusterItem
     protected String sDescription;
     protected String sPrice;
     protected BitmapDescriptor icon;
+    protected static double markerOffset = 0.00002;
     private static ArrayList<POI> allPoints = new ArrayList<>();
     private MIcon oIcon;
 
+
     protected static void storePoint(POI point)
     {
+
+        LatLng current = point.getPosition();
+
+        if (allPoints.size() != 0)
+        {
+            for (int i = 0; i < allPoints.size(); i++)
+            {
+                LatLng tempTest = allPoints.get(i).getPosition();
+
+                if (tempTest.equals(current))
+                {
+                    double currentLat = current.latitude;
+                    double currentLong = current.longitude;
+
+                    point.getAddressInfo().setLatitude(currentLat - (5 * markerOffset));
+                    point.getAddressInfo().setLongitude(currentLong - (5 * markerOffset));
+                }
+
+            }
+        }
+
         allPoints.add(point);
     }
 
