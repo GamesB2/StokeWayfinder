@@ -16,10 +16,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:id="@+id/thumbnail">
 
             <ImageView
-                android:id="@+id/thumbnail"
                 android:layout_width="82dp"
                 android:layout_height="80dp"
                 android:cropToPadding="false"

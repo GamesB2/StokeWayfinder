@@ -170,7 +170,7 @@
             android:theme="@style/AppTheme"/>
         <activity
             android:name=".activity.qrActivity"
-            android:screenOrientation="fullSensor"
+            android:screenOrientation="portrait"
             tools:replace="screenOrientation"/>
 
     </application>

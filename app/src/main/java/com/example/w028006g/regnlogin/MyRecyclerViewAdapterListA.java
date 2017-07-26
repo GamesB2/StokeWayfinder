@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,14 +71,14 @@ public class MyRecyclerViewAdapterListA extends RecyclerView.Adapter<MyRecyclerV
 
 
     class CustomViewHolder extends RecyclerView.ViewHolder {
-        protected ImageView imageView;
+        protected LinearLayout imageView;
         protected TextView textViewE;
         protected TextView textViewD;
         protected TextView textViewP;
 
         public CustomViewHolder(View view) {
             super(view);
-            this.imageView = (ImageView) view.findViewById(R.id.thumbnail);
+            this.imageView = (LinearLayout) view.findViewById(R.id.thumbnail);
             this.textViewE = (TextView) view.findViewById(R.id.title);
             this.textViewD = (TextView) view.findViewById(R.id.tDesc);
             this.textViewP = (TextView) view.findViewById(R.id.tPrice);

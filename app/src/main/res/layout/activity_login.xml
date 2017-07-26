@@ -140,8 +140,8 @@
 
         <Button
             android:id="@+id/googleplus"
-            android:layout_width="130dp"
-            android:layout_height="45dp"
+            android:layout_width="135dp"
+            android:layout_height="50dp"
             android:layout_gravity="center"
             android:layout_weight="0.29"
             android:background="@drawable/common_google_signin_btn_text_light"

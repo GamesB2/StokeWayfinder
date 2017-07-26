@@ -7,9 +7,10 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
         android:layout_gravity="bottom"
-        android:orientation="horizontal">
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimaryDark">
 
 
         <android.support.v4.widget.NestedScrollView
@@ -17,18 +18,18 @@
             android:layout_height="match_parent">
 
 
-        <LinearLayout
-            android:id="@+id/textTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:textAlignment="center">
-
-
             <LinearLayout
+                android:id="@+id/textTitle"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:textAlignment="center">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -43,11 +44,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="0dp"
+                            android:gravity="center"
                             android:paddingTop="0dp"
                             android:text="Recommended For You"
-                            android:textColor="@color/colorPrimaryDark"
                             android:textAlignment="center"
-                            android:gravity="center"
+                            android:textColor="@color/colorPrimaryDark"
                             android:textSize="18sp" />
 
                         <TextView
@@ -58,9 +59,9 @@
                             android:textColor="@color/colorPrimaryDark"
                             android:textSize="18sp" />
 
-                </LinearLayout>
+                    </LinearLayout>
 
-            </LinearLayout>
+                </LinearLayout>
 
 
                 <ImageView
@@ -68,13 +69,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/recom" />
+                    app:srcCompat="@drawable/recom"
+                    android:layout_weight="0.07" />
 
 
                 <android.support.v7.widget.CardView
+                    android:id="@+id/card1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="20dp">
+                    android:layout_marginTop="20dp"
+                    android:padding="30dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -83,9 +87,12 @@
                         android:background="#fff"
                         android:orientation="horizontal"
                         android:paddingBottom="10dp"
-                        android:paddingTop="10dp">
+                        android:paddingTop="10dp"
+
+                        android:id="@+id/events">
 
                         <LinearLayout
+
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -93,7 +100,7 @@
                             android:padding="12dp">
 
                             <TextView
-                                android:id="@+id/textView8"
+                                android:id="@+id/textView18"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="right"
@@ -103,7 +110,7 @@
                                 android:textSize="18sp" />
 
                             <TextView
-                                android:id="@+id/textView7"
+                                android:id="@+id/textView17"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="right"
@@ -113,7 +120,7 @@
                                 android:textSize="18sp" />
 
                             <TextView
-                                android:id="@+id/textView6"
+                                android:id="@+id/textView16"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="right"
@@ -123,7 +130,7 @@
                                 android:textSize="18sp" />
 
                             <TextView
-                                android:id="@+id/textView5"
+                                android:id="@+id/textView15"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="right"
@@ -133,7 +140,7 @@
                                 android:textSize="18sp" />
 
                             <TextView
-                                android:id="@+id/textView4"
+                                android:id="@+id/textView14"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="right"
@@ -146,7 +153,7 @@
                         <ImageButton
                             android:id="@+id/imgEvents"
                             android:layout_width="50dp"
-                            android:layout_height="match_parent"
+                            android:layout_height="50dp"
                             android:padding="5dp"
                             android:scaleType="fitStart"
                             app:srcCompat="@drawable/events" />
@@ -166,7 +173,8 @@
                         android:background="#fff"
                         android:orientation="horizontal"
                         android:paddingBottom="10dp"
-                        android:paddingTop="10dp">
+                        android:paddingTop="10dp"
+                        android:id="@+id/landmarks">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -176,7 +184,7 @@
                             android:padding="12dp">
 
                             <TextView
-                                android:id="@+id/textView8"
+                                android:id="@+id/textView28"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -186,7 +194,7 @@
                                 android:textSize="18sp" />
 
                             <TextView
-                                android:id="@+id/textView7"
+                                android:id="@+id/textView27"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -196,7 +204,7 @@
                                 android:textSize="18sp" />
 
                             <TextView
-                                android:id="@+id/textView6"
+                                android:id="@+id/textView26"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -206,7 +214,7 @@
                                 android:textSize="18sp" />
 
                             <TextView
-                                android:id="@+id/textView5"
+                                android:id="@+id/textView25"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -215,22 +223,13 @@
                                 android:textAlignment="textStart"
                                 android:textSize="18sp" />
 
-                            <TextView
-                                android:id="@+id/textView4"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:paddingTop="10dp"
-                                android:text="@string/l5"
-                                android:textAlignment="textStart"
-                                android:textSize="18sp" />
 
                         </LinearLayout>
 
                         <ImageButton
                             android:id="@+id/imgLandmarks"
                             android:layout_width="100dp"
-                            android:layout_height="match_parent"
+                            android:layout_height="50dp"
                             android:layout_weight="1"
                             android:padding="10dp"
                             android:scaleType="fitStart"
@@ -242,16 +241,17 @@
 
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="20dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="214dp"
                         android:background="#fff"
                         android:orientation="horizontal"
                         android:paddingBottom="10dp"
-                        android:paddingTop="10dp">
+                        android:paddingTop="10dp"
+                        android:id="@id/attractions">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -261,7 +261,7 @@
                             android:padding="12dp">
 
                             <TextView
-                                android:id="@+id/textView8"
+                                android:id="@+id/textView38"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -270,7 +270,7 @@
                                 android:textSize="18sp" />
 
                             <TextView
-                                android:id="@+id/textView7"
+                                android:id="@+id/textView37"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -279,7 +279,7 @@
                                 android:textSize="18sp" />
 
                             <TextView
-                                android:id="@+id/textView6"
+                                android:id="@+id/textView36"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -288,7 +288,7 @@
                                 android:textSize="18sp" />
 
                             <TextView
-                                android:id="@+id/textView5"
+                                android:id="@+id/textView35"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -297,7 +297,7 @@
                                 android:textSize="18sp" />
 
                             <TextView
-                                android:id="@+id/textView4"
+                                android:id="@+id/textView34"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -309,7 +309,7 @@
                         <ImageButton
                             android:id="@+id/imgAttractions"
                             android:layout_width="100dp"
-                            android:layout_height="match_parent"
+                            android:layout_height="50dp"
                             android:layout_weight="1"
                             android:padding="10dp"
                             android:scaleType="fitStart"
@@ -328,8 +328,6 @@
                     android:textAlignment="center"
                     android:textColor="#000"
                     android:textSize="20sp" />
-
-
 
 
             </LinearLayout>

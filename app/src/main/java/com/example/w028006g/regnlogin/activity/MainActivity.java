@@ -53,6 +53,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,9 +65,9 @@ public class MainActivity extends AppCompatActivity {
     private Button btnMaps;
     private ImageView imgUser;
     private int networkId;
-    private ImageButton events;
-    private ImageButton land;
-    private ImageButton att;
+    private LinearLayout events;
+    private LinearLayout land;
+    private LinearLayout att;
 
     private SocialNetwork socialNetwork;
     private SQLiteHandler db;
@@ -104,9 +105,9 @@ public class MainActivity extends AppCompatActivity {
         btnLogout = (Button) findViewById(R.id.btnLogout);
         btnMaps = (Button) findViewById(R.id.btnMaps);
         imgUser = (ImageView) findViewById(R.id.img_userprofile);
-        events = (ImageButton)findViewById(R.id.imgEvents);
-        land = (ImageButton)findViewById(R.id.imgLandmarks);
-        att = (ImageButton)findViewById(R.id.imgAttractions);
+        events = (LinearLayout)findViewById(R.id.events);
+        land = (LinearLayout)findViewById(R.id.landmarks);
+        att = (LinearLayout)findViewById(R.id.attractions);
         // SqLite database handler
         db = new SQLiteHandler(getApplicationContext());
 

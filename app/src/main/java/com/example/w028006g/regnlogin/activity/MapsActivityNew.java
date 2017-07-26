@@ -12,6 +12,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
@@ -20,8 +21,9 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
+import android.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -352,18 +354,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         Directions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try{
-                    route(GeolocationService.getLatLng(), location);
-                }
-                catch (Exception e)
-                {
-                    Log.d(TAG, e.getMessage());
-                    route(stoke, location);
-
-                }
-
-                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                mBottomSheetBehavior.setPeekHeight(300);
+                dialog(location, stoke);
             }
         });
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
@@ -427,7 +418,60 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         ad.create().show();
 
     };
+    private void dialog(final LatLng location, final LatLng stoke) {
+        android.app.AlertDialog.Builder ad = alertDialogInit("Would you like to:", link);
+        ad.setTitle(Html.fromHtml("<font color='#D4AF37'>Would you like to:</font>"));
+        ad.setPositiveButton("Open in Maps", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                double lat = location.latitude;
 
+                double lng = location.longitude;
+
+                String format = "geo:0,0?q=" + lat + "," + lng + "( Location title)";
+
+                Uri uri = Uri.parse(format);
+
+
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+        ad.setNegativeButton("Show Route", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                try{
+                    route(GeolocationService.getLatLng(), location);
+                }
+                catch (Exception e)
+                {
+                    Log.d(TAG, e.getMessage());
+                    route(stoke, location);
+
+                }
+
+                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                mBottomSheetBehavior.setPeekHeight(300);
+            }
+        });
+        AlertDialog alert = ad.create();
+        alert.show();
+        Button nbutton = alert.getButton(DialogInterface.BUTTON_NEGATIVE);
+        //Set negative button background
+        //Set negative button text color
+        nbutton.setTextColor(getResources().getColor(R.color.colorPrimary));
+        Button pbutton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
+        //Set positive button background
+        //Set positive button text color
+        pbutton.setTextColor(getResources().getColor(R.color.colorPrimary));
+        ad.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            public void onCancel(DialogInterface dialog) {
+                dialog.cancel();
+            }
+        });
+
+    };
     private OnPostingCompleteListener postingComplete = new OnPostingCompleteListener() {
         @Override
         public void onPostSuccessfully(int socialNetworkID) {
