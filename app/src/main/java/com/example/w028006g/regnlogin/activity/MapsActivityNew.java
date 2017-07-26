@@ -441,14 +441,14 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         dialog.show();
     }
 
-    //Focuses the camera on the coordinates passed to it
-    public void centerOn(String sLat, String sLong) {
-        LatLng focusPoint = new LatLng(Double.parseDouble(sLat), Double.parseDouble(sLong));
-
-        mMap.addMarker(new MarkerOptions().position(focusPoint).title("Discount Day").icon(BitmapDescriptorFactory.fromResource(R.drawable.discountlogo)));
-        mMap.moveCamera(CameraUpdateFactory.zoomTo(25));
-        mMap.animateCamera(CameraUpdateFactory.newLatLng(focusPoint));
-    }
+//    //Focuses the camera on the coordinates passed to it
+//    public void centerOn(String sLat, String sLong) {
+//        LatLng focusPoint = new LatLng(Double.parseDouble(sLat), Double.parseDouble(sLong));
+//
+//        mMap.addMarker(new MarkerOptions().position(focusPoint).title("Discount Day").icon(BitmapDescriptorFactory.fromResource(R.drawable.discountlogo)));
+//        mMap.moveCamera(CameraUpdateFactory.zoomTo(25));
+//        mMap.animateCamera(CameraUpdateFactory.newLatLng(focusPoint));
+//    }
 
 
 
@@ -594,10 +594,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         checkLocationPermission();
 
         //Checks that something has been passed to lat and lon before trying to execute
-        if (lat != null && lon != null)
-        {
-            centerOn(lat, lon);
-        }
+
 
         //Executes popMap to populate the markers on the maps
 //        filterManager = new FilterManager(mMap,poiArrayList);

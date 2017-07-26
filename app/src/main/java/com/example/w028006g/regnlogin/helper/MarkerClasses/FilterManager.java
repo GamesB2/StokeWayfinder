@@ -50,7 +50,7 @@ public class FilterManager
 
         poiArrayList = arrayList;
         mMap = map;
-        filter = new boolean[25];
+        filter = new boolean[50];
 
         userLatLng = GeolocationService.getLatLng();
     }
@@ -122,7 +122,7 @@ public class FilterManager
 
                 float distance = location.distanceTo(destLoc);
 
-                if ((!rangeFilter || distance <= maxRange)&&(!filter[att.getIcon()]))
+                if (!rangeFilter || distance <= maxRange)
                 {
 //                    temp = mMap.addMarker(new MarkerOptions()
 //                            .position(dest)
@@ -189,7 +189,7 @@ public class FilterManager
 
                 float distance = location.distanceTo(destLoc);
 
-                if ((!rangeFilter || distance <= maxRange)&&(!filter[evnt.getIcon()]))
+                if (!rangeFilter || distance <= maxRange)
                 {
 //                    Bitmap bitmap = changeIcon(event.getIcon());
 //                    temp = mMap.addMarker(new MarkerOptions()

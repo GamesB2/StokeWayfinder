@@ -3,6 +3,7 @@ package com.example.w028006g.regnlogin.helper.MarkerClasses;
 import android.location.Address;
 
 import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.ClusterItem;
@@ -10,6 +11,8 @@ import com.google.maps.android.clustering.ClusterItem;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Locale;
+
+import static com.example.w028006g.regnlogin.helper.MarkerClasses.IconManager.nArrIconID;
 
 /**
  * Created by a025178g on 15/06/2017.
@@ -23,6 +26,7 @@ public abstract class POI implements ClusterItem
     protected String sPrice;
     protected BitmapDescriptor icon;
     private static ArrayList<POI> allPoints = new ArrayList<>();
+    private MIcon oIcon;
 
     protected static void storePoint(POI point)
     {
@@ -97,6 +101,13 @@ public abstract class POI implements ClusterItem
             aAddressInfo.setPostalCode(sPC);
             return true;
 
+    }
+
+    public void setIcon(String string)
+    {
+        int nIconCode = Integer.parseInt(string);
+        oIcon = MIcon.getByIndex(nIconCode);
+        icon = BitmapDescriptorFactory.fromResource(oIcon.getIconId());
     }
 
     public void setIconBMP (BitmapDescriptor bmp)
