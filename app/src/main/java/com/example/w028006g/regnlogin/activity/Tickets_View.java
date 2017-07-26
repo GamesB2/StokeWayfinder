@@ -119,7 +119,7 @@ public class Tickets_View extends AppCompatActivity {
                 BackgroundTask backgroundTask=new BackgroundTask(Tickets_View.this);
                 backgroundTask.execute(method, MainActivity.userDetails.getEmail(), String.valueOf(t.getId()));
                 Toast.makeText(getApplicationContext(),
-                        "You Sucessfully Purchased a Ticket for: " + t.getName(),
+                        "You Purchased A Ticket For: " + t.getName(),
                         Toast.LENGTH_LONG).show();
                 finish();
             }

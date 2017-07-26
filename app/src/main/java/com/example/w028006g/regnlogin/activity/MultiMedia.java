@@ -123,7 +123,7 @@ public class MultiMedia extends YouTubeBaseActivity implements
 
                     Toast.makeText(getApplicationContext(),
 
-                            "You Added This Post To Your Collection:\n" + p.getAddressInfo().getFeatureName(),
+                            "Post Added To Your Collection:\n" + p.getAddressInfo().getFeatureName(),
                             Toast.LENGTH_LONG).show();
                 }
                 finish();
@@ -153,7 +153,7 @@ public class MultiMedia extends YouTubeBaseActivity implements
         } else {
             String errorMessage = String.format(
                     getString(R.string.error_player), errorReason.toString());
-            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Youtube Load Failed", Toast.LENGTH_LONG).show();
         }
     }
 
