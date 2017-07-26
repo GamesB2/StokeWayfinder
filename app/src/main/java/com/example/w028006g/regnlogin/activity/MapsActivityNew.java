@@ -297,21 +297,25 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         }
     }
 
-    private void pullBottomSheet(final LatLng location) {
+    private void pullBottomSheet(final POI point) {
 
         View bottomSheet = findViewById( R.id.bottom_sheet );
         TextView Directions = (TextView) findViewById(R.id.direction);
+
+        ImageView myImage = (ImageView)findViewById(R.id.pic);
+        //myImage.setImageBitmap();
+
         final LatLng stoke = new LatLng(53.0027, -2.1794);
         Directions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try{
-                    route(GeolocationService.getLatLng(), location);
+                    route(GeolocationService.getLatLng(), point.getPosition());
                 }
                 catch (Exception e)
                 {
                     Log.d(TAG, e.getMessage());
-                    route(stoke, location);
+                    route(stoke, point.getPosition());
 
                 }
 
@@ -319,7 +323,6 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
                 mBottomSheetBehavior.setPeekHeight(300);
             }
         });
-        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -521,13 +524,17 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         markerRenderer = new MarkerRenderer(getApplicationContext(), mMap, clusterManager);
         filterManager = new FilterManager(mMap,poiArrayList);
 
+        View bottomSheet = findViewById( R.id.bottom_sheet );
+        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        mBottomSheetBehavior.setPeekHeight(0);
+
 
         fillCM();
-        pullBottomSheet(stoke);
         clusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<POI>()
         {
             @Override
-            public boolean onClusterItemClick(POI poi)
+            public boolean onClusterItemClick(final POI poi)
             {
                 final POI PointOfInt = poi;
 
@@ -546,7 +553,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
                                 Descritption.setText(PointOfInt.getDescription());
 
 
-                                pullBottomSheet(poiLocation);
+                                pullBottomSheet(poi);
                             }
                         };
 
@@ -564,6 +571,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
                 return false;
             }
         });
+
 
         //Calls function to display geofence circle
         displayGeofences();
@@ -595,6 +603,8 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
 
         checkLocation();
         checkLocationPermission();
+
+
 
         //Checks that something has been passed to lat and lon before trying to execute
         if (lat != null && lon != null)
