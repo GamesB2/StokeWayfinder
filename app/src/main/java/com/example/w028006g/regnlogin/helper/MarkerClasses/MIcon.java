@@ -115,6 +115,7 @@ public class MIcon
         names.add("Weddings");
         names.add("Totem");
         names.add("Landmark");
+        names.add("User Pin");
 
 
 //        names.add("Gift Shops");
@@ -175,7 +176,8 @@ public class MIcon
                         R.drawable.water,
                         R.drawable.wedding,
                         R.drawable.totem,
-                        R.drawable.landmark
+                        R.drawable.landmark,
+                        R.drawable.pin
 
                 };
         for (int id:nArrIconID)

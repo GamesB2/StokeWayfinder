@@ -17,5 +17,6 @@ public class UserPin extends POI
         super.setLat(String.valueOf(latLng.latitude));
         super.setLong(String.valueOf(latLng.longitude));
         POI.storePoint(this);
+        super.setIcon("35");
     }
 }

@@ -69,7 +69,6 @@ public class MyRecyclerViewAdapterPosts extends RecyclerView.Adapter<MyRecyclerV
 
                 //Toast.makeText(v.getContext(), "ITEM PRESSED = " + String.valueOf(customViewHolder.getAdapterPosition()), Toast.LENGTH_SHORT).show();
                 //} else {
-                Toast.makeText(v.getContext(), "ROW PRESSED = " + String.valueOf(customViewHolder.getAdapterPosition()), Toast.LENGTH_SHORT).show();
 
                 Intent myIntent1 = new Intent(v.getContext(), MultiMedia.class);
                     myIntent1.putExtra("id", feedItem.getId());
