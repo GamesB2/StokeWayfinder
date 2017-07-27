@@ -500,7 +500,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         {
             clusterManager.clearItems();
             MarkerRenderer markerRenderer = new MarkerRenderer(getApplicationContext(), mMap, clusterManager);
-            filterManager.popFilter();
+            FilterManager.popFilter();
             mMap.clear();
             fillCM();
         }
