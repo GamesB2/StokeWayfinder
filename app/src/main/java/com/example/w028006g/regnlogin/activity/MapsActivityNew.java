@@ -310,6 +310,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
             @Override
             public void onClick(View view) {
                 try{
+
                     route(GeolocationService.getLatLng(), point.getPosition());
                 }
                 catch (Exception e)
@@ -379,14 +380,19 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
         final Handler handler = new Handler() {
             public void handleMessage(Message msg) {
                 try {
+                    mMap.clear();
                     Document doc = (Document) msg.obj;
                     GMapV2Direction md = new GMapV2Direction();
                     ArrayList<LatLng> directionPoint = md.getDirection(doc);
                     PolylineOptions rectLine = new PolylineOptions().width(15).color(R.color.bg_login) ;
-                    for (int i = 0; i < directionPoint.size(); i++) {
+                    for (int i = 0; i < directionPoint.size(); i++)
+                    {
                         rectLine.add(directionPoint.get(i));
                     }
-                    mMap.addPolyline(rectLine);md.getDurationText(doc);
+                    mMap.addPolyline(rectLine);
+                    md.getDurationText(doc);
+                    fillCM();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -619,7 +625,7 @@ public class MapsActivityNew extends AppCompatActivity implements OnMapReadyCall
     @Override
     public boolean onMarkerClick(Marker marker)
     {
-
+       // pullBottomSheet((POI)marker.getTag());
         return false;
     }
 

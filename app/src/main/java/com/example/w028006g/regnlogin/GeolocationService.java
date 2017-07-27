@@ -28,6 +28,7 @@ import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.HashMap;
@@ -51,6 +52,17 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
 	public void onStart(Intent intent, int startId) {
 		buildGoogleApiClient();
 		mGoogleApiClient.connect();
+
+		LocationSource.OnLocationChangedListener locListener = new LocationSource.OnLocationChangedListener()
+
+		{
+			@Override
+			public void onLocationChanged(Location location)
+			{
+				userLocation = location;
+			}
+		};
+
 
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -227,7 +239,7 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
     {
         //LatLng userLatLng = new LatLng(userLocation.getLatitude(),userLocation.getLongitude());
         //return userLatLng;
-		LatLng userLatLng = new LatLng(53.02,-2.32);
+		userLatLng = new LatLng(userLocation.getLatitude(), userLocation.getLongitude());
         return userLatLng;
     }
 
